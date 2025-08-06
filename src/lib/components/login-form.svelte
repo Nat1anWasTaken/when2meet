@@ -1,10 +1,18 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
+    import { authClient } from "$lib/auth-client";
     import { Button } from "$lib/components/ui/button/index.js";
     import * as Card from "$lib/components/ui/card/index.js";
     import { Input } from "$lib/components/ui/input/index.js";
     import { Label } from "$lib/components/ui/label/index.js";
+    import { toast } from "svelte-sonner";
+
+    interface Props {
+        redirectTo?: string;
+    }
 
     const id = $props.id();
+    const { redirectTo }: Props = $props();
 
     let email = $state("");
     let password = $state("");
@@ -15,8 +23,21 @@
     };
 
     const handleLogin = async () => {
-        // Placeholder for login logic
-        alert(`Logging in with email: ${email} and password: ${password}`);
+        toast.info("Logging in...");
+
+        const result = await authClient.signIn.email({
+            email: email,
+            password: password
+        });
+
+        if (result.error) {
+            toast.error(`Login failed: ${result.error.message}`);
+            return;
+        }
+
+        toast.success("Login successful! Redirecting to home...");
+
+        goto(redirectTo || "/");
     };
 </script>
 
