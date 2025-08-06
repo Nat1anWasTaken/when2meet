@@ -3,6 +3,7 @@
     import favicon from "$lib/assets/favicon.svg";
     import { ModeWatcher } from "mode-watcher";
     import Navbar from "$lib/components/navbar.svelte";
+    import { Toaster } from "$lib/components/ui/sonner";
 
     let { children } = $props();
 </script>
@@ -12,6 +13,7 @@
 </svelte:head>
 
 <ModeWatcher />
+<Toaster />
 <div class="flex h-screen flex-col">
     <Navbar />
     <main class="w-full flex-1 overflow-auto">

@@ -5,6 +5,19 @@
     import { Label } from "$lib/components/ui/label/index.js";
 
     const id = $props.id();
+
+    let email = $state("");
+    let password = $state("");
+
+    const checkEmailValid = () => {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+    };
+
+    const handleLogin = async () => {
+        // Placeholder for login logic
+        alert(`Logging in with email: ${email} and password: ${password}`);
+    };
 </script>
 
 <Card.Root class="mx-auto w-full max-w-sm">
@@ -16,7 +29,16 @@
         <div class="grid gap-4">
             <div class="grid gap-2">
                 <Label for="email-{id}">Email</Label>
-                <Input id="email-{id}" type="email" placeholder="m@example.com" required />
+                <Input
+                    id="email-{id}"
+                    type="email"
+                    placeholder="m@example.com"
+                    required
+                    bind:value={email}
+                />
+                {#if !checkEmailValid() && email.length > 0}
+                    <p class="text-sm text-destructive">Please enter a valid email address.</p>
+                {/if}
             </div>
             <div class="grid gap-2">
                 <div class="flex items-center">
@@ -25,9 +47,9 @@
                         Forgot your password?
                     </a>
                 </div>
-                <Input id="password-{id}" type="password" required />
+                <Input id="password-{id}" type="password" required bind:value={password} />
             </div>
-            <Button type="submit" class="w-full">Login</Button>
+            <Button type="submit" class="w-full" onclick={() => handleLogin()}>Login</Button>
             <Button
                 variant="outline"
                 class="w-full"
@@ -44,7 +66,7 @@
         </div>
         <div class="mt-4 text-center text-sm">
             Don't have an account?
-            <a href="##" class="underline"> Sign up </a>
+            <a href="/register" class="underline"> Sign up </a>
         </div>
     </Card.Content>
 </Card.Root>

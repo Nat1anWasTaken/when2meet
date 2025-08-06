@@ -4,6 +4,7 @@
     import * as Card from "$lib/components/ui/card/index.js";
     import { Input } from "$lib/components/ui/input/index.js";
     import { Label } from "$lib/components/ui/label/index.js";
+    import { toast } from "svelte-sonner";
 
     const id = $props.id();
 
@@ -25,11 +26,20 @@
     };
 
     const handleRegister = async () => {
-        return await authClient.signUp.email({
+        toast.info("Registering...");
+
+        const result = await authClient.signUp.email({
             name: username,
             email: email,
             password: password
         });
+
+        if (result.error) {
+            toast.error(`Registration failed: ${result.error.message}`);
+            return;
+        }
+
+        toast.success("Registration successful! Redirecting to home...");
     };
 </script>
 
@@ -83,7 +93,7 @@
                 type="submit"
                 class="w-full"
                 onclick={() => handleRegister()}
-                disabled={!checkPasswordsMatch()}>Register</Button
+                disabled={!checkPasswordsMatch() || !checkEmailValid()}>Register</Button
             >
             <Button
                 variant="outline"
@@ -101,7 +111,7 @@
         </div>
         <div class="mt-4 text-center text-sm">
             Already have an account?
-            <a href="##" class="underline"> Sign in </a>
+            <a href="/login" class="underline"> Sign in </a>
         </div>
     </Card.Content>
 </Card.Root>
