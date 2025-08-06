@@ -14,7 +14,7 @@
 
 <ModeWatcher />
 <Toaster />
-<div class="flex h-screen flex-col">
+<div class="flex h-screen min-h-screen flex-col">
     <Navbar />
     <main class="w-full flex-1 overflow-auto">
         {@render children?.()}
