@@ -37,16 +37,14 @@
 
 {#if $session.data?.user && !$session.isPending}
     <DropdownMenu.Root>
-        <DropdownMenu.Trigger asChild let:builder>
-            <Button builders={[builder]} variant="ghost" class="relative h-8 w-8 rounded-full">
-                <Avatar.Root class="h-8 w-8">
-                    <Avatar.Image
-                        src={$session.data.user.image}
-                        alt={$session.data.user.name || "User"}
-                    />
-                    <Avatar.Fallback>{getUserInitials($session.data.user.name)}</Avatar.Fallback>
-                </Avatar.Root>
-            </Button>
+        <DropdownMenu.Trigger>
+            <Avatar.Root class="h-8 w-8">
+                <Avatar.Image
+                    src={$session.data.user.image}
+                    alt={$session.data.user.name || "User"}
+                />
+                <Avatar.Fallback>{getUserInitials($session.data.user.name)}</Avatar.Fallback>
+            </Avatar.Root>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content class="w-56" align="end">
             <DropdownMenu.Label class="font-normal">
@@ -65,7 +63,7 @@
                 <span>Profile</span>
             </DropdownMenu.Item>
             <DropdownMenu.Separator />
-            <DropdownMenu.Item onclick={handleLogout}>
+            <DropdownMenu.Item onclick={handleLogout} variant="destructive">
                 <LogOut class="mr-2 h-4 w-4" />
                 <span>Log out</span>
             </DropdownMenu.Item>
