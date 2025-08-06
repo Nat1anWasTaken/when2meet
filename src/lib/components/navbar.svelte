@@ -1,5 +1,6 @@
 <script>
     import ModeSwitch from "./mode-switch.svelte";
+    import UserAvatarMenu from "./user-avatar-menu.svelte";
 </script>
 
 <div class="flex h-16 flex-row items-center justify-between bg-accent px-4">
@@ -9,5 +10,8 @@
         </h1>
         <a href="/">About</a>
     </div>
-    <ModeSwitch />
+    <div class="flex flex-row items-center gap-2">
+        <ModeSwitch />
+        <UserAvatarMenu />
+    </div>
 </div>
