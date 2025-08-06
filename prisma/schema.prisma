@@ -8,16 +8,17 @@ generator client {
 }
 
 model User {
-    id            String    @id @map("_id")
-    name          String
-    email         String
-    emailVerified Boolean
-    image         String?
-    createdAt     DateTime
-    updatedAt     DateTime
-    sessions      Session[]
-    accounts      Account[]
-    Event         Event[]
+    id                String              @id @map("_id")
+    name              String
+    email             String
+    emailVerified     Boolean
+    image             String?
+    createdAt         DateTime
+    updatedAt         DateTime
+    sessions          Session[]
+    accounts          Account[]
+    Event             Event[]
+    UserTimeSelection UserTimeSelection[]
 
     @@unique([email])
     @@map("user")
@@ -68,10 +69,34 @@ model Verification {
     @@map("verification")
 }
 
+type TimeSelection {
+    startTime DateTime
+    endTime   DateTime
+}
+
 model Event {
-    id          String  @id @map("_id")
-    organizerId String?
-    organizer   User?   @relation(fields: [organizerId], references: [id], onDelete: SetNull)
+    id                String              @id @map("_id")
+    timezone          String // IANA timezone identifier
+    organizerId       String?
+    organizer         User?               @relation(fields: [organizerId], references: [id], onDelete: SetNull)
+    availableTime     TimeSelection
+    userTimeSelection UserTimeSelection[]
+    weeklyRecurrence  Boolean // Indicate that this event is a weekly recurrence and not a one-time event. For weekly events, we should only list the day of the week and not the date.
 
     @@map("event")
+}
+
+model UserTimeSelection {
+    id        String        @id @map("_id")
+    eventId   String
+    username  String
+    userId    String? // Optional user ID for the user who made the selection, just use the username if not logged in
+    createdAt DateTime
+    updatedAt DateTime
+    selection TimeSelection
+
+    event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    user  User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+    @@map("time_selection")
 }
