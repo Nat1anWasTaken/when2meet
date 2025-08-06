@@ -1,5 +1,3 @@
-<script>
-    import Navbar from "$lib/components/navbar.svelte";
-</script>
-
-<Navbar />
+<div class="h-full w-full bg-red-500">
+    Home page content
+</div>
