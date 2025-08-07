@@ -1,6 +1,7 @@
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { auth } from "$lib/auth";
 import z from "zod";
+import { prisma } from "$lib/db";
 
 // Custom Zod schemas for API validation
 const TimeSelectionSchema = z.object({
