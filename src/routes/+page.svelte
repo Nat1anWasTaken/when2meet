@@ -11,7 +11,7 @@
             Find meeting times that work for everyone, fast.
         </p>
         <div class="mt-8">
-            <a href="/register">
+            <a href="/events">
                 <Button size="lg">organize new event</Button>
             </a>
         </div>

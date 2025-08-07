@@ -5,10 +5,16 @@ datasource db {
 
 generator client {
     provider = "prisma-client-js"
+    output   = "./generated/client"
+}
+
+generator zod {
+    provider = "prisma-zod-generator"
+    output   = "./generated/zod"
 }
 
 model User {
-    id                String              @id @map("_id")
+    id                String        @id @map("_id")
     name              String
     email             String
     emailVerified     Boolean
@@ -18,7 +24,7 @@ model User {
     sessions          Session[]
     accounts          Account[]
     Event             Event[]
-    UserTimeSelection UserTimeSelection[]
+    UserTimeSelection Participant[]
 
     @@unique([email])
     @@map("user")
@@ -75,18 +81,18 @@ type TimeSelection {
 }
 
 model Event {
-    id                String              @id @map("_id")
+    id                String        @id @map("_id")
     timezone          String // IANA timezone identifier
     organizerId       String?
-    organizer         User?               @relation(fields: [organizerId], references: [id], onDelete: SetNull)
+    organizer         User?         @relation(fields: [organizerId], references: [id], onDelete: SetNull)
     availableTime     TimeSelection
-    userTimeSelection UserTimeSelection[]
+    userTimeSelection Participant[]
     weeklyRecurrence  Boolean // Indicate that this event is a weekly recurrence and not a one-time event. For weekly events, we should only list the day of the week and not the date.
 
     @@map("event")
 }
 
-model UserTimeSelection {
+model Participant {
     id        String        @id @map("_id")
     eventId   String
     username  String
