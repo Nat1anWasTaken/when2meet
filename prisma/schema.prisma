@@ -14,7 +14,7 @@ generator zod {
 }
 
 model User {
-    id                String        @id @map("_id")
+    id                String        @id @default(auto()) @map("_id") @db.ObjectId
     name              String
     email             String
     emailVerified     Boolean
@@ -31,7 +31,7 @@ model User {
 }
 
 model Session {
-    id        String   @id @map("_id")
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
     expiresAt DateTime
     token     String
     createdAt DateTime
@@ -46,7 +46,7 @@ model Session {
 }
 
 model Account {
-    id                    String    @id @map("_id")
+    id                    String    @id @default(auto()) @map("_id") @db.ObjectId
     accountId             String
     providerId            String
     userId                String
@@ -65,7 +65,7 @@ model Account {
 }
 
 model Verification {
-    id         String    @id @map("_id")
+    id         String    @id @default(auto()) @map("_id") @db.ObjectId
     identifier String
     value      String
     expiresAt  DateTime
@@ -81,7 +81,7 @@ type TimeSelection {
 }
 
 model Event {
-    id                String        @id @map("_id")
+    id                String        @id @default(auto()) @map("_id") @db.ObjectId
     timezone          String // IANA timezone identifier
     organizerId       String?
     organizer         User?         @relation(fields: [organizerId], references: [id], onDelete: SetNull)
@@ -93,7 +93,7 @@ model Event {
 }
 
 model Participant {
-    id        String        @id @map("_id")
+    id        String        @id @default(auto()) @map("_id") @db.ObjectId
     eventId   String
     username  String
     userId    String? // Optional user ID for the user who made the selection, just use the username if not logged in
