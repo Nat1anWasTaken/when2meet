@@ -1,19 +1,11 @@
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { auth } from "$lib/auth";
-import z from "zod";
+import { z } from "zod";
 import { prisma } from "$lib/db";
+import {
+    TimeSelectionCreateInputObjectSchema
+} from "$prisma/zod/schemas/index.js";
 
-// Custom Zod schemas for API validation
-const TimeSelectionSchema = z.object({
-    startTime: z.string().transform((val) => new Date(val)),
-    endTime: z.string().transform((val) => new Date(val))
-});
-
-const CreateEventSchema = z.object({
-    timezone: z.string().min(1, "Timezone is required"),
-    availableTime: TimeSelectionSchema,
-    weeklyRecurrence: z.boolean()
-});
 
 const GetEventsQuerySchema = z.object({
     organizerId: z.string().optional(),
@@ -113,13 +105,30 @@ export const POST: RequestHandler = async ({ request }) => {
         }
 
         const body = await request.json();
-        const validatedData = CreateEventSchema.parse(body);
+        
+        // Basic validation
+        if (!body.timezone || !body.availableTime || typeof body.weeklyRecurrence !== 'boolean') {
+            return json({ error: "Missing required fields" }, { status: 400 });
+        }
+        
+        // Transform string dates to Date objects
+        const transformedData = {
+            timezone: body.timezone,
+            availableTime: {
+                startTime: new Date(body.availableTime.startTime),
+                endTime: new Date(body.availableTime.endTime)
+            },
+            weeklyRecurrence: body.weeklyRecurrence
+        };
+        
+        // Validate with Prisma schema
+        TimeSelectionCreateInputObjectSchema.parse(transformedData.availableTime);
 
         const event = await prisma.event.create({
             data: {
-                timezone: validatedData.timezone,
-                availableTime: validatedData.availableTime,
-                weeklyRecurrence: validatedData.weeklyRecurrence,
+                timezone: transformedData.timezone,
+                availableTime: transformedData.availableTime,
+                weeklyRecurrence: transformedData.weeklyRecurrence,
                 organizerId: user.id
             },
             include: {

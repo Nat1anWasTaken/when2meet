@@ -1,19 +1,11 @@
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { auth } from "$lib/auth";
-import z from "zod";
+import { z } from "zod";
 import { prisma } from "$lib/db";
+import {
+    TimeSelectionUpdateInputObjectSchema
+} from "$prisma/zod/schemas/index.js";
 
-// Custom Zod schemas for API validation
-const TimeSelectionSchema = z.object({
-    startTime: z.string().transform((val) => new Date(val)),
-    endTime: z.string().transform((val) => new Date(val))
-});
-
-const UpdateEventSchema = z.object({
-    timezone: z.string().min(1).optional(),
-    availableTime: TimeSelectionSchema.optional(),
-    weeklyRecurrence: z.boolean().optional()
-});
 
 // Helper function to get authenticated user
 async function getAuthenticatedUser(request: Request) {
@@ -107,12 +99,36 @@ export const PUT: RequestHandler = async ({ params, request }) => {
         }
 
         const body = await request.json();
-        const validatedData = UpdateEventSchema.parse(body);
-
-        // Filter out undefined values
-        const updateData = Object.fromEntries(
-            Object.entries(validatedData).filter(([, value]) => value !== undefined)
-        );
+        
+        // Transform and validate data
+        const updateData: {
+            timezone?: string;
+            weeklyRecurrence?: boolean;
+            availableTime?: {
+                startTime: Date;
+                endTime: Date;
+            };
+        } = {};
+        
+        if (body.timezone !== undefined) {
+            updateData.timezone = body.timezone;
+        }
+        
+        if (body.weeklyRecurrence !== undefined) {
+            updateData.weeklyRecurrence = body.weeklyRecurrence;
+        }
+        
+        if (body.availableTime !== undefined) {
+            // Transform string dates to Date objects
+            const availableTime = {
+                startTime: new Date(body.availableTime.startTime),
+                endTime: new Date(body.availableTime.endTime)
+            };
+            
+            // Validate with Prisma schema
+            TimeSelectionUpdateInputObjectSchema.parse(availableTime);
+            updateData.availableTime = availableTime;
+        }
 
         if (Object.keys(updateData).length === 0) {
             return json({ error: "No valid fields to update" }, { status: 400 });

@@ -4,5 +4,5 @@
 
     let { data }: PageProps = $props();
 
-    const eventsQuery = createQuery();
+    const eventsQuery = createQuery({});
 </script>
