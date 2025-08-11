@@ -14,6 +14,9 @@ const config = {
         adapter: adapter(),
         alias: {
             '$prisma': 'prisma/generated'
+        },
+        experimental: {
+            remoteFunctions: true,
         }
     }
 };

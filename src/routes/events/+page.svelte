@@ -1,8 +1,20 @@
 <script lang="ts">
-    import { createQuery } from "@tanstack/svelte-query";
     import type { PageProps } from "./$types";
+    import { getEvents } from "$lib/api/events.remote";
 
     let { data }: PageProps = $props();
-
-    const eventsQuery = createQuery({});
 </script>
+
+{#await getEvents()}
+    <p>loadings</p>
+{:then events}
+    <ul>
+        {#each events as event}
+            <li>
+                {event.name}
+            </li>
+        {/each}
+    </ul>
+{:catch error}
+    <p>Error loading events: {error}</p>
+{/await}

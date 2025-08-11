@@ -83,6 +83,7 @@ type TimeSelection {
 model Event {
     id                String        @id @default(auto()) @map("_id") @db.ObjectId
     timezone          String // IANA timezone identifier
+    name              String
     organizerId       String?
     organizer         User?         @relation(fields: [organizerId], references: [id], onDelete: SetNull)
     availableTime     TimeSelection
