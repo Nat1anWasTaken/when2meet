@@ -5,16 +5,4 @@
     let { data }: PageProps = $props();
 </script>
 
-{#await getEvents()}
-    <p>loadings</p>
-{:then events}
-    <ul>
-        {#each events as event}
-            <li>
-                {event.name}
-            </li>
-        {/each}
-    </ul>
-{:catch error}
-    <p>Error loading events: {error}</p>
-{/await}
+<div class="h-full max-w-7xl"></div>

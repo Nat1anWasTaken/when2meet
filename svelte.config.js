@@ -13,10 +13,16 @@ const config = {
         // See https://svelte.dev/docs/kit/adapters for more information about adapters.
         adapter: adapter(),
         alias: {
-            '$prisma': 'prisma/generated'
+            $prisma: "prisma/generated"
         },
         experimental: {
-            remoteFunctions: true,
+            remoteFunctions: true
+        }
+    },
+
+    compilerOptions: {
+        experimental: {
+            async: true
         }
     }
 };
