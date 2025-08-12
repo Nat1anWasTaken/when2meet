@@ -5,47 +5,79 @@
     import { Calendar } from "$lib/components/ui/calendar/";
     import { getLocalTimeZone } from "@internationalized/date";
     import type { CalendarDate } from "@internationalized/date";
+    import { Time } from "@internationalized/date";
     import { ChevronDownIcon } from "lucide-svelte";
-    import { listTimesByInterval } from "$lib/utils";
+    import { cn, formatTime, listTimesByInterval, parseTime } from "$lib/utils";
+    import type { HTMLAttributes } from "svelte/elements";
+
+    interface Props extends HTMLAttributes<HTMLDivElement> {
+        selectedDate?: CalendarDate;
+        selectedTime?: Time;
+    }
 
     let id = $props.id();
-
-    let availableTimes = $derived(listTimesByInterval(30));
+    let {
+        class: className = "",
+        selectedDate = $bindable(undefined),
+        selectedTime = $bindable(new Time(9, 0)),
+        ...props
+    }: Props = $props();
 
     let isCalendarOpen = $state(false);
-    let calendarDate = $state<CalendarDate | undefined>(undefined);
-    let selectedTime = $state<string>("09:00");
+
+    let availableTimes = $derived(listTimesByInterval(30));
+    let selectedTimeString = $derived(formatTime(selectedTime));
 </script>
 
-<Popover.Root bind:open={isCalendarOpen}>
-    <Popover.Trigger id="{id}-date">
-        {#snippet child({ props })}
-            <Button {...props} variant="outline" class="justify-between font-normal">
-                {calendarDate
-                    ? calendarDate.toDate(getLocalTimeZone()).toLocaleDateString()
-                    : "Select date"}
-                <ChevronDownIcon />
-            </Button>
-        {/snippet}
-    </Popover.Trigger>
-    <Popover.Content class="w-auto overflow-hidden p-0" align="start" side="top">
-        <Calendar
-            type="single"
-            bind:value={calendarDate}
-            onValueChange={() => {
-                isCalendarOpen = false;
-            }}
-            captionLayout="dropdown"
-        />
-    </Popover.Content>
-</Popover.Root>
-<Select.Root type="single" bind:value={selectedTime}>
-    <Select.Trigger class="w-full max-w-xl">
-        {selectedTime || "09:00"}
-    </Select.Trigger>
-    <Select.Content side="top" class="overflow-y-auto">
-        {#each availableTimes as time}
-            <Select.Item value={time}>{time}</Select.Item>
-        {/each}
-    </Select.Content>
-</Select.Root>
+<div class={cn("grid grid-cols-1 gap-2 md:grid-cols-2", className)} {...props}>
+    <Popover.Root>
+        <Popover.Trigger id="{id}-date">
+            {#snippet child({ props })}
+                <Button
+                    {...props}
+                    variant="outline"
+                    class={cn(
+                        "w-full justify-between font-normal md:w-auto",
+                        selectedDate ? "text-foreground" : "text-muted-foreground"
+                    )}
+                >
+                    {selectedDate
+                        ? selectedDate.toDate(getLocalTimeZone()).toLocaleDateString()
+                        : "Select date"}
+                    <ChevronDownIcon />
+                </Button>
+            {/snippet}
+        </Popover.Trigger>
+        <Popover.Content class="overflow-hidden p-0" align="start" side="top">
+            <Calendar
+                type="single"
+                bind:value={selectedDate}
+                onValueChange={() => {
+                    isCalendarOpen = false;
+                }}
+                captionLayout="dropdown"
+            />
+        </Popover.Content>
+    </Popover.Root>
+
+    <Select.Root
+        type="single"
+        onValueChange={(time) => {
+            selectedTime = parseTime(time)!;
+        }}
+    >
+        <Select.Trigger
+            class={cn(
+                "w-full max-w-xl",
+                selectedTimeString ? "text-foreground" : "text-muted-foreground"
+            )}
+        >
+            {selectedTime ? selectedTimeString : "9:00"}
+        </Select.Trigger>
+        <Select.Content side="top" class="overflow-y-auto">
+            {#each availableTimes as time}
+                <Select.Item value={formatTime(time)}>{formatTime(time)}</Select.Item>
+            {/each}
+        </Select.Content>
+    </Select.Root>
+</div>
