@@ -5,8 +5,7 @@
     import * as Select from "$lib/components/ui/select";
     import type { PageProps } from "./$types";
     import EventCard from "$lib/components/event-card.svelte";
-
-    let { data }: PageProps = $props();
+    import NewEventDialog from "$lib/components/new-event-dialog.svelte";
 
     let sort = $state("");
 
@@ -29,7 +28,9 @@
                     <Select.Item value="name">Name</Select.Item>
                 </Select.Content>
             </Select.Root>
-            <Button>New Event</Button>
+            <NewEventDialog>
+                <Button>New Event</Button>
+            </NewEventDialog>
         </div>
 
         <div class="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2">
