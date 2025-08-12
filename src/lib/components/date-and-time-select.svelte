@@ -48,7 +48,7 @@
                 </Button>
             {/snippet}
         </Popover.Trigger>
-        <Popover.Content class="overflow-hidden p-0" align="start" side="top">
+        <Popover.Content class="w-full overflow-hidden p-0 md:w-auto" align="center" side="top">
             <Calendar
                 type="single"
                 bind:value={selectedDate}
