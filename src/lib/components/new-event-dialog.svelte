@@ -55,21 +55,23 @@
         </div>
         <div class="flex flex-col gap-2">
             <Label>What date / time might work?</Label>
-            <div class="grid w-full grid-cols-3 items-center gap-2">
+            <div
+                class="flex w-full flex-col items-start gap-2 md:grid md:grid-cols-3 md:items-center"
+            >
                 <p class="text-xs text-muted-foreground">Starting from:</p>
                 <DateAndTimeSelect
-                    class="col-span-2"
+                    class="w-full md:col-span-2 md:w-auto"
                     bind:selectedDate={selectedStartDate}
                     bind:selectedTime={selectedStartTime}
                 />
                 <p class="text-xs text-muted-foreground">Ending at:</p>
                 <DateAndTimeSelect
-                    class="col-span-2"
+                    class="w-full md:col-span-2 md:w-auto"
                     bind:selectedDate={selectedEndDate}
                     bind:selectedTime={selectedEndTime}
                 />
                 <p class="text-xs text-muted-foreground">Timezone:</p>
-                <TimezoneSelect class="col-span-2" bind:selectedTimezone />
+                <TimezoneSelect class="col-span-2 w-full md:w-auto" bind:selectedTimezone />
             </div>
         </div>
         <Button class="mt-2">Create Event</Button>

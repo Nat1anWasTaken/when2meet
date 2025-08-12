@@ -33,6 +33,7 @@
                 variant="outline"
                 {...props}
                 class={cn(
+                    "justify-between",
                     className,
                     selectedTimezone ? "text-foreground" : "text-muted-foreground"
                 )}
