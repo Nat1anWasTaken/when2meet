@@ -10,22 +10,3 @@ export const auth = betterAuth({
         enabled: true
     }
 });
-
-/**
- * Gets the authenticated session from request headers
- * @param headers - Request headers from the current request
- * @returns
- */
-export async function getAuthenticatedSession(
-    headers: Headers
-): Promise<ReturnType<typeof auth.api.getSession>> {
-    const sessionData = await auth.api.getSession({
-        headers
-    });
-
-    if (!sessionData) {
-        return null;
-    }
-
-    return sessionData;
-}

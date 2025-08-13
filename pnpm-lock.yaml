@@ -20,6 +20,9 @@ importers:
       drizzle-orm:
         specifier: ^0.40.0
         version: 0.40.1(@neondatabase/serverless@0.10.4)(@prisma/client@6.13.0(prisma@6.13.0(typescript@5.9.2))(typescript@5.9.2))(@types/pg@8.15.5)(gel@2.1.1)(kysely@0.28.4)(prisma@6.13.0(typescript@5.9.2))
+      drizzle-zod:
+        specifier: ^0.8.3
+        version: 0.8.3(drizzle-orm@0.40.1(@neondatabase/serverless@0.10.4)(@prisma/client@6.13.0(prisma@6.13.0(typescript@5.9.2))(typescript@5.9.2))(@types/pg@8.15.5)(gel@2.1.1)(kysely@0.28.4)(prisma@6.13.0(typescript@5.9.2)))(zod@4.0.15)
       lucide-svelte:
         specifier: ^0.536.0
         version: 0.536.0(svelte@5.37.3)
@@ -1377,6 +1380,12 @@ packages:
         optional: true
       sqlite3:
         optional: true
+
+  drizzle-zod@0.8.3:
+    resolution: {integrity: sha512-66yVOuvGhKJnTdiqj1/Xaaz9/qzOdRJADpDa68enqS6g3t0kpNkwNYjUuaeXgZfO/UWuIM9HIhSlJ6C5ZraMww==}
+    peerDependencies:
+      drizzle-orm: '>=0.36.0'
+      zod: ^3.25.0 || ^4.0.0
 
   effect@3.16.12:
     resolution: {integrity: sha512-N39iBk0K71F9nb442TLbTkjl24FLUzuvx2i1I2RsEAQsdAdUTuUoW0vlfUXgkMTUOnYqKnWcFfqw4hK4Pw27hg==}
@@ -3422,6 +3431,11 @@ snapshots:
       gel: 2.1.1
       kysely: 0.28.4
       prisma: 6.13.0(typescript@5.9.2)
+
+  drizzle-zod@0.8.3(drizzle-orm@0.40.1(@neondatabase/serverless@0.10.4)(@prisma/client@6.13.0(prisma@6.13.0(typescript@5.9.2))(typescript@5.9.2))(@types/pg@8.15.5)(gel@2.1.1)(kysely@0.28.4)(prisma@6.13.0(typescript@5.9.2)))(zod@4.0.15):
+    dependencies:
+      drizzle-orm: 0.40.1(@neondatabase/serverless@0.10.4)(@prisma/client@6.13.0(prisma@6.13.0(typescript@5.9.2))(typescript@5.9.2))(@types/pg@8.15.5)(gel@2.1.1)(kysely@0.28.4)(prisma@6.13.0(typescript@5.9.2))
+      zod: 4.0.15
 
   effect@3.16.12:
     dependencies:
