@@ -16,8 +16,8 @@ const timeSelection = customType<{ data: TimeSelection; driverData: string }>({
             endTime: value.endTime.toISOString()
         });
     },
-    fromDriver(value: string): TimeSelection {
-        const obj = JSON.parse(value);
+    fromDriver(value: string | { startTime: string; endTime: string }): TimeSelection {
+        const obj = typeof value === 'string' ? JSON.parse(value) : value;
         return {
             startTime: new Date(obj.startTime),
             endTime: new Date(obj.endTime)
