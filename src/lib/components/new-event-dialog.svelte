@@ -6,6 +6,7 @@
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
     import * as RadioGroup from "$lib/components/ui/radio-group";
+    import { preservedEventNames } from "$lib/utils";
     import type { CalendarDate } from "@internationalized/date";
     import { Time, toCalendarDateTime } from "@internationalized/date";
     import type { Snippet } from "svelte";
@@ -87,6 +88,11 @@
 
         if (missingFields.length > 0) {
             validationErrorMessage = `Please fill in the following fields: ${missingFields.join(", ")}`;
+            return false;
+        }
+
+        if (preservedEventNames.includes(eventName.trim())) {
+            validationErrorMessage = `Event name "${eventName.trim()}" is reserved.`;
             return false;
         }
 

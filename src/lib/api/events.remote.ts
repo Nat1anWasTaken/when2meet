@@ -2,6 +2,7 @@ import { command, query } from "$app/server";
 import { getAuthenticatedSession } from "$lib/api/utils";
 import { db } from "$lib/server/db";
 import { event, participant } from "$lib/server/db/schema";
+import { preservedEventNames } from "$lib/utils";
 import { error } from "@sveltejs/kit";
 import { and, eq, ilike } from "drizzle-orm";
 import z from "zod";
@@ -11,7 +12,9 @@ const getEventsSchema = z.object({
 });
 
 const createEventSchema = z.object({
-    name: z.string(),
+    name: z.string().refine((val) => !preservedEventNames.includes(val), {
+        message: "Event name is reserved."
+    }),
     timezone: z.string(),
     organizerName: z.string(),
     availableTime: z.object({
