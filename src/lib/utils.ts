@@ -2,7 +2,7 @@ import { Time } from "@internationalized/date";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-export const preservedEventNames = ["about"];
+export const preservedEventNames = ["events"];
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
