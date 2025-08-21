@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import { authClient } from "$lib/auth-client";
     import { Button } from "$lib/components/ui/button/index.js";
     import * as Card from "$lib/components/ui/card/index.js";
@@ -40,6 +41,8 @@
         }
 
         toast.success("Registration successful! Redirecting to home...");
+
+        goto("/");
     };
 </script>
 
