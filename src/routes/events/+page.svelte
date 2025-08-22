@@ -16,7 +16,7 @@
 
 {#snippet eventGallery(events: Awaited<ReturnType<typeof getOrganizedEvents>>)}
     {#each events as event}
-        <EventCard weeklyRecurrence={event.weeklyRecurrence}>
+        <EventCard weeklyRecurrence={event.weeklyRecurrence} eventId={event.id}>
             {#snippet name()}
                 {event.name}
             {/snippet}

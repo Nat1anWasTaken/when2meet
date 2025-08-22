@@ -1,11 +1,12 @@
 <script lang="ts">
+    import { Badge } from "$lib/components/ui/badge";
     import * as Card from "$lib/components/ui/card";
     import { Calendar, Earth, Repeat, User } from "lucide-svelte";
-    import { Badge } from "$lib/components/ui/badge";
-    import Button from "./ui/button/button.svelte";
     import type { Snippet } from "svelte";
+    import Button from "./ui/button/button.svelte";
 
     interface Props {
+        eventId: string;
         name: Snippet;
         organizer: Snippet;
         weeklyRecurrence: Boolean;
@@ -14,7 +15,8 @@
         timezone: Snippet;
     }
 
-    let { name, organizer, weeklyRecurrence, startTime, endTime, timezone }: Props = $props();
+    let { eventId, name, organizer, weeklyRecurrence, startTime, endTime, timezone }: Props =
+        $props();
 </script>
 
 <Card.Root class="w-full max-w-xl min-w-xs">
@@ -50,7 +52,7 @@
         </div>
         <div class="ml-16 flex flex-col items-center justify-center gap-2">
             <Button class="w-16">Edit</Button>
-            <Button class="w-16" variant="outline">View</Button>
+            <Button class="w-16" variant="outline" href={`/${eventId}`}>View</Button>
         </div>
     </Card.Content>
 </Card.Root>
