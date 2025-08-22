@@ -1,5 +1,6 @@
 CREATE TABLE "event" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY DEFAULT upper(substr(md5(random()::text), 1, 7)) NOT NULL,
+	"name" text NOT NULL,
 	"timezone" text DEFAULT 'UTC' NOT NULL,
 	"organizer_name" text NOT NULL,
 	"organizer_id" text,
@@ -9,7 +10,7 @@ CREATE TABLE "event" (
 --> statement-breakpoint
 CREATE TABLE "participant" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"event_id" integer NOT NULL,
+	"event_id" text NOT NULL,
 	"username" text NOT NULL,
 	"user_id" text,
 	"created_at" date DEFAULT now() NOT NULL,

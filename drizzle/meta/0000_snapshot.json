@@ -1,5 +1,5 @@
 {
-  "id": "887ca2b1-a212-4296-94d5-6c5425d6c42e",
+  "id": "2b759fc1-e972-4295-b7a2-9de6e34b8689",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,8 +10,15 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "text",
           "primaryKey": true,
+          "notNull": true,
+          "default": "upper(substr(md5(random()::text), 1, 7))"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
           "notNull": true
         },
         "timezone": {
@@ -81,7 +88,7 @@
         },
         "event_id": {
           "name": "event_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },

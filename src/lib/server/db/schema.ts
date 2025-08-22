@@ -1,4 +1,5 @@
-import { boolean, customType, date, integer, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { boolean, customType, date, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 import { user } from "./auth-schema";
 
 type TimeSelection = {
@@ -26,7 +27,7 @@ const timeSelection = customType<{ data: TimeSelection; driverData: string }>({
 });
 
 export const event = pgTable("event", {
-    id: serial("id").primaryKey(),
+    id: text("id").primaryKey().default(sql`upper(substr(md5(random()::text), 1, 7))`),
     name: text("name").notNull(),
     timezone: text("timezone").default("UTC").notNull(), // IANA Timezone Identifier
     organizerName: text("organizer_name").notNull(),
@@ -37,7 +38,7 @@ export const event = pgTable("event", {
 
 export const participant = pgTable("participant", {
     id: serial("id").primaryKey(),
-    eventId: integer("event_id")
+    eventId: text("event_id")
         .references(() => event.id, { onDelete: "cascade" })
         .notNull(),
     username: text("username").notNull(),
