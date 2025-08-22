@@ -63,12 +63,18 @@
                 </NewEventDialog>
             </div>
 
-            <div class="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2">
+            <div class="mt-4">
                 <svelte:boundary>
-                    <Tabs.Content value="organized-events">
+                    <Tabs.Content
+                        value="organized-events"
+                        class="grid grid-flow-row grid-cols-1 gap-2 md:grid-cols-2"
+                    >
                         {@render eventGallery(await getOrganizedEvents({ name: searchQuery }))}
                     </Tabs.Content>
-                    <Tabs.Content value="attending-events">
+                    <Tabs.Content
+                        value="attending-events"
+                        class="grid grid-flow-row grid-cols-1 gap-2 md:grid-cols-2"
+                    >
                         {@render eventGallery(
                             (await getParticipatedEvents({ name: searchQuery })).map(
                                 (entry) => entry.event
