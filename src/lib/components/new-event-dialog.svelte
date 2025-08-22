@@ -20,7 +20,7 @@
         children: Snippet;
     }
 
-    let { children } = $props();
+    let { children }: Props = $props();
 
     let open = $state<boolean>(false);
     let validationErrorMessage = $state<string | undefined>(undefined);
