@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { refreshAll } from "$app/navigation";
     import { createEvent } from "$lib/api/events.remote";
     import DateAndTimeSelect from "$lib/components/date-and-time-select.svelte";
     import { Button } from "$lib/components/ui/button";
@@ -116,6 +117,7 @@
             });
 
             resetForm();
+            refreshAll();
 
             open = false; // Close dialog
         } catch (error) {
