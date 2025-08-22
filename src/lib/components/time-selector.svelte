@@ -5,9 +5,10 @@
     interface Props {
         class?: string;
         days?: number;
+        cell?: Snippet<[Cell, boolean, boolean]>;
     }
 
-    let { class: className, days = 7 }: Props = $props();
+    let { class: className, days = 7, cell }: Props = $props();
 
     let timeGrid: HTMLElement;
 
@@ -36,13 +37,11 @@
             return;
         }
 
-        lastHovered = [x, y];
+        // Set selection
         isSelecting = true;
-
-        // do whatever with the coordinates, like mark it selected
+        lastHovered = [x, y];
         startCell = [x, y];
         endCell = [x, y];
-
         mode = availableCells.some(([sx, sy]) => sx === x && sy === y) ? "remove" : "add";
     }
 
@@ -61,9 +60,8 @@
             return;
         }
 
+        // Update selection
         lastHovered = [x, y];
-
-        // do whatever with the index
         endCell = [x, y];
     }
 
@@ -75,9 +73,6 @@
 
         if (!cell || !timeGrid.contains(cell)) return;
 
-        const x = Number(cell.dataset.x);
-        const y = Number(cell.dataset.y);
-
         if (mode === "add") {
             availableCells.push(...currentSelectedCells);
         } else {
@@ -86,27 +81,27 @@
             );
         }
 
-        mode = null;
-
+        // Reset selection
         isSelecting = false;
         lastHovered = null;
-
         startCell = null;
         endCell = null;
-    }
-
-    function getCellColor(cell: Cell): string {
-        if (currentSelectedCells.some(([sx, sy]) => sx === cell[0] && sy === cell[1])) {
-            return "bg-accent-foreground";
-        }
-
-        if (availableCells.some(([sx, sy]) => sx === cell[0] && sy === cell[1])) {
-            return "bg-primary";
-        }
-
-        return "bg-accent";
+        mode = null;
     }
 </script>
+
+{#snippet defaultCell(cell: Cell, selected: boolean, available: boolean)}
+    <di
+        data-x={cell[0]}
+        data-y={cell[1]}
+        class={cn(
+            "cell flex h-full w-full items-center justify-center rounded-xl select-none",
+            selected ? "bg-primary/70" : available ? "bg-primary" : "bg-accent hover:bg-accent/50"
+        )}
+    >
+        {cell[0]}, {cell[1]}
+    </di>
+{/snippet}
 
 <svelte:window
     onpointerdown={handlePointerDown}
@@ -116,28 +111,31 @@
 
 <div
     bind:this={timeGrid}
-    class={cn("grid grid-flow-col grid-rows-48", className)}
+    class={cn("grid grid-flow-col grid-rows-48 gap-1", className)}
     style={`grid-template-columns: repeat(${days + 1}, minmax(0, 1fr));`}
 >
     {#each generateTimeStrings(30, false) as time, index}
         <div
-            class="flex h-full w-full items-center justify-center border-x-1 p-2 text-xs text-muted-foreground"
+            class="flex h-full w-full items-center justify-center p-2 text-xs text-muted-foreground"
         >
             {index % 4 == 0 ? time : ""}
         </div>
     {/each}
     {#each Array(days) as _, x}
         {#each Array(48) as _, y}
-            <div
-                data-x={x}
-                data-y={y}
-                class={cn(
-                    "cell flex h-full w-full items-center justify-center border-x-1 border-y-0 select-none",
-                    getCellColor([x, y])
+            {#if cell}
+                {@render cell(
+                    [x, y],
+                    currentSelectedCells.some(([sx, sy]) => sx === x && sy === y),
+                    availableCells.some(([sx, sy]) => sx === x && sy === y)
                 )}
-            >
-                {x}, {y}
-            </div>
+            {:else}
+                {@render defaultCell(
+                    [x, y],
+                    currentSelectedCells.some(([sx, sy]) => sx === x && sy === y),
+                    availableCells.some(([sx, sy]) => sx === x && sy === y)
+                )}
+            {/if}
         {/each}
     {/each}
 </div>

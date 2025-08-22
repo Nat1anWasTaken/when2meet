@@ -90,3 +90,8 @@ export function parseTime(timeString: string): Time | null {
     if (isNaN(hours) || isNaN(minutes)) return null;
     return new Time(hours, minutes);
 }
+
+export function daysBetween(date1: Date, date2: Date): number {
+    const msPerDay = 1000 * 60 * 60 * 24;
+    return Math.round(Math.abs(date2.getTime() - date1.getTime()) / msPerDay);
+}
