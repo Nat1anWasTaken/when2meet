@@ -3,7 +3,6 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
-
 :root {
     --background: oklch(1 0 0);
     --foreground: oklch(0.2178 0 0);
@@ -41,14 +40,14 @@
     --font-serif: "Lora", serif;
     --font-mono: "Space Mono", monospace;
     --radius: 0rem;
-    --shadow-2xs: 8px 8px 0px 0px hsl(0 0% 0% / 0.5);
-    --shadow-xs: 8px 8px 0px 0px hsl(0 0% 0% / 0.5);
-    --shadow-sm: 8px 8px 0px 0px hsl(0 0% 0% / 1), 8px 1px 2px -1px hsl(0 0% 0% / 1);
-    --shadow: 8px 8px 0px 0px hsl(0 0% 0% / 1), 8px 1px 2px -1px hsl(0 0% 0% / 1);
-    --shadow-md: 8px 8px 0px 0px hsl(0 0% 0% / 1), 8px 2px 4px -1px hsl(0 0% 0% / 1);
-    --shadow-lg: 8px 8px 0px 0px hsl(0 0% 0% / 1), 8px 4px 6px -1px hsl(0 0% 0% / 1);
-    --shadow-xl: 8px 8px 0px 0px hsl(0 0% 0% / 1), 8px 8px 10px -1px hsl(0 0% 0% / 1);
-    --shadow-2xl: 8px 8px 0px 0px hsl(0 0% 0% / 2.5);
+    --shadow-2xs: 0px 0px 0px 0px hsl(0 0% 0% / 0);
+    --shadow-xs: 0px 0px 0px 0px hsl(0 0% 0% / 0);
+    --shadow-sm: 0px 0px 0px 0px hsl(0 0% 0% / 0), 0px 1px 2px -1px hsl(0 0% 0% / 0);
+    --shadow: 0px 0px 0px 0px hsl(0 0% 0% / 0), 0px 1px 2px -1px hsl(0 0% 0% / 0);
+    --shadow-md: 0px 0px 0px 0px hsl(0 0% 0% / 0), 0px 2px 4px -1px hsl(0 0% 0% / 0);
+    --shadow-lg: 0px 0px 0px 0px hsl(0 0% 0% / 0), 0px 4px 6px -1px hsl(0 0% 0% / 0);
+    --shadow-xl: 0px 0px 0px 0px hsl(0 0% 0% / 0), 0px 8px 10px -1px hsl(0 0% 0% / 0);
+    --shadow-2xl: 0px 0px 0px 0px hsl(0 0% 0% / 0);
     --tracking-normal: 0.025em;
     --spacing: 0.25rem;
 }
@@ -90,14 +89,14 @@
     --font-serif: "Lora", serif;
     --font-mono: "Space Mono", monospace;
     --radius: 0rem;
-    --shadow-2xs: 8px 8px 0px 0px hsl(0 0% 0% / 0.5);
-    --shadow-xs: 8px 8px 0px 0px hsl(0 0% 0% / 0.5);
-    --shadow-sm: 8px 8px 0px 0px hsl(0 0% 0% / 1), 8px 1px 2px -1px hsl(0 0% 0% / 1);
-    --shadow: 8px 8px 0px 0px hsl(0 0% 0% / 1), 8px 1px 2px -1px hsl(0 0% 0% / 1);
-    --shadow-md: 8px 8px 0px 0px hsl(0 0% 0% / 1), 8px 2px 4px -1px hsl(0 0% 0% / 1);
-    --shadow-lg: 8px 8px 0px 0px hsl(0 0% 0% / 1), 8px 4px 6px -1px hsl(0 0% 0% / 1);
-    --shadow-xl: 8px 8px 0px 0px hsl(0 0% 0% / 1), 8px 8px 10px -1px hsl(0 0% 0% / 1);
-    --shadow-2xl: 8px 8px 0px 0px hsl(0 0% 0% / 2.5);
+    --shadow-2xs: 0px 0px 0px 0px hsl(0 0% 0% / 0);
+    --shadow-xs: 0px 0px 0px 0px hsl(0 0% 0% / 0);
+    --shadow-sm: 0px 0px 0px 0px hsl(0 0% 0% / 0), 0px 1px 2px -1px hsl(0 0% 0% / 0);
+    --shadow: 0px 0px 0px 0px hsl(0 0% 0% / 0), 0px 1px 2px -1px hsl(0 0% 0% / 0);
+    --shadow-md: 0px 0px 0px 0px hsl(0 0% 0% / 0), 0px 2px 4px -1px hsl(0 0% 0% / 0);
+    --shadow-lg: 0px 0px 0px 0px hsl(0 0% 0% / 0), 0px 4px 6px -1px hsl(0 0% 0% / 0);
+    --shadow-xl: 0px 0px 0px 0px hsl(0 0% 0% / 0), 0px 8px 10px -1px hsl(0 0% 0% / 0);
+    --shadow-2xl: 0px 0px 0px 0px hsl(0 0% 0% / 0);
 }
 
 @theme inline {
