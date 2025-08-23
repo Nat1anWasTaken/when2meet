@@ -1,20 +1,20 @@
 {
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1755833236543,
-      "tag": "0000_small_nextwave",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1755833236544,
-      "tag": "0001_drop_all_tables",
-      "breakpoints": true
-    }
-  ]
+    "version": "7",
+    "dialect": "postgresql",
+    "entries": [
+        {
+            "idx": 0,
+            "version": "7",
+            "when": 1755833236543,
+            "tag": "0000_small_nextwave",
+            "breakpoints": true
+        },
+        {
+            "idx": 1,
+            "version": "7",
+            "when": 1755833236544,
+            "tag": "0001_drop_all_tables",
+            "breakpoints": true
+        }
+    ]
 }

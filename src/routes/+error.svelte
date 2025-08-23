@@ -14,8 +14,4 @@
     }
 </script>
 
-<ErrorPage
-    code={status}
-    onRetry={handleRetry}
-    onGoHome={handleGoHome}
-/>
+<ErrorPage code={status} onRetry={handleRetry} onGoHome={handleGoHome} />

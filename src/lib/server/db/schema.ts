@@ -18,7 +18,7 @@ const timeSelection = customType<{ data: TimeSelection; driverData: string }>({
         });
     },
     fromDriver(value: string | { startTime: string; endTime: string }): TimeSelection {
-        const obj = typeof value === 'string' ? JSON.parse(value) : value;
+        const obj = typeof value === "string" ? JSON.parse(value) : value;
         return {
             startTime: new Date(obj.startTime),
             endTime: new Date(obj.endTime)
@@ -27,7 +27,9 @@ const timeSelection = customType<{ data: TimeSelection; driverData: string }>({
 });
 
 export const event = pgTable("event", {
-    id: text("id").primaryKey().default(sql`upper(substr(md5(random()::text), 1, 7))`),
+    id: text("id")
+        .primaryKey()
+        .default(sql`upper(substr(md5(random()::text), 1, 7))`),
     name: text("name").notNull(),
     timezone: text("timezone").default("UTC").notNull(), // IANA Timezone Identifier
     organizerName: text("organizer_name").notNull(),
