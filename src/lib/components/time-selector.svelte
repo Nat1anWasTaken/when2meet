@@ -1,4 +1,5 @@
 <script lang="ts">
+    import TimeCell from "$lib/components/time-cell.svelte";
     import {
         cellsToTimeSelections,
         cn,
@@ -8,7 +9,6 @@
         type AvailabilityColorMap,
         type Cell
     } from "$lib/utils";
-    import type { Snippet } from "svelte";
 
     interface Props {
         class?: string;
@@ -16,11 +16,13 @@
         endDate: Date;
         intervalInMinutes?: number;
         cellHeight?: string;
-        cell?: Snippet<[Cell, boolean, boolean, number]>;
         selectable?: boolean;
         hoveredCell?: Cell | null;
         selectedTimes?: { startTime: Date; endTime: Date }[];
-        participants?: Array<{ timeSelection: { startTime: Date; endTime: Date }[] }>;
+        participants?: Array<{
+            username: string;
+            timeSelection: { startTime: Date; endTime: Date }[];
+        }>;
         availabilityColorMap?: AvailabilityColorMap;
     }
 
@@ -30,7 +32,6 @@
         endDate,
         intervalInMinutes = 30,
         cellHeight = "1fr",
-        cell,
         selectable = $bindable(false),
         hoveredCell = $bindable(null),
         selectedTimes = $bindable([]),
@@ -71,11 +72,12 @@
     // Calculate participant availability for each cell
     let participantAvailability = $derived.by(() => {
         const totalParticipants = participants?.length || 0;
-        if (totalParticipants === 0) return new Map<string, number>();
+        if (totalParticipants === 0)
+            return new Map<string, { count: number; participants: string[] }>();
 
-        const availability = new Map<string, number>();
+        const availability = new Map<string, { count: number; participants: string[] }>();
 
-        // Count availability for each cell
+        // Count availability for each cell and track participant names
         participants.forEach((participant) => {
             participant.timeSelection.forEach((selection) => {
                 const startTime = new Date(selection.startTime);
@@ -101,7 +103,11 @@
                 // Mark all cells in this time range as available for this participant
                 for (let y = startY; y < endY && y < cellsPerDay; y++) {
                     const key = cellKeyFromCoords(dayIndex, y);
-                    availability.set(key, (availability.get(key) || 0) + 1);
+                    const existing = availability.get(key) || { count: 0, participants: [] };
+                    availability.set(key, {
+                        count: existing.count + 1,
+                        participants: [...existing.participants, participant.username]
+                    });
                 }
             });
         });
@@ -110,7 +116,11 @@
     });
 
     function getAvailabilityCount(x: number, y: number): number {
-        return participantAvailability.get(cellKeyFromCoords(x, y)) || 0;
+        return participantAvailability.get(cellKeyFromCoords(x, y))?.count || 0;
+    }
+
+    function getAvailableParticipants(x: number, y: number): string[] {
+        return participantAvailability.get(cellKeyFromCoords(x, y))?.participants || [];
     }
 
     function getAvailabilityColor(participantCount: number): string {
@@ -197,35 +207,6 @@
     }
 </script>
 
-{#snippet defaultCell(cell: Cell, selecting: boolean, selected: boolean, participantCount: number)}
-    {@const totalParticipants = participants?.length || 0}
-    {@const availabilityRatio = totalParticipants > 0 ? participantCount / totalParticipants : 0}
-    {@const cellColor = getAvailabilityColor(participantCount)}
-    <div
-        data-x={cell[0]}
-        data-y={cell[1]}
-        class={cn(
-            "cell flex h-full w-full items-center justify-center transition-all duration-150 select-none",
-            selecting
-                ? "scale-105 border-2 border-primary shadow-md"
-                : selected
-                  ? "border-2 border-primary/70"
-                  : "border border-transparent hover:border-primary"
-        )}
-        style={selecting
-            ? "background-color: hsl(var(--primary) / 0.8)"
-            : selected
-              ? "background-color: hsl(var(--primary) / 0.4)"
-              : `background-color: ${cellColor}`}
-        title={totalParticipants > 0
-            ? `${participantCount}/${totalParticipants} available (${Math.round(availabilityRatio * 100)}%)`
-            : undefined}
-    >
-        {#if selected}
-            Selected
-        {/if}
-    </div>
-{/snippet}
 
 <svelte:window
     onpointerdown={handlePointerDown}
@@ -253,21 +234,16 @@
         </div>
         {#each Array(cellsPerDay) as _, y}
             {@const participantCount = getAvailabilityCount(x, y)}
-            {#if cell}
-                {@render cell(
-                    [x, y],
-                    currentSelectedCells.some(([sx, sy]) => sx === x && sy === y),
-                    selectedCells.some(([sx, sy]) => sx === x && sy === y),
-                    participantCount
-                )}
-            {:else}
-                {@render defaultCell(
-                    [x, y],
-                    currentSelectedCells.some(([sx, sy]) => sx === x && sy === y),
-                    selectedCells.some(([sx, sy]) => sx === x && sy === y),
-                    participantCount
-                )}
-            {/if}
+
+            <TimeCell
+                cell={[x, y]}
+                selecting={currentSelectedCells.some(([sx, sy]) => sx === x && sy === y)}
+                selected={selectedCells.some(([sx, sy]) => sx === x && sy === y)}
+                {participantCount}
+                totalParticipants={participants?.length || 0}
+                availableParticipants={getAvailableParticipants(x, y)}
+                cellColor={getAvailabilityColor(participantCount)}
+            />
         {/each}
     {/each}
 </div>
