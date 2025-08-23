@@ -14,6 +14,8 @@
             timeSelection: { startTime: Date; endTime: Date }[];
         }[];
         cellColor: string;
+        disableTooltip?: boolean;
+        selectable?: boolean;
         class?: string;
     }
 
@@ -25,12 +27,13 @@
         totalParticipants,
         availableParticipants,
         cellColor,
+        selectable = false,
         class: className
     }: Props = $props();
 </script>
 
 <Tooltip.Provider>
-    <Tooltip.Root delayDuration={0}>
+    <Tooltip.Root delayDuration={0} disabled={selectable}>
         <Tooltip.Trigger
             data-x={cell[0]}
             data-y={cell[1]}

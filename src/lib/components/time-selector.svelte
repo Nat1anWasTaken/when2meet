@@ -75,7 +75,10 @@
         if (totalParticipants === 0)
             return new Map<string, { count: number; participants: typeof participants }>();
 
-        const availability = new Map<string, { count: number; participants: typeof participants }>();
+        const availability = new Map<
+            string,
+            { count: number; participants: typeof participants }
+        >();
 
         // Count availability for each cell and track full participant objects
         participants.forEach((participant) => {
@@ -207,7 +210,6 @@
     }
 </script>
 
-
 <svelte:window
     onpointerdown={handlePointerDown}
     onpointermove={handlePointerMove}
@@ -243,6 +245,7 @@
                 totalParticipants={participants?.length || 0}
                 availableParticipants={getAvailableParticipants(x, y)}
                 cellColor={getAvailabilityColor(participantCount)}
+                {selectable}
             />
         {/each}
     {/each}

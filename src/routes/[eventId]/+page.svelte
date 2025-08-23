@@ -25,10 +25,14 @@
     let participationMode = $state<"view" | "participate">("view");
     let selectedTimes = $state<{ startTime: Date; endTime: Date }[]>([]);
     let selectorSelectable = $state(false);
+    let controlBarRef = $state<any>();
 
     function startParticipation() {
         participationMode = "participate";
         selectorSelectable = true;
+        setTimeout(() => {
+            controlBarRef?.focusInput?.();
+        }, 100);
     }
 
     function reset() {
@@ -68,16 +72,20 @@
                 {#if data.participants && data.participants.length > 0}
                     <div class="mb-4 flex flex-wrap gap-2">
                         {#each data.participants as participant}
-                            <ParticipantBadge 
-                                name={participant.username || participant.user?.name || "Unknown User"}
+                            <ParticipantBadge
+                                name={participant.username ||
+                                    participant.user?.name ||
+                                    "Unknown User"}
                                 image={participant.user?.image}
                             />
                         {/each}
                     </div>
                 {/if}
-                {#if participationMode === "view"}
-                    <Button size="lg" onclick={startParticipation}>Participate in Event</Button>
-                {/if}
+                <Button
+                    size="lg"
+                    onclick={startParticipation}
+                    disabled={participationMode === "participate"}>Participate in Event</Button
+                >
             </Card.Content>
         </Card.Root>
 
@@ -123,5 +131,11 @@
 
 <!-- Floating Control Bar -->
 {#if participationMode === "participate"}
-    <ParticipationControlBar eventId={data.id} {selectedTimes} onSuccess={reset} onCancel={reset} />
+    <ParticipationControlBar
+        bind:this={controlBarRef}
+        eventId={data.id}
+        {selectedTimes}
+        onSuccess={reset}
+        onCancel={reset}
+    />
 {/if}

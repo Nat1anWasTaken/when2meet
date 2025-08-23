@@ -22,10 +22,15 @@
     const session = authClient.useSession();
 
     let participantName = $state("");
+    let inputRef = $state<HTMLInputElement | null>(null);
 
     let isSaving = $state(false);
     let showWarningDialog = $state(false);
     let validationErrorMessage = $state<string | undefined>(undefined);
+
+    export function focusInput() {
+        inputRef?.focus();
+    }
 
     async function handleSave() {
         validationErrorMessage = undefined;
@@ -71,6 +76,18 @@
     }
 </script>
 
+<svelte:window
+    onkeydown={(event) => {
+        if (event.key == "Enter") {
+            handleSave();
+            return;
+        } else if (event.key == "Escape") {
+            onCancel();
+            return;
+        }
+    }}
+/>
+
 <div
     class="fixed right-4 bottom-4 left-4 z-50 mx-auto max-w-3xl rounded-lg border border-accent bg-background/95 p-4 shadow-xl backdrop-blur supports-[backdrop-filter]:bg-background/80"
     in:fly={{ y: 100, duration: 500, easing: backOut }}
@@ -87,16 +104,12 @@
                 {/if}
             </div>
             <Input
+                bind:ref={inputRef}
                 id="floatingName"
                 bind:value={participantName}
                 placeholder="Enter your name to participate"
                 disabled={isSaving}
                 class="transition-all duration-200"
-                onkeydown={(event) => {
-                    if (event.key === "Enter" && !isSaving && participantName.trim()) {
-                        handleSave();
-                    }
-                }}
             />
         </div>
 
