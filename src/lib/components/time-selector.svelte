@@ -1,8 +1,8 @@
 <script lang="ts">
     import TimeCell from "$lib/components/time-cell.svelte";
     import {
-        cellsToTimeSelections,
         cn,
+        generateDaysArray,
         generateTimeStrings,
         getDayString,
         rectCellsArray,
@@ -18,7 +18,7 @@
         cellHeight?: string;
         selectable?: boolean;
         hoveredCell?: Cell | null;
-        selectedTimes?: { startTime: Date; endTime: Date }[];
+        selectedCells?: Cell[];
         participants?: Array<{
             username: string;
             timeSelection: { startTime: Date; endTime: Date }[];
@@ -34,20 +34,12 @@
         cellHeight = "1fr",
         selectable = $bindable(false),
         hoveredCell = $bindable(null),
-        selectedTimes = $bindable([]),
+        selectedCells = $bindable([]),
         participants = [],
         availabilityColorMap
     }: Props = $props();
 
-    let days = $derived.by(() => {
-        const dates: Date[] = [];
-        const currentDate = structuredClone(startDate);
-        while (currentDate <= endDate) {
-            dates.push(new Date(currentDate));
-            currentDate.setDate(currentDate.getDate() + 1);
-        }
-        return dates;
-    });
+    let days = $derived(generateDaysArray(startDate, endDate));
 
     let cellsPerDay = $derived((60 * 24) / intervalInMinutes);
 
@@ -62,8 +54,6 @@
     let currentSelectedCells = $derived(
         startCell && endCell ? rectCellsArray(startCell, endCell) : []
     );
-
-    let selectedCells = $state<Cell[]>([]);
 
     function cellKeyFromCoords(x: number, y: number): string {
         return `${x},${y}`;
@@ -131,15 +121,10 @@
         return availabilityColorMap?.get(participantCount) || "var(--primary)";
     }
 
-    $effect(() => {
-        selectedTimes = cellsToTimeSelections(selectedCells, days, intervalInMinutes);
-    });
-
     export function resetSelection() {
         startCell = null;
         endCell = null;
         lastHovered = null;
-        currentSelectedCells = [];
         selectedCells = [];
     }
 

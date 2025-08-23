@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { createParticipant } from "$lib/api/participants.remote";
+    import { createParticipant, updateParticipant } from "$lib/api/participants.remote";
     import { authClient } from "$lib/auth-client";
     import { Button } from "$lib/components/ui/button";
     import { Input } from "$lib/components/ui/input";
@@ -13,15 +13,22 @@
     interface Props {
         eventId: string;
         selectedTimes: { startTime: Date; endTime: Date }[];
+        existingParticipant: {
+            id: number;
+            username: string;
+            timeSelection: { startTime: Date; endTime: Date }[];
+        } | null;
         onSuccess: () => void;
         onCancel: () => void;
     }
 
-    let { eventId, selectedTimes, onSuccess, onCancel }: Props = $props();
+    let { eventId, selectedTimes, existingParticipant, onSuccess, onCancel }: Props = $props();
+
+    let userAlreadyJoined = $derived(!!existingParticipant);
 
     const session = authClient.useSession();
 
-    let participantName = $state("");
+    let participantName = $state(existingParticipant?.username || "");
     let inputRef = $state<HTMLInputElement | null>(null);
 
     let isSaving = $state(false);
@@ -57,16 +64,28 @@
         isSaving = true;
 
         try {
-            await createParticipant({
-                eventId,
-                username: participantName,
-                timeSelection: selectedTimes.map((t) => ({
-                    startTime: t.startTime.toISOString(),
-                    endTime: t.endTime.toISOString()
-                }))
-            });
+            if (userAlreadyJoined && existingParticipant) {
+                await updateParticipant({
+                    participantId: existingParticipant.id,
+                    username: participantName,
+                    timeSelection: selectedTimes.map((t) => ({
+                        startTime: t.startTime.toISOString(),
+                        endTime: t.endTime.toISOString()
+                    }))
+                });
+                toast.success("Your availability has been updated!");
+            } else {
+                await createParticipant({
+                    eventId,
+                    username: participantName,
+                    timeSelection: selectedTimes.map((t) => ({
+                        startTime: t.startTime.toISOString(),
+                        endTime: t.endTime.toISOString()
+                    }))
+                });
+                toast.success("Your availability has been saved!");
+            }
 
-            toast.success("Your availability has been saved!");
             onSuccess();
         } catch {
             validationErrorMessage = "Failed to save your availability. Please try again.";
@@ -135,10 +154,10 @@
                     {#if isSaving}
                         <div class="flex items-center gap-2">
                             <LoaderCircle class="h-4 w-4 animate-spin" />
-                            Saving...
+                            {userAlreadyJoined ? "Updating..." : "Saving..."}
                         </div>
                     {:else}
-                        Save ({selectedTimes.length} slots)
+                        {userAlreadyJoined ? "Update" : "Save"} ({selectedTimes.length} slots)
                     {/if}
                 </Button>
             </div>

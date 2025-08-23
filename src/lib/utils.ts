@@ -169,6 +169,53 @@ export function cellsToTimeSelections(
     return timeSelections;
 }
 
+export function generateDaysArray(startDate: Date, endDate: Date): Date[] {
+    const dates: Date[] = [];
+    const currentDate = structuredClone(startDate);
+    while (currentDate <= endDate) {
+        dates.push(new Date(currentDate));
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return dates;
+}
+
+export function timeSelectionsToCells(
+    timeSelections: { startTime: Date; endTime: Date }[],
+    days: Date[],
+    intervalInMinutes: number
+): Cell[] {
+    const cells: Cell[] = [];
+
+    for (const selection of timeSelections) {
+        const startTime = new Date(selection.startTime);
+        const endTime = new Date(selection.endTime);
+
+        // Find which day this selection belongs to
+        const dayIndex = days.findIndex(
+            (day) =>
+                day.getFullYear() === startTime.getFullYear() &&
+                day.getMonth() === startTime.getMonth() &&
+                day.getDate() === startTime.getDate()
+        );
+
+        if (dayIndex === -1) continue;
+
+        // Calculate start and end cell indices
+        const startMinutes = startTime.getHours() * 60 + startTime.getMinutes();
+        const endMinutes = endTime.getHours() * 60 + endTime.getMinutes();
+
+        const startY = Math.floor(startMinutes / intervalInMinutes);
+        const endY = Math.floor(endMinutes / intervalInMinutes);
+
+        // Add all cells in this time range
+        for (let y = startY; y < endY; y++) {
+            cells.push([dayIndex, y]);
+        }
+    }
+
+    return cells;
+}
+
 /**
  * Generate an availability color map for participant visualization.
  * @param totalParticipants The total number of participants.

@@ -8,7 +8,14 @@
     import TimeSelector from "$lib/components/time-selector.svelte";
     import { Button } from "$lib/components/ui/button";
     import * as Card from "$lib/components/ui/card";
-    import { extractPrimaryHue, generateAvailabilityColorMap } from "$lib/utils";
+    import {
+        extractPrimaryHue,
+        generateAvailabilityColorMap,
+        cellsToTimeSelections,
+        generateDaysArray,
+        timeSelectionsToCells,
+        type Cell
+    } from "$lib/utils";
     import { ArrowDown } from "lucide-svelte";
     import type { PageProps } from "./$types";
 
@@ -18,6 +25,10 @@
 
     let userAlreadyJoined = $derived.by(() => {
         return data.participants?.some((p) => p.userId === $session.data?.user?.id) || false;
+    });
+
+    let currentUserParticipant = $derived.by(() => {
+        return data.participants?.find((p) => p.userId === $session.data?.user?.id) || null;
     });
 
     let totalParticipants = $derived(data.participants?.length || 0);
@@ -38,16 +49,29 @@
         `Join "${data.name}" organized by ${data.organizerName}. ${totalParticipants} ${totalParticipants === 1 ? "person has" : "people have"} already joined. Find times that work for everyone!`
     );
 
+    let days = $derived(
+        data?.availableTime
+            ? generateDaysArray(data.availableTime.startTime, data.availableTime.endTime)
+            : []
+    );
+
     let timeSelectorRef = $state<TimeSelector | null>(null);
     // State management
     let participationMode = $state<"view" | "participate">("view");
-    let selectedTimes = $state<{ startTime: Date; endTime: Date }[]>([]);
+    let selectedCells = $state<Cell[]>([]);
+    let selectedTimes = $derived(cellsToTimeSelections(selectedCells, days, 60));
     let selectorSelectable = $state(false);
     let controlBarRef = $state<{ focusInput?: () => void }>({});
 
     function startParticipation() {
         participationMode = "participate";
         selectorSelectable = true;
+
+        // If user is already joined, pre-populate their existing selections
+        if (currentUserParticipant && currentUserParticipant.timeSelection) {
+            selectedCells = timeSelectionsToCells(currentUserParticipant.timeSelection, days, 60);
+        }
+
         setTimeout(() => {
             controlBarRef?.focusInput?.();
         }, 100);
@@ -56,6 +80,7 @@
     function reset() {
         participationMode = "view";
         selectorSelectable = false;
+        selectedCells = [];
         timeSelectorRef?.resetSelection?.();
     }
 </script>
@@ -182,7 +207,7 @@
                         cellHeight="40px"
                         class="w-full overflow-auto"
                         bind:selectable={selectorSelectable}
-                        bind:selectedTimes
+                        bind:selectedCells
                         participants={data.participants}
                         {availabilityColorMap}
                     />
@@ -198,6 +223,7 @@
         bind:this={controlBarRef}
         eventId={data.id}
         {selectedTimes}
+        existingParticipant={currentUserParticipant}
         onSuccess={reset}
         onCancel={reset}
     />
