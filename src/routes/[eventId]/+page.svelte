@@ -1,15 +1,26 @@
 <script lang="ts">
+    import ColorMapDisplay from "$lib/components/color-map-display.svelte";
     import EventCard from "$lib/components/event-card.svelte";
     import ParticipationControlBar from "$lib/components/participation-control-bar.svelte";
     import TimeSelector from "$lib/components/time-selector.svelte";
     import { Button } from "$lib/components/ui/button";
     import * as Card from "$lib/components/ui/card";
-    import { daysBetween } from "$lib/utils";
+    import { extractPrimaryHue, generateAvailabilityColorMap } from "$lib/utils";
     import type { PageProps } from "./$types";
 
     let { data }: PageProps = $props();
 
-    // Participation state management
+    let totalParticipants = $derived(data.participants?.length || 0);
+
+    let availabilityColorMap = $derived.by(() => {
+        if (totalParticipants === 0) {
+            return generateAvailabilityColorMap(0);
+        }
+
+        const primaryHue = extractPrimaryHue() || 277;
+        return generateAvailabilityColorMap(totalParticipants, primaryHue);
+    });
+
     let participationMode = $state<"view" | "participate">("view");
     let selectedTimes = $state<{ startTime: Date; endTime: Date }[]>([]);
     let selectorSelectable = $state(false);
@@ -19,14 +30,7 @@
         selectorSelectable = true;
     }
 
-    function handleParticipationSuccess() {
-        // Reset to view mode
-        participationMode = "view";
-        selectedTimes = [];
-        selectorSelectable = false;
-    }
-
-    function handleParticipationCancel() {
+    function reset() {
         participationMode = "view";
         selectedTimes = [];
         selectorSelectable = false;
@@ -82,6 +86,9 @@
                     </Card.Description>
                 </Card.Header>
                 <Card.Content class="p-6">
+                    <div class="mb-4">
+                        <ColorMapDisplay {availabilityColorMap} {totalParticipants} />
+                    </div>
                     <TimeSelector
                         startDate={data.availableTime.startTime}
                         endDate={data.availableTime.endTime}
@@ -90,6 +97,8 @@
                         class="w-full overflow-auto"
                         bind:selectable={selectorSelectable}
                         bind:selectedTimes
+                        participants={data.participants}
+                        {availabilityColorMap}
                     />
                 </Card.Content>
             </Card.Root>
@@ -99,10 +108,5 @@
 
 <!-- Floating Control Bar -->
 {#if participationMode === "participate"}
-    <ParticipationControlBar
-        eventId={data.id}
-        {selectedTimes}
-        onSuccess={handleParticipationSuccess}
-        onCancel={handleParticipationCancel}
-    />
+    <ParticipationControlBar eventId={data.id} {selectedTimes} onSuccess={reset} onCancel={reset} />
 {/if}

@@ -1,5 +1,5 @@
 import { db } from "$lib/server/db";
-import { event } from "$lib/server/db/schema";
+import { event, participant } from "$lib/server/db/schema";
 import { error } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import type { PageServerLoad } from "./$types";
@@ -13,5 +13,10 @@ export const load: PageServerLoad = async ({ params }) => {
         error(404, "Event not found");
     }
 
-    return eventData;
+    const participants = await db.select().from(participant).where(eq(participant.eventId, eventId));
+
+    return {
+        ...eventData,
+        participants
+    };
 };

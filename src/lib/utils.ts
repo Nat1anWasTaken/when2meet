@@ -81,6 +81,8 @@ export function generateTimeStrings(intervalInMinutes: number, use24h: boolean =
 
 export type Cell = [number, number];
 
+export type AvailabilityColorMap = Map<number, string>;
+
 /**
  * Get the cells in a rectangular area.
  * @param from The starting cell.
@@ -165,4 +167,59 @@ export function cellsToTimeSelections(
     }
 
     return timeSelections;
+}
+
+/**
+ * Generate an availability color map for participant visualization.
+ * @param totalParticipants The total number of participants.
+ * @param primaryHue The hue value from the primary color (optional, defaults to 277).
+ * @returns A color map for each participant count level (0 to totalParticipants).
+ */
+export function generateAvailabilityColorMap(totalParticipants: number, primaryHue: number = 277): AvailabilityColorMap {
+    const colorMap = new Map<number, string>();
+
+    // Base color (no participants)
+    colorMap.set(0, "oklch(var(--accent))");
+
+    if (totalParticipants > 0) {
+        // Generate colors for each participant count using OKLCH
+        for (let count = 1; count <= totalParticipants; count++) {
+            const ratio = count / totalParticipants;
+            // Vary lightness and chroma while keeping primary hue
+            const lightness = Math.max(0.3, 0.85 - ratio * 0.4); // 0.85 to 0.45
+            const chroma = Math.min(0.15, 0.05 + ratio * 0.1); // 0.05 to 0.15
+            colorMap.set(count, `oklch(${lightness} ${chroma} ${primaryHue})`);
+        }
+    }
+
+    return colorMap;
+}
+
+/**
+ * Extract the hue value from a CSS OKLCH color string.
+ * This should be called client-side only.
+ * @param element The element to get computed styles from (defaults to document.documentElement).
+ * @param cssVariable The CSS variable name (defaults to '--primary').
+ * @returns The hue value or null if not available.
+ */
+export function extractPrimaryHue(element?: Element, cssVariable: string = '--primary'): number | null {
+    if (typeof window === 'undefined') return null;
+    
+    const targetElement = element || document.documentElement;
+    const primaryValue = getComputedStyle(targetElement)
+        .getPropertyValue(cssVariable)
+        .trim();
+
+    // Parse OKLCH values: oklch(lightness chroma hue)
+    const oklchMatch = primaryValue.match(/oklch\(([^)]+)\)/);
+    
+    if (oklchMatch) {
+        const [, values] = oklchMatch;
+        const parts = values.split(/\s+/);
+        if (parts.length >= 3) {
+            return parseFloat(parts[2]) || null;
+        }
+    }
+    
+    return null;
 }
