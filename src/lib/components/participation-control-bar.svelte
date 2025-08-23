@@ -72,7 +72,7 @@
 </script>
 
 <div
-    class="fixed right-4 bottom-4 left-4 z-50 mx-auto max-w-3xl rounded-lg border bg-background/95 p-4 shadow-xl backdrop-blur supports-[backdrop-filter]:bg-background/80"
+    class="fixed right-4 bottom-4 left-4 z-50 mx-auto max-w-3xl rounded-lg border border-accent bg-background/95 p-4 shadow-xl backdrop-blur supports-[backdrop-filter]:bg-background/80"
     in:fly={{ y: 100, duration: 500, easing: backOut }}
     out:fly={{ y: 100, duration: 300 }}
 >
@@ -93,7 +93,7 @@
                 disabled={isSaving}
                 class="transition-all duration-200"
                 onkeydown={(event) => {
-                    if (event.key === 'Enter' && !isSaving && participantName.trim()) {
+                    if (event.key === "Enter" && !isSaving && participantName.trim()) {
                         handleSave();
                     }
                 }}
