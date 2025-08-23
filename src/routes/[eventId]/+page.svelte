@@ -8,6 +8,7 @@
     import { Button } from "$lib/components/ui/button";
     import * as Card from "$lib/components/ui/card";
     import { extractPrimaryHue, generateAvailabilityColorMap } from "$lib/utils";
+    import type { SvelteComponent } from "svelte";
     import type { PageProps } from "./$types";
 
     let { data }: PageProps = $props();
@@ -30,6 +31,7 @@
         `Join "${data.name}" organized by ${data.organizerName}. ${totalParticipants} ${totalParticipants === 1 ? "person has" : "people have"} already joined. Find times that work for everyone!`
     );
 
+    let timeSelectorRef = $state<TimeSelector | null>(null);
     // State management
     let participationMode = $state<"view" | "participate">("view");
     let selectedTimes = $state<{ startTime: Date; endTime: Date }[]>([]);
@@ -46,8 +48,8 @@
 
     function reset() {
         participationMode = "view";
-        selectedTimes = [];
         selectorSelectable = false;
+        timeSelectorRef?.resetSelection?.();
     }
 </script>
 
@@ -146,6 +148,7 @@
                         <ColorMapDisplay {availabilityColorMap} {totalParticipants} />
                     </div>
                     <TimeSelector
+                        bind:this={timeSelectorRef}
                         startDate={data.availableTime.startTime}
                         endDate={data.availableTime.endTime}
                         intervalInMinutes={60}
@@ -167,7 +170,7 @@
     <ParticipationControlBar
         bind:this={controlBarRef}
         eventId={data.id}
-        {selectedTimes}
+        bind:selectedTimes
         onSuccess={reset}
         onCancel={reset}
     />

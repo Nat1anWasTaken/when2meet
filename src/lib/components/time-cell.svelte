@@ -29,6 +29,46 @@
         selectable = false,
         class: className
     }: Props = $props();
+
+    function getCellClasses() {
+        const baseClasses =
+            "cell flex h-full w-full items-center justify-center transition-all duration-150 select-none";
+
+        if (selecting) {
+            return cn(baseClasses, "scale-105 border-2 border-primary shadow-md", className);
+        }
+
+        if (selected) {
+            return cn(
+                baseClasses,
+                "border-2 border-primary/70",
+                selectable && "animate-float",
+                className
+            );
+        }
+
+        if (selectable) {
+            return cn(
+                baseClasses,
+                "border border-accent hover:border-primary hover:scale-110 animate-float",
+                className
+            );
+        }
+
+        return cn(baseClasses, "border border-transparent", className);
+    }
+
+    function getCellStyle() {
+        if (selecting) {
+            return "background-color: hsl(var(--primary) / 0.8)";
+        }
+
+        if (selected) {
+            return "background-color: hsl(var(--primary) / 0.4)";
+        }
+
+        return `background-color: ${cellColor}`;
+    }
 </script>
 
 <Tooltip.Provider>
@@ -36,20 +76,8 @@
         <Tooltip.Trigger
             data-x={cell[0]}
             data-y={cell[1]}
-            class={cn(
-                "cell flex h-full w-full items-center justify-center transition-all duration-150 select-none",
-                selecting
-                    ? "scale-105 border-2 border-primary shadow-md"
-                    : selected
-                      ? "border-2 border-primary/70"
-                      : "border border-transparent hover:border-primary",
-                className
-            )}
-            style={selecting
-                ? "background-color: hsl(var(--primary) / 0.8)"
-                : selected
-                  ? "background-color: hsl(var(--primary) / 0.4)"
-                  : `background-color: ${cellColor}`}
+            class={getCellClasses()}
+            style={getCellStyle()}
         >
             {#if selected}
                 Selected
@@ -76,3 +104,19 @@
         {/if}
     </Tooltip.Root>
 </Tooltip.Provider>
+
+<style>
+    @keyframes float {
+        0%,
+        100% {
+            transform: translateY(0) scale(1);
+        }
+        50% {
+            transform: translateY(-2px) scale(1.02);
+        }
+    }
+
+    :global(.animate-float) {
+        animation: float 1.5s ease-in-out infinite;
+    }
+</style>

@@ -135,6 +135,14 @@
         selectedTimes = cellsToTimeSelections(selectedCells, days, intervalInMinutes);
     });
 
+    export function resetSelection() {
+        startCell = null;
+        endCell = null;
+        lastHovered = null;
+        currentSelectedCells = [];
+        selectedCells = [];
+    }
+
     function handlePointerDown(event: PointerEvent) {
         if (!selectable) return;
 
@@ -219,7 +227,11 @@
 
 <div
     bind:this={timeGrid}
-    class={cn("grid grid-flow-col gap-1", className)}
+    class={cn(
+        "grid grid-flow-col transition-all duration-200 ease-in-out",
+        selectable ? "gap-3" : "gap-1",
+        className
+    )}
     style={`grid-template-columns: repeat(${days.length + 1}, minmax(0, 1fr)); grid-template-rows: repeat(${cellsPerDay + 1}, ${cellHeight})`}
 >
     <div class="mb-2 h-full w-full"></div>
