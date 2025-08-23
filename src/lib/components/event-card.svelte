@@ -16,7 +16,6 @@
         };
         timezone: string;
         showActions?: boolean;
-        informationMode?: "compact" | "expanded";
         class?: string;
     }
 
@@ -28,7 +27,6 @@
         availableTime,
         timezone,
         showActions = true,
-        informationMode = "compact",
         class: className
     }: Props = $props();
 
@@ -45,7 +43,7 @@
     }
 </script>
 
-<Card.Root class={className}>
+<Card.Root class={cn("@container", className)}>
     <Card.Content>
         <div class="flex flex-col gap-3">
             <div class="flex flex-col gap-1">
@@ -94,17 +92,10 @@
                         </div>
                     {/snippet}
 
-                    {#if informationMode == "compact"}
-                        <div class="flex flex-col gap-2">
-                            {@render timeRangeDisplay(availableTime)}
-                            {@render timezoneDisplay(timezone)}
-                        </div>
-                    {:else if informationMode == "expanded"}
-                        <div class="grid w-full grid-cols-2 gap-2">
-                            {@render timeRangeDisplay(availableTime)}
-                            {@render timezoneDisplay(timezone)}
-                        </div>
-                    {/if}
+                    <div class="flex flex-col gap-2 @lg:grid @lg:w-full @lg:grid-cols-2">
+                        {@render timeRangeDisplay(availableTime)}
+                        {@render timezoneDisplay(timezone)}
+                    </div>
                 </div>
             {/if}
 

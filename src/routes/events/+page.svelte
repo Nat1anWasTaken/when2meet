@@ -26,7 +26,6 @@
                 endTime: new Date(event.availableTime.endTime)
             }}
             timezone={event.timezone}
-            informationMode="compact"
         />
     {/each}
 {/snippet}
