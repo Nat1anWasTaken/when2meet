@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { page } from "$app/state";
     import ColorMapDisplay from "$lib/components/color-map-display.svelte";
     import EventCard from "$lib/components/event-card.svelte";
     import ParticipantBadge from "$lib/components/participant-badge.svelte";
@@ -22,6 +23,14 @@
         return generateAvailabilityColorMap(totalParticipants, primaryHue);
     });
 
+    // Meta tag data
+    let eventUrl = $derived(page.url.toString());
+    let eventTitle = $derived(`${data.name} - when2meet.app`);
+    let eventDescription = $derived(
+        `Join "${data.name}" organized by ${data.organizerName}. ${totalParticipants} ${totalParticipants === 1 ? "person has" : "people have"} already joined. Find times that work for everyone!`
+    );
+
+    // State management
     let participationMode = $state<"view" | "participate">("view");
     let selectedTimes = $state<{ startTime: Date; endTime: Date }[]>([]);
     let selectorSelectable = $state(false);
@@ -41,6 +50,30 @@
         selectorSelectable = false;
     }
 </script>
+
+<svelte:head>
+    <title>{data.name} - when2meet.app</title>
+    <meta name="description" content={eventDescription} />
+
+    <!-- OpenGraph meta tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={eventTitle} />
+    <meta property="og:description" content={eventDescription} />
+    <meta property="og:url" content={eventUrl} />
+    <meta property="og:site_name" content="when2meet.app" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card meta tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={eventTitle} />
+    <meta name="twitter:description" content={eventDescription} />
+    <meta name="twitter:url" content={eventUrl} />
+    <meta name="twitter:site" content="@when2meetapp" />
+
+    <!-- Additional meta tags -->
+    <meta name="author" content={data.organizerName} />
+    <meta name="robots" content="index, follow" />
+</svelte:head>
 
 <div class="flex h-full w-full items-start justify-center p-4">
     <div class="flex h-full w-full max-w-4xl flex-col gap-6">
