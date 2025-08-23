@@ -137,3 +137,32 @@ export function daysBetween(date1: Date, date2: Date): number {
     const msPerDay = 1000 * 60 * 60 * 24;
     return Math.round(Math.abs(date2.getTime() - date1.getTime()) / msPerDay);
 }
+
+/**
+ * Convert grid cells to time selections with actual dates.
+ * @param cells The array of cell coordinates.
+ * @param days The array of dates corresponding to columns.
+ * @param intervalInMinutes The time interval per cell row.
+ * @returns An array of time selection objects.
+ */
+export function cellsToTimeSelections(
+    cells: Cell[],
+    days: Date[],
+    intervalInMinutes: number
+): { startTime: Date; endTime: Date }[] {
+    const timeSelections: { startTime: Date; endTime: Date }[] = [];
+
+    for (const [x, y] of cells) {
+        const dayDate = new Date(days[x]);
+        const minutesFromMidnight = y * intervalInMinutes;
+        const startTime = new Date(dayDate);
+        startTime.setHours(0, minutesFromMidnight, 0, 0);
+
+        const endTime = new Date(startTime);
+        endTime.setMinutes(endTime.getMinutes() + intervalInMinutes);
+
+        timeSelections.push({ startTime, endTime });
+    }
+
+    return timeSelections;
+}

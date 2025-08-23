@@ -1,5 +1,12 @@
 <script lang="ts">
-    import { cn, generateTimeStrings, getDayString, rectCellsArray, type Cell } from "$lib/utils";
+    import {
+        cellsToTimeSelections,
+        cn,
+        generateTimeStrings,
+        getDayString,
+        rectCellsArray,
+        type Cell
+    } from "$lib/utils";
     import type { Snippet } from "svelte";
 
     interface Props {
@@ -11,6 +18,7 @@
         cell?: Snippet<[Cell, boolean, boolean]>;
         selectable?: boolean;
         hoveredCell?: Cell | null;
+        selectedTimes?: { startTime: Date; endTime: Date }[];
     }
 
     let {
@@ -21,7 +29,8 @@
         cellHeight = "1fr",
         cell,
         selectable = $bindable(false),
-        hoveredCell = $bindable(null)
+        hoveredCell = $bindable(null),
+        selectedTimes = $bindable([])
     }: Props = $props();
 
     let days = $derived.by(() => {
@@ -49,6 +58,10 @@
     );
 
     let availableCells = $state<Cell[]>([]);
+
+    $effect(() => {
+        selectedTimes = cellsToTimeSelections(availableCells, days, intervalInMinutes);
+    });
 
     function handlePointerDown(event: PointerEvent) {
         if (!selectable) return;
