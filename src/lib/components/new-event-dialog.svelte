@@ -1,17 +1,18 @@
 <script lang="ts">
     import { refreshAll } from "$app/navigation";
     import { createEvent } from "$lib/api/events.remote";
-    import DateAndTimeSelect from "$lib/components/date-and-time-select.svelte";
     import { Button } from "$lib/components/ui/button";
     import * as Dialog from "$lib/components/ui/dialog/";
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
     import * as RadioGroup from "$lib/components/ui/radio-group";
+    import { RangeCalendar } from "$lib/components/ui/range-calendar";
     import { preservedEventNames } from "$lib/utils";
-    import type { CalendarDate } from "@internationalized/date";
     import { Time, toCalendarDateTime } from "@internationalized/date";
+    import type { DateRange } from "bits-ui";
     import type { Snippet } from "svelte";
     import { toast } from "svelte-sonner";
+    import DateRangeSelect from "./date-range-select.svelte";
     import TimezoneSelect from "./timezone-select.svelte";
 
     type WeeklyRecurrence = "weekly" | "once";
@@ -31,25 +32,23 @@
     let organizerName = $state<string>("");
     let weeklyRecurrence = $state<WeeklyRecurrence>("weekly");
 
-    let selectedStartDate = $state<CalendarDate | undefined>(undefined);
-    let selectedStartTime = $state<Time | undefined>(new Time(9, 0));
+    let selectedDateRange = $state<DateRange | undefined>(undefined);
 
-    let selectedEndDate = $state<CalendarDate | undefined>(undefined);
-    let selectedEndTime = $state<Time | undefined>(new Time(10, 0));
-
-    let selectedTimezone = $state<string | undefined>(undefined);
+    let selectedTimezone = $state<string | undefined>(
+        Intl.DateTimeFormat().resolvedOptions().timeZone
+    );
 
     let selectedWeeklyRecurrence = $derived(weeklyRecurrence === "weekly");
 
     let startingDateTime = $derived(
-        selectedStartDate && selectedStartTime
-            ? toCalendarDateTime(selectedStartDate, selectedStartTime)
+        selectedDateRange?.start
+            ? toCalendarDateTime(selectedDateRange.start, new Time(0, 0))
             : undefined
     );
 
     let endingDateTime = $derived(
-        selectedEndDate && selectedEndTime
-            ? toCalendarDateTime(selectedEndDate, selectedEndTime)
+        selectedDateRange?.end
+            ? toCalendarDateTime(selectedDateRange.end, new Time(23, 59, 59, 999))
             : undefined
     );
 
@@ -59,10 +58,7 @@
         eventName = "";
         organizerName = "";
         weeklyRecurrence = "weekly";
-        selectedStartDate = undefined;
-        selectedStartTime = new Time(9, 0);
-        selectedEndDate = undefined;
-        selectedEndTime = new Time(10, 0);
+        selectedDateRange = undefined;
         selectedTimezone = undefined;
     };
 
@@ -77,12 +73,8 @@
             missingFields.push("Organizer Name");
         }
 
-        if (!startingDateTime) {
-            missingFields.push("Starting Date and Time");
-        }
-
-        if (!endingDateTime) {
-            missingFields.push("Ending Date and Time");
+        if (!selectedDateRange) {
+            missingFields.push("Date Range");
         }
 
         if (!selectedTimezone) {
@@ -105,7 +97,11 @@
 
     const handleCreateEvent = async () => {
         canCreate = false;
-        validateFormData();
+
+        if (!validateFormData()) {
+            canCreate = true;
+            return;
+        }
 
         try {
             await createEvent({
@@ -156,25 +152,30 @@
             </div>
 
             <div class="flex flex-col gap-2">
-                <Label>What date / time might work?</Label>
-                <div
-                    class="flex w-full flex-col items-start gap-2 md:grid md:grid-cols-3 md:items-center"
-                >
-                    <p class="text-xs text-muted-foreground">Starting from:</p>
-                    <DateAndTimeSelect
-                        class="w-full md:col-span-2 md:w-auto"
-                        bind:selectedDate={selectedStartDate}
-                        bind:selectedTime={selectedStartTime}
-                    />
-                    <p class="text-xs text-muted-foreground">Ending at:</p>
-                    <DateAndTimeSelect
-                        class="w-full md:col-span-2 md:w-auto"
-                        bind:selectedDate={selectedEndDate}
-                        bind:selectedTime={selectedEndTime}
-                    />
-                    <p class="text-xs text-muted-foreground">Timezone:</p>
-                    <TimezoneSelect class="col-span-2 w-full md:w-auto" bind:selectedTimezone />
+                <Label>What date range might work?</Label>
+                <div class="grid grid-cols-4 grid-rows-2 gap-2" style="place-items: center start;">
+                    <p class=" col-span-1 text-xs text-muted-foreground">Date range:</p>
+                    <!-- <RangeCalendar
+                        bind:value={selectedDateRange}
+                        class="flex w-full items-center justify-center"
+                    /> -->
+                    <DateRangeSelect class="col-span-3 w-full" bind:selectedDateRange />
+                    <p class="col-span-1 text-xs text-muted-foreground">Timezone:</p>
+                    <TimezoneSelect class="col-span-3 w-full" bind:selectedTimezone />
                 </div>
+                <!-- <div class="flex w-full flex-col items-start justify-between gap-2">
+                    <p class="text-xs text-muted-foreground">
+                        Select date range (time will be set from 00:00 to 23:59):
+                    </p>
+                    <RangeCalendar
+                        bind:value={selectedDateRange}
+                        class="flex w-full items-center justify-center"
+                    />
+                    <div class="flex w-full flex-col gap-2 md:flex-row md:items-center">
+                        <p class="text-xs text-muted-foreground">Timezone:</p>
+                        <TimezoneSelect class="w-full md:w-auto" bind:selectedTimezone />
+                    </div>
+                </div> -->
             </div>
 
             <div class="flex flex-col gap-2">
