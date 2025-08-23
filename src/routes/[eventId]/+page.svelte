@@ -1,5 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
+    import { authClient } from "$lib/auth-client";
     import ColorMapDisplay from "$lib/components/color-map-display.svelte";
     import EventCard from "$lib/components/event-card.svelte";
     import ParticipantBadge from "$lib/components/participant-badge.svelte";
@@ -12,6 +13,12 @@
     import type { PageProps } from "./$types";
 
     let { data }: PageProps = $props();
+
+    const session = authClient.useSession();
+
+    let userAlreadyJoined = $derived.by(() => {
+        return data.participants?.some((p) => p.userId === $session.data?.user?.id) || false;
+    });
 
     let totalParticipants = $derived(data.participants?.length || 0);
 
@@ -136,7 +143,7 @@
                     disabled={participationMode === "participate"}
                 >
                     {#if participationMode === "view"}
-                        Join Event
+                        {userAlreadyJoined ? "Edit Participation" : "Join Event"}
                     {:else if participationMode === "participate"}
                         Select your available time below <ArrowDown />
                     {/if}
@@ -190,7 +197,7 @@
     <ParticipationControlBar
         bind:this={controlBarRef}
         eventId={data.id}
-        bind:selectedTimes
+        {selectedTimes}
         onSuccess={reset}
         onCancel={reset}
     />
