@@ -16,23 +16,18 @@
 
 {#snippet eventGallery(events: Awaited<ReturnType<typeof getOrganizedEvents>>)}
     {#each events as event}
-        <EventCard weeklyRecurrence={event.weeklyRecurrence} eventId={event.id}>
-            {#snippet name()}
-                {event.name}
-            {/snippet}
-            {#snippet organizer()}
-                {event.organizerName}
-            {/snippet}
-            {#snippet startTime()}
-                {new Date(event.availableTime.startTime).toLocaleString()}
-            {/snippet}
-            {#snippet endTime()}
-                {new Date(event.availableTime.endTime).toLocaleString()}
-            {/snippet}
-            {#snippet timezone()}
-                {event.timezone}
-            {/snippet}
-        </EventCard>
+        <EventCard
+            eventId={event.id}
+            name={event.name}
+            organizerName={event.organizerName}
+            weeklyRecurrence={event.weeklyRecurrence}
+            availableTime={{
+                startTime: new Date(event.availableTime.startTime),
+                endTime: new Date(event.availableTime.endTime)
+            }}
+            timezone={event.timezone}
+            informationMode="compact"
+        />
     {/each}
 {/snippet}
 

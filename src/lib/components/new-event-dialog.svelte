@@ -22,6 +22,8 @@
 
     let { children }: Props = $props();
 
+    let canCreate = $state<boolean>(true);
+
     let open = $state<boolean>(false);
     let validationErrorMessage = $state<string | undefined>(undefined);
 
@@ -102,6 +104,7 @@
     };
 
     const handleCreateEvent = async () => {
+        canCreate = false;
         validateFormData();
 
         try {
@@ -116,15 +119,17 @@
                 weeklyRecurrence: selectedWeeklyRecurrence
             });
 
+            open = false; // Close dialog
+
             resetForm();
             refreshAll();
-
-            open = false; // Close dialog
         } catch (error) {
             console.error("Failed to create event:", error);
             toast.error("Failed to create event", {
                 description: `${error}`
             });
+        } finally {
+            canCreate = true;
         }
     };
 </script>
@@ -190,7 +195,9 @@
                 {#if validationErrorMessage}
                     <p class="text-sm text-destructive">{validationErrorMessage}</p>
                 {/if}
-                <Button class="w-full" onclick={handleCreateEvent}>Create Event</Button>
+                <Button class="w-full" onclick={handleCreateEvent} disabled={!canCreate}
+                    >Create Event</Button
+                >
             </div>
         </div>
     </Dialog.Content>

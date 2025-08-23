@@ -4,19 +4,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Common Development Commands
 
-- `npm run dev` - Start development server
-- `npm run build` - Create production build
-- `npm run preview` - Preview production build
-- `npm run check` - Run Svelte type checking
-- `npm run check:watch` - Run type checking in watch mode
-- `npm run format` - Format code with Prettier
-- `npm run lint` - Run linting (Prettier + ESLint)
+**Note: This project uses pnpm, not npm**
+
+- `pnpm dev` - Start development server
+- `pnpm build` - Create production build
+- `pnpm preview` - Preview production build
+- `pnpm check` - Run Svelte type checking
+- `pnpm check:watch` - Run type checking in watch mode
+- `pnpm format` - Format code with Prettier
+- `pnpm lint` - Run linting (Prettier + ESLint)
 
 ## Database Commands
 
-- `npm run db:push` - Push schema changes to database (uses drizzle-kit)
-- `npm run db:migrate` - Run database migrations
-- `npm run db:studio` - Open Drizzle Studio for database management
+- `pnpm db:push` - Push schema changes to database (uses drizzle-kit)
+- `pnpm db:migrate` - Run database migrations
+- `pnpm db:studio` - Open Drizzle Studio for database management
 
 ## Architecture Overview
 
@@ -133,3 +135,33 @@ const dispatch = createEventDispatcher();
 - No `export let` for props
 - No `$$props` or `$$restProps`
 - Use Context7 tool with `/sveltejs/svelte` library ID for latest docs
+
+## UI Components
+
+**IMPORTANT**: Always use shadcn-svelte components when available. Components are located in `src/lib/components/ui/`.
+
+**Available Components:**
+- Avatar, Badge, Button, Calendar, Card, Command, Dialog
+- Dropdown Menu, Input, Label, Popover, Select, Separator, Sonner
+
+**Adding New Components:**
+If you need a shadcn-svelte component that's not yet added:
+```bash
+npx shadcn-svelte@latest add [component-name]
+```
+
+Examples:
+```bash
+npx shadcn-svelte@latest add sheet
+npx shadcn-svelte@latest add table  
+npx shadcn-svelte@latest add tabs
+```
+
+**Usage Pattern:**
+```svelte
+import { Button } from '$lib/components/ui/button';
+import { Input } from '$lib/components/ui/input';
+import { Card } from '$lib/components/ui/card';
+```
+
+The project uses `components.json` for shadcn-svelte configuration.

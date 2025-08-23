@@ -15,7 +15,22 @@ export type WithoutChildren<T> = T extends { children?: any } ? Omit<T, "childre
 export type WithoutChildrenOrChild<T> = WithoutChildren<WithoutChild<T>>;
 export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & { ref?: U | null };
 
-/// Generates a list of time intervals within a day.
+/**
+ * Get the name of the day for a given date
+ * TODO: i18n
+ * @param date The date to get the day name for.
+ * @returns The name of the day.
+ */
+export function getDayString(date: Date): string {
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    return days[date.getDay()];
+}
+
+/**
+ * List time intervals within a day.
+ * @param intervalInMinutes The interval in minutes.
+ * @returns An array of Time objects representing the intervals.
+ */
 export function listTimesByInterval(intervalInMinutes: number): Time[] {
     if (intervalInMinutes <= 0 || intervalInMinutes > 1440) {
         throw new Error("Interval must be between 1 and 1440 minutes.");
@@ -32,7 +47,12 @@ export function listTimesByInterval(intervalInMinutes: number): Time[] {
     return timeList;
 }
 
-/// Generates a list of time strings within a day.
+/**
+ * Generates a list of time strings within a day.
+ * @param intervalInMinutes The interval in minutes.
+ * @param use24h Whether to use 24-hour format.
+ * @returns An array of time strings.
+ */
 export function generateTimeStrings(intervalInMinutes: number, use24h: boolean = false): string[] {
     if (intervalInMinutes <= 0 || intervalInMinutes > 1440) {
         throw new Error("Interval must be between 1 and 1440 minutes.");
@@ -61,6 +81,12 @@ export function generateTimeStrings(intervalInMinutes: number, use24h: boolean =
 
 export type Cell = [number, number];
 
+/**
+ * Get the cells in a rectangular area.
+ * @param from The starting cell.
+ * @param to The ending cell.
+ * @returns An array of cells in the rectangular area.
+ */
 export function rectCellsArray(from: Cell, to: Cell): Cell[] {
     const minX = Math.min(from[0], to[0]);
     const maxX = Math.max(from[0], to[0]);
@@ -81,16 +107,32 @@ export function rectCellsArray(from: Cell, to: Cell): Cell[] {
     return out;
 }
 
+/**
+ * Formats a time object into a string.
+ * @param time The time object to format.
+ * @returns The formatted time string.
+ */
 export function formatTime(time: Time): string {
     return `${time.hour}:${time.minute.toString().padStart(2, "0")}`;
 }
 
+/**
+ * Parses a time string in the format "HH:mm" or "H:mm" into a Time object.
+ * @param timeString The time string to parse.
+ * @returns The parsed Time object or null if the format is invalid.
+ */
 export function parseTime(timeString: string): Time | null {
     const [hours, minutes] = timeString.split(":").map(Number);
     if (isNaN(hours) || isNaN(minutes)) return null;
     return new Time(hours, minutes);
 }
 
+/**
+ * Get the number of days between two dates.
+ * @param date1 The first date.
+ * @param date2 The second date.
+ * @returns The number of days between the two dates.
+ */
 export function daysBetween(date1: Date, date2: Date): number {
     const msPerDay = 1000 * 60 * 60 * 24;
     return Math.round(Math.abs(date2.getTime() - date1.getTime()) / msPerDay);
