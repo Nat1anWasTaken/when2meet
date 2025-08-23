@@ -1,11 +1,9 @@
 <script lang="ts">
     import { Button } from "$lib/components/ui/button";
-    import * as Command from "$lib/components/ui/command";
     import * as Popover from "$lib/components/ui/popover";
     import { cn } from "$lib/utils";
     import type { DateRange } from "bits-ui";
-    import { CheckIcon, ChevronDownIcon } from "lucide-svelte";
-    import { tick } from "svelte";
+    import { ChevronDownIcon } from "lucide-svelte";
     import { RangeCalendar } from "./ui/range-calendar";
 
     interface Props {
@@ -17,13 +15,6 @@
 
     let open = $state(false);
     let triggerRef = $state<HTMLButtonElement>(null!);
-
-    function closeAndFocusTrigger() {
-        open = false;
-        tick().then(() => {
-            triggerRef.focus();
-        });
-    }
 </script>
 
 <Popover.Root bind:open>

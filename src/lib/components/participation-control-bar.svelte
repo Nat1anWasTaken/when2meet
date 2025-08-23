@@ -68,7 +68,7 @@
 
             toast.success("Your availability has been saved!");
             onSuccess();
-        } catch (error) {
+        } catch {
             validationErrorMessage = "Failed to save your availability. Please try again.";
         } finally {
             isSaving = false;

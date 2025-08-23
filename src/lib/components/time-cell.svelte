@@ -14,7 +14,6 @@
             timeSelection: { startTime: Date; endTime: Date }[];
         }[];
         cellColor: string;
-        disableTooltip?: boolean;
         selectable?: boolean;
         class?: string;
     }
@@ -64,7 +63,7 @@
                         {participantCount}/{totalParticipants} available
                     </p>
                     <div class="flex flex-row flex-wrap gap-2">
-                        {#each availableParticipants as participant}
+                        {#each availableParticipants as participant (participant.username)}
                             <ParticipantBadge
                                 name={participant.username}
                                 size="sm"

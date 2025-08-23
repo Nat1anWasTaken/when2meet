@@ -175,7 +175,10 @@ export function cellsToTimeSelections(
  * @param primaryHue The hue value from the primary color (optional, defaults to 277).
  * @returns A color map for each participant count level (0 to totalParticipants).
  */
-export function generateAvailabilityColorMap(totalParticipants: number, primaryHue: number = 277): AvailabilityColorMap {
+export function generateAvailabilityColorMap(
+    totalParticipants: number,
+    primaryHue: number = 277
+): AvailabilityColorMap {
     const colorMap = new Map<number, string>();
 
     // Base color (no participants)
@@ -202,17 +205,18 @@ export function generateAvailabilityColorMap(totalParticipants: number, primaryH
  * @param cssVariable The CSS variable name (defaults to '--primary').
  * @returns The hue value or null if not available.
  */
-export function extractPrimaryHue(element?: Element, cssVariable: string = '--primary'): number | null {
-    if (typeof window === 'undefined') return null;
-    
+export function extractPrimaryHue(
+    element?: Element,
+    cssVariable: string = "--primary"
+): number | null {
+    if (typeof window === "undefined") return null;
+
     const targetElement = element || document.documentElement;
-    const primaryValue = getComputedStyle(targetElement)
-        .getPropertyValue(cssVariable)
-        .trim();
+    const primaryValue = getComputedStyle(targetElement).getPropertyValue(cssVariable).trim();
 
     // Parse OKLCH values: oklch(lightness chroma hue)
     const oklchMatch = primaryValue.match(/oklch\(([^)]+)\)/);
-    
+
     if (oklchMatch) {
         const [, values] = oklchMatch;
         const parts = values.split(/\s+/);
@@ -220,6 +224,6 @@ export function extractPrimaryHue(element?: Element, cssVariable: string = '--pr
             return parseFloat(parts[2]) || null;
         }
     }
-    
+
     return null;
 }

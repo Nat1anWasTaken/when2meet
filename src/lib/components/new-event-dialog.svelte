@@ -6,7 +6,6 @@
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
     import * as RadioGroup from "$lib/components/ui/radio-group";
-    import { RangeCalendar } from "$lib/components/ui/range-calendar";
     import { preservedEventNames } from "$lib/utils";
     import { Time, toCalendarDateTime } from "@internationalized/date";
     import type { DateRange } from "bits-ui";

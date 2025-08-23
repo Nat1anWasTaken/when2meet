@@ -41,7 +41,7 @@
 
     let days = $derived.by(() => {
         const dates: Date[] = [];
-        const currentDate = new Date(startDate);
+        const currentDate = structuredClone(startDate);
         while (currentDate <= endDate) {
             dates.push(new Date(currentDate));
             currentDate.setDate(currentDate.getDate() + 1);
@@ -75,6 +75,7 @@
         if (totalParticipants === 0)
             return new Map<string, { count: number; participants: typeof participants }>();
 
+        // eslint-disable-next-line svelte/prefer-svelte-reactivity
         const availability = new Map<
             string,
             { count: number; participants: typeof participants }
@@ -222,19 +223,19 @@
     style={`grid-template-columns: repeat(${days.length + 1}, minmax(0, 1fr)); grid-template-rows: repeat(${cellsPerDay + 1}, ${cellHeight})`}
 >
     <div class="mb-2 h-full w-full"></div>
-    {#each generateTimeStrings(intervalInMinutes, false) as time, index}
+    {#each generateTimeStrings(intervalInMinutes, false) as time, index (index)}
         <div
             class="flex h-full w-full items-center justify-center p-2 text-xs text-muted-foreground"
         >
             {index % 4 == 0 ? time : ""}
         </div>
     {/each}
-    {#each days as date, x}
+    {#each days as date, x (date.getTime())}
         <div class="sticky top-0 flex h-full w-full flex-col items-center justify-center">
             <h2 class="text-sm font-bold">{getDayString(date).slice(0, 3)}</h2>
             <p class="text-sm text-muted-foreground">{date.getMonth()}/{date.getDate()}</p>
         </div>
-        {#each Array(cellsPerDay) as _, y}
+        {#each Array(cellsPerDay).entries() as [y] (y)}
             {@const participantCount = getAvailabilityCount(x, y)}
 
             <TimeCell

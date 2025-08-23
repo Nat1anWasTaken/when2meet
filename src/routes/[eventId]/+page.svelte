@@ -34,7 +34,7 @@
     let participationMode = $state<"view" | "participate">("view");
     let selectedTimes = $state<{ startTime: Date; endTime: Date }[]>([]);
     let selectorSelectable = $state(false);
-    let controlBarRef = $state<any>();
+    let controlBarRef = $state<{ focusInput?: () => void }>({});
 
     function startParticipation() {
         participationMode = "participate";
@@ -104,7 +104,7 @@
             <Card.Content>
                 {#if data.participants && data.participants.length > 0}
                     <div class="mb-4 flex flex-wrap gap-2">
-                        {#each data.participants as participant}
+                        {#each data.participants as participant (participant.id)}
                             <ParticipantBadge
                                 name={participant.username ||
                                     participant.user?.name ||

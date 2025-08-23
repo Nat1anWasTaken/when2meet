@@ -22,7 +22,7 @@
 <div class="flex items-center justify-between gap-4">
     <span class="text-sm text-muted-foreground">0/{totalParticipants} Available</span>
     <div class="flex h-6 flex-1 overflow-hidden rounded-full border border-accent shadow-sm">
-        {#each colorSegments as segment}
+        {#each colorSegments as segment (segment.count)}
             <div class="flex-1" style="background-color: {segment.color}"></div>
         {/each}
     </div>

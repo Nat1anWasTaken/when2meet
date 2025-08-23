@@ -27,8 +27,8 @@ export const load: PageServerLoad = async ({ params }) => {
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                image: user.image,
-            },
+                image: user.image
+            }
         })
         .from(participant)
         .leftJoin(user, eq(participant.userId, user.id))

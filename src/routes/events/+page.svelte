@@ -23,7 +23,7 @@
 </script>
 
 {#snippet eventGallery(events: Awaited<ReturnType<typeof getOrganizedEvents>>)}
-    {#each events as event}
+    {#each events as event (event.id)}
         <EventCard
             eventId={event.id}
             name={event.name}
@@ -130,81 +130,5 @@
                 </svelte:boundary>
             </div>
         </Tabs.Root>
-        <!--
-        <div class="flex flex-row items-center gap-2">
-            <Input class="flex-1" placeholder="search" />
-            <Select.Root type="single" bind:value={sort}>
-                <Select.Trigger class="w-32">{triggerContent}</Select.Trigger>
-                        {/await}
-                    </Tabs.Content>
-                </svelte:boundary>
-            </div>
-        </Tabs.Root>
-        <!--
-        <div class="flex flex-row items-center gap-2">
-            <Input class="flex-1" placeholder="search" />
-            <Select.Root type="single" bind:value={sort}>
-                <Select.Trigger class="w-32">{triggerContent}</Select.Trigger>
-                <Select.Content>
-                    <Select.Item value="available-time">Available Time</Select.Item>
-                    <Select.Item value="name">Name</Select.Item>
-                </Select.Content>
-            </Select.Root>
-            <NewEventDialog>
-                <Button>New Event</Button>
-            </NewEventDialog>
-        </div>
-
-        <div class="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2">
-            <EventCard weeklyRecurrence={false}>
-                {#snippet name()}
-                    New Event
-                {/snippet}
-                {#snippet organizer()}
-                    Nathan
-                {/snippet}
-                {#snippet startTime()}
-                    1970/1/1 0:00
-                {/snippet}
-                {#snippet endTime()}
-                    1970/1/1 1:00
-                {/snippet}
-                {#snippet timezone()}
-                    Asia/Taipei
-                {/snippet}
-            </EventCard><EventCard weeklyRecurrence={false}>
-                {#snippet name()}
-                    New Event
-                {/snippet}
-                {#snippet organizer()}
-                    Nathan
-                {/snippet}
-                {#snippet startTime()}
-                    1970/1/1 0:00
-                {/snippet}
-                {#snippet endTime()}
-                    1970/1/1 1:00
-                {/snippet}
-                {#snippet timezone()}
-                    Asia/Taipei
-                {/snippet}
-            </EventCard><EventCard weeklyRecurrence={false}>
-                {#snippet name()}
-                    New Event
-                {/snippet}
-                {#snippet organizer()}
-                    Nathan
-                {/snippet}
-                {#snippet startTime()}
-                    1970/1/1 0:00
-                {/snippet}
-                {#snippet endTime()}
-                    1970/1/1 1:00
-                {/snippet}
-                {#snippet timezone()}
-                    Asia/Taipei
-                {/snippet}
-            </EventCard>
-        </div> -->
     </div>
 </div>

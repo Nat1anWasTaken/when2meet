@@ -51,7 +51,7 @@
             <Command.List>
                 <Command.Empty>No timezone found.</Command.Empty>
                 <Command.Group>
-                    {#each availableTimezones as timezone}
+                    {#each availableTimezones as timezone (timezone)}
                         <Command.Item
                             value={timezone}
                             onSelect={() => {

@@ -1,7 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
     import * as Accordion from "$lib/components/ui/accordion/index.js";
-    import * as Alert from "$lib/components/ui/alert/index.js";
     import { Badge } from "$lib/components/ui/badge/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
     import * as Card from "$lib/components/ui/card/index.js";

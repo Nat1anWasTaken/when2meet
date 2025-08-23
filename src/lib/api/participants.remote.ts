@@ -2,7 +2,6 @@ import { command } from "$app/server";
 import { getAuthenticatedSession } from "$lib/api/utils";
 import { db } from "$lib/server/db";
 import { participant } from "$lib/server/db/schema";
-import { error } from "@sveltejs/kit";
 import z from "zod";
 
 const timeSelectionSchema = z.object({
