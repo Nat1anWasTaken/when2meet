@@ -82,11 +82,13 @@ export const updateParticipant = command(updateParticipantSchema, async (data) =
         const usernameConflict = await db
             .select()
             .from(participant)
-            .where(and(
-                eq(participant.eventId, currentParticipant.eventId),
-                eq(participant.username, data.username),
-                ne(participant.id, data.participantId)
-            ))
+            .where(
+                and(
+                    eq(participant.eventId, currentParticipant.eventId),
+                    eq(participant.username, data.username),
+                    ne(participant.id, data.participantId)
+                )
+            )
             .limit(1);
 
         if (usernameConflict.length > 0) {
