@@ -3,6 +3,7 @@
     import EventCard from "$lib/components/event-card.svelte";
     import ParticipationControlBar from "$lib/components/participation-control-bar.svelte";
     import TimeSelector from "$lib/components/time-selector.svelte";
+    import * as Avatar from "$lib/components/ui/avatar";
     import { Button } from "$lib/components/ui/button";
     import * as Card from "$lib/components/ui/card";
     import { extractPrimaryHue, generateAvailabilityColorMap } from "$lib/utils";
@@ -52,19 +53,47 @@
         />
 
         <!-- Participation Section -->
-        {#if participationMode === "view"}
-            <Card.Root class="w-full">
-                <Card.Header>
-                    <Card.Title>Participate in this Event</Card.Title>
-                    <Card.Description>
-                        Join this event by selecting your available times.
-                    </Card.Description>
-                </Card.Header>
-                <Card.Content class="p-6">
+        <Card.Root class="w-full">
+            <Card.Header>
+                <Card.Title>Participants ({totalParticipants})</Card.Title>
+                <Card.Description>
+                    {#if totalParticipants > 0}
+                        People who have joined this event and selected their available times.
+                    {:else}
+                        No one has joined this event yet.
+                    {/if}
+                </Card.Description>
+            </Card.Header>
+            <Card.Content>
+                {#if data.participants && data.participants.length > 0}
+                    <div class="mb-4 flex flex-wrap gap-2">
+                        {#each data.participants as participant}
+                            <div class="flex items-center gap-2 rounded-md bg-muted pr-3">
+                                <Avatar.Root class="h-8 w-8">
+                                    <Avatar.Image
+                                        src={participant.user?.image}
+                                        alt={participant.user?.name || participant.username}
+                                    />
+                                    <Avatar.Fallback
+                                        class="bg-primary text-sm font-medium text-primary-foreground"
+                                    >
+                                        {(participant.user?.name || participant.username)
+                                            .charAt(0)
+                                            .toUpperCase()}
+                                    </Avatar.Fallback>
+                                </Avatar.Root>
+                                <span class="text-sm font-medium">
+                                    {participant.user?.name || participant.username}
+                                </span>
+                            </div>
+                        {/each}
+                    </div>
+                {/if}
+                {#if participationMode === "view"}
                     <Button size="lg" onclick={startParticipation}>Participate in Event</Button>
-                </Card.Content>
-            </Card.Root>
-        {/if}
+                {/if}
+            </Card.Content>
+        </Card.Root>
 
         <!-- Time Selection -->
         {#if data?.availableTime}
