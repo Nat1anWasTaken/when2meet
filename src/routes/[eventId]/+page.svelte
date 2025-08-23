@@ -8,7 +8,7 @@
     import { Button } from "$lib/components/ui/button";
     import * as Card from "$lib/components/ui/card";
     import { extractPrimaryHue, generateAvailabilityColorMap } from "$lib/utils";
-    import type { SvelteComponent } from "svelte";
+    import { ArrowDown } from "lucide-svelte";
     import type { PageProps } from "./$types";
 
     let { data }: PageProps = $props();
@@ -116,11 +116,31 @@
                         {/each}
                     </div>
                 {/if}
+            </Card.Content>
+        </Card.Root>
+
+        <!-- Join Event -->
+        <Card.Root>
+            <Card.Header>
+                <Card.Title>Want to join <span class="font-semibold">{data.name}</span>?</Card.Title
+                >
+                <Card.Description>
+                    Join this event and select your available times below.
+                </Card.Description>
+            </Card.Header>
+            <Card.Content>
                 <Button
                     size="lg"
+                    class="h-16 w-full text-xl"
                     onclick={startParticipation}
-                    disabled={participationMode === "participate"}>Participate in Event</Button
+                    disabled={participationMode === "participate"}
                 >
+                    {#if participationMode === "view"}
+                        Join Event
+                    {:else if participationMode === "participate"}
+                        Select your available time below <ArrowDown />
+                    {/if}
+                </Button>
             </Card.Content>
         </Card.Root>
 
