@@ -1,7 +1,7 @@
 <script lang="ts">
     import * as Tooltip from "$lib/components/ui/tooltip";
     import { cn, type Cell } from "$lib/utils";
-    import { Badge } from "./ui/badge";
+    import ParticipantBadge from "./participant-badge.svelte";
 
     interface Props {
         cell: Cell;
@@ -9,7 +9,10 @@
         selected: boolean;
         participantCount: number;
         totalParticipants: number;
-        availableParticipants: string[];
+        availableParticipants: {
+            username: string;
+            timeSelection: { startTime: Date; endTime: Date }[];
+        }[];
         cellColor: string;
         class?: string;
     }
@@ -53,13 +56,19 @@
 
         {#if availableParticipants.length > 0}
             <Tooltip.Content class="max-w-xs">
-                <div class="flex flex-col">
+                <div class="flex flex-col gap-2">
                     <p class="text-sm">
                         {participantCount}/{totalParticipants} available
                     </p>
-                    <p class="text-center text-wrap text-muted-foreground">
-                        {availableParticipants.join(", ")}
-                    </p>
+                    <div class="flex flex-row flex-wrap gap-2">
+                        {#each availableParticipants as participant}
+                            <ParticipantBadge
+                                name={participant.username}
+                                size="sm"
+                                class="border-1 border-accent"
+                            />
+                        {/each}
+                    </div>
                 </div>
             </Tooltip.Content>
         {/if}

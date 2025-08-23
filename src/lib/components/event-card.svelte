@@ -64,7 +64,7 @@
 
             {#if availableTime}
                 <div class="flex flex-col gap-2">
-                    <h3 class="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                    <h3 class="text-xs font-medium tracking-wide text-muted-foreground">
                         Event Details
                     </h3>
 

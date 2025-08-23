@@ -73,11 +73,11 @@
     let participantAvailability = $derived.by(() => {
         const totalParticipants = participants?.length || 0;
         if (totalParticipants === 0)
-            return new Map<string, { count: number; participants: string[] }>();
+            return new Map<string, { count: number; participants: typeof participants }>();
 
-        const availability = new Map<string, { count: number; participants: string[] }>();
+        const availability = new Map<string, { count: number; participants: typeof participants }>();
 
-        // Count availability for each cell and track participant names
+        // Count availability for each cell and track full participant objects
         participants.forEach((participant) => {
             participant.timeSelection.forEach((selection) => {
                 const startTime = new Date(selection.startTime);
@@ -106,7 +106,7 @@
                     const existing = availability.get(key) || { count: 0, participants: [] };
                     availability.set(key, {
                         count: existing.count + 1,
-                        participants: [...existing.participants, participant.username]
+                        participants: [...existing.participants, participant]
                     });
                 }
             });
@@ -119,7 +119,7 @@
         return participantAvailability.get(cellKeyFromCoords(x, y))?.count || 0;
     }
 
-    function getAvailableParticipants(x: number, y: number): string[] {
+    function getAvailableParticipants(x: number, y: number) {
         return participantAvailability.get(cellKeyFromCoords(x, y))?.participants || [];
     }
 
