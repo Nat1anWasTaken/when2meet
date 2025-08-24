@@ -32,7 +32,7 @@
 
     function getCellClasses() {
         const baseClasses =
-            "cell flex h-full w-full items-center justify-center transition-all duration-150 select-none truncate ";
+            "cell flex h-full w-full items-center justify-center transition-all duration-150 select-none truncate touch-none";
 
         if (selecting) {
             return cn(baseClasses, "scale-105 border-2 border-primary shadow-md", className);
