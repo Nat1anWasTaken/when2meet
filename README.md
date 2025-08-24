@@ -57,8 +57,6 @@ pnpm dev
 
 Visit `http://localhost:5173` to see the application running.
 
-## Development
-
 ### Available Scripts
 
 - `pnpm dev` - Start development server
