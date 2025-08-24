@@ -1,6 +1,7 @@
 <script lang="ts">
     import { refreshAll } from "$app/navigation";
     import { createEvent } from "$lib/api/events.remote";
+    import { authClient } from "$lib/auth-client";
     import { Button } from "$lib/components/ui/button";
     import * as Dialog from "$lib/components/ui/dialog/";
     import { Input } from "$lib/components/ui/input";
@@ -21,6 +22,8 @@
     }
 
     let { children }: Props = $props();
+
+    const session = authClient.useSession();
 
     let canCreate = $state<boolean>(true);
 
@@ -204,6 +207,12 @@
                 <Button class="w-full" onclick={handleCreateEvent} disabled={!canCreate}
                     >Create Event</Button
                 >
+                {#if !$session.data?.user}
+                    <p class="text-sm text-muted-foreground">
+                        You will not be able to edit or delete this event later unless you
+                        <a href="/login" class="underline">log in</a>.
+                    </p>
+                {/if}
             </div>
         </div>
     </Dialog.Content>
