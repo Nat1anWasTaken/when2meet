@@ -24,6 +24,24 @@ const createEventSchema = z.object({
     weeklyRecurrence: z.boolean()
 });
 
+const updateEventSchema = z.object({
+    id: z.string(),
+    name: z.string().refine((val) => !preservedEventNames.includes(val), {
+        message: "Event name is reserved."
+    }),
+    timezone: z.string(),
+    organizerName: z.string(),
+    availableTime: z.object({
+        startTime: z.string().transform((val) => new Date(val)),
+        endTime: z.string().transform((val) => new Date(val))
+    }),
+    weeklyRecurrence: z.boolean()
+});
+
+const deleteEventSchema = z.object({
+    id: z.string()
+});
+
 export const createEvent = command(createEventSchema, async (data) => {
     const session = await getAuthenticatedSession();
 
@@ -44,6 +62,51 @@ export const createEvent = command(createEventSchema, async (data) => {
         .returning();
 
     return newEvent[0];
+});
+
+export const updateEvent = command(updateEventSchema, async (data) => {
+    const session = await getAuthenticatedSession();
+
+    if (!session) {
+        return error(401, "Unauthorized");
+    }
+
+    const updatedEvent = await db
+        .update(event)
+        .set({
+            name: data.name,
+            timezone: data.timezone,
+            organizerName: data.organizerName,
+            availableTime: data.availableTime,
+            weeklyRecurrence: data.weeklyRecurrence
+        })
+        .where(and(eq(event.id, data.id), eq(event.organizerId, session.user.id)))
+        .returning();
+
+    if (updatedEvent.length === 0) {
+        return error(404, "Event not found or unauthorized");
+    }
+
+    return updatedEvent[0];
+});
+
+export const deleteEvent = command(deleteEventSchema, async (data) => {
+    const session = await getAuthenticatedSession();
+
+    if (!session) {
+        return error(401, "Unauthorized");
+    }
+
+    const deletedEvent = await db
+        .delete(event)
+        .where(and(eq(event.id, data.id), eq(event.organizerId, session.user.id)))
+        .returning();
+
+    if (deletedEvent.length === 0) {
+        return error(404, "Event not found or unauthorized");
+    }
+
+    return deletedEvent[0];
 });
 
 export const getOrganizedEvents = query(getEventsSchema, async (queries) => {

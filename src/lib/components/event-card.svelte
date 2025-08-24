@@ -3,6 +3,7 @@
     import * as Card from "$lib/components/ui/card";
     import { cn } from "$lib/utils";
     import { Calendar, Earth, Repeat, User } from "lucide-svelte";
+    import EditEventDialog from "./edit-event-dialog.svelte";
     import Button from "./ui/button/button.svelte";
 
     interface Props {
@@ -101,7 +102,16 @@
 
             {#if showActions}
                 <div class="mt-2 grid w-full grid-cols-2 justify-center gap-2">
-                    <Button class="w-full">Edit</Button>
+                    <EditEventDialog
+                        {eventId}
+                        {name}
+                        {organizerName}
+                        {weeklyRecurrence}
+                        {availableTime}
+                        {timezone}
+                    >
+                        <Button class="w-full">Edit</Button>
+                    </EditEventDialog>
                     <Button class="w-full" variant="outline" href={`/${eventId}`}>View</Button>
                 </div>
             {/if}

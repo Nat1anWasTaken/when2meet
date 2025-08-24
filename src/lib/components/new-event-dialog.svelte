@@ -116,7 +116,6 @@
 
             open = false; // Close dialog
 
-            resetForm();
             refreshAll();
         } catch (error) {
             console.error("Failed to create event:", error);
@@ -127,6 +126,13 @@
             canCreate = true;
         }
     };
+
+    // Reset the form when dialog opens
+    $effect(() => {
+        if (open) {
+            resetForm();
+        }
+    });
 </script>
 
 <Dialog.Root bind:open>
