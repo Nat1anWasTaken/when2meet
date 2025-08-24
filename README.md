@@ -1,38 +1,114 @@
-# sv
+# when2meet.app
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A modern, fast scheduling application similar to When2Meet, built with SvelteKit and designed to help you find meeting times that work for everyone.
 
-## Creating a project
+## What is this?
 
-If you're seeing this, you've probably already done this step. Congrats!
+To be written...
 
-```sh
-# create a new project in the current directory
-npx sv create
+## Running locally
 
-# create a new project in my-app
-npx sv create my-app
+### Prerequisites
+
+- Node.js 18+
+- pnpm
+- PostgreSQL database (or Neon account)
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd when2meet
 ```
 
-## Developing
+2. Install dependencies:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```bash
+pnpm install
 ```
 
-## Building
+3. Set up environment variables:
 
-To create a production version of your app:
-
-```sh
-npm run build
+```bash
+cp .env.example .env
 ```
 
-You can preview the production build with `npm run preview`.
+4. Configure your environment variables in `.env`:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```env
+DATABASE_URL="your-postgresql-connection-string"
+BETTER_AUTH_SECRET="your-secret-key"
+BETTER_AUTH_URL="http://localhost:5173"
+```
+
+5. Run database migrations:
+
+```bash
+pnpm db:push
+```
+
+6. Start the development server:
+
+```bash
+pnpm dev
+```
+
+Visit `http://localhost:5173` to see the application running.
+
+## Development
+
+### Available Scripts
+
+- `pnpm dev` - Start development server
+- `pnpm build` - Create production build
+- `pnpm preview` - Preview production build
+- `pnpm check` - Run Svelte type checking
+- `pnpm check:watch` - Run type checking in watch mode
+- `pnpm format` - Format code with Prettier
+- `pnpm lint` - Run linting (Prettier + ESLint)
+
+### Database Commands
+
+- `pnpm db:push` - Push schema changes to database
+- `pnpm db:migrate` - Run database migrations
+- `pnpm db:studio` - Open Drizzle Studio for database management
+
+### Project Structure
+
+```
+src/
+├── lib/
+│   ├── components/          # Reusable Svelte components
+│   │   ├── ui/             # shadcn-svelte components
+│   │   ├── time-selector.svelte # Interactive time selection grid
+│   │   └── ...
+│   ├── server/
+│   │   └── db/
+│   │       ├── schema.ts   # Main database schema
+│   │       └── auth-schema.ts # Authentication schema
+│   └── utils.ts           # Utility functions
+├── routes/
+│   ├── +page.svelte       # Landing page
+│   ├── [eventId]/         # Event participation page
+│   ├── events/            # User's events dashboard
+│   └── ...
+└── app.html               # App shell
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Make your changes and ensure tests pass
+4. Run linting: `pnpm lint`
+5. Submit a pull request
+
+## License
+
+[MIT License](LICENSE)
+
+---
+
+Built with ❤️ using modern web technologies to make scheduling meetings simple and fast.
