@@ -3,7 +3,7 @@
     import * as Popover from "$lib/components/ui/popover";
     import { cn } from "$lib/utils";
     import type { DateRange } from "bits-ui";
-    import { ChevronDownIcon } from "lucide-svelte";
+    import IconChevronDown from "~icons/lucide/chevron-down";
     import { RangeCalendar } from "./ui/range-calendar";
 
     interface Props {
@@ -33,7 +33,7 @@
                 {selectedDateRange?.start && selectedDateRange?.end
                     ? `${selectedDateRange.start?.toString()} － ${selectedDateRange.end?.toString()}`
                     : "Select a date range..."}
-                <ChevronDownIcon />
+                <IconChevronDown />
             </Button>
         {/snippet}
     </Popover.Trigger>

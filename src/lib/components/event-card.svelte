@@ -2,7 +2,11 @@
     import { Badge } from "$lib/components/ui/badge";
     import * as Card from "$lib/components/ui/card";
     import { cn } from "$lib/utils";
-    import { Calendar, Earth, Repeat, Share2, User } from "lucide-svelte";
+    import IconCalendar from "~icons/lucide/calendar";
+    import IconEarth from "~icons/lucide/earth";
+    import IconRepeat from "~icons/lucide/repeat";
+    import IconShare2 from "~icons/lucide/share-2";
+    import IconUser from "~icons/lucide/user";
 
     import EditEventDialog from "./edit-event-dialog.svelte";
     import ShareEventDialog from "./share-event-dialog.svelte";
@@ -52,12 +56,12 @@
                     <Card.Title class="text-2xl">{name}</Card.Title>
                     <div class="flex flex-row items-center gap-2">
                         <div class="flex flex-row items-center gap-1 text-sm text-muted-foreground">
-                            <User class="h-4 w-4" />
+                            <IconUser class="h-4 w-4" />
                             <span>Organized by {organizerName}</span>
                         </div>
                         {#if weeklyRecurrence}
                             <Badge variant="outline">
-                                <Repeat class="mr-1 h-4 w-4" />
+                                <IconRepeat class="mr-1 h-4 w-4" />
                                 Weekly
                             </Badge>
                         {/if}
@@ -66,7 +70,7 @@
                 <div class="flex items-start justify-end">
                     <ShareEventDialog {eventId} eventName={name}>
                         <Button variant="ghost" size="sm" aria-label="Share event">
-                            <Share2 class="h-4 w-4" />
+                            <IconShare2 class="h-4 w-4" />
                         </Button>
                     </ShareEventDialog>
                 </div>
@@ -80,7 +84,7 @@
 
                     {#snippet timeRangeDisplay(availableTime: { startTime: Date; endTime: Date })}
                         <div class="flex items-center gap-2">
-                            <Calendar class="h-4 w-4 shrink-0 text-muted-foreground" />
+                            <IconCalendar class="h-4 w-4 shrink-0 text-muted-foreground" />
                             <div class="min-w-0">
                                 <span class="block text-sm font-medium">Available Time</span>
                                 <span class="text-sm text-muted-foreground">
@@ -94,7 +98,7 @@
 
                     {#snippet timezoneDisplay(timezone: string)}
                         <div class="flex items-center gap-2">
-                            <Earth class="h-4 w-4 shrink-0 text-muted-foreground" />
+                            <IconEarth class="h-4 w-4 shrink-0 text-muted-foreground" />
                             <div class="min-w-0">
                                 <span class="block text-sm font-medium">Timezone</span>
                                 <span class="text-sm text-muted-foreground">{timezone}</span>

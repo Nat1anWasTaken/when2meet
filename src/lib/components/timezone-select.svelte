@@ -3,7 +3,8 @@
     import * as Command from "$lib/components/ui/command";
     import * as Popover from "$lib/components/ui/popover";
     import { cn } from "$lib/utils";
-    import { CheckIcon, ChevronDownIcon } from "lucide-svelte";
+    import IconCheck from "~icons/lucide/check";
+    import IconChevronDown from "~icons/lucide/chevron-down";
     import { tick } from "svelte";
 
     interface Props {
@@ -41,7 +42,7 @@
                 aria-expanded={open}
             >
                 {selectedTimezone || "Select a timezone..."}
-                <ChevronDownIcon />
+                <IconChevronDown />
             </Button>
         {/snippet}
     </Popover.Trigger>
@@ -59,7 +60,7 @@
                                 closeAndFocusTrigger();
                             }}
                         >
-                            <CheckIcon
+                            <IconCheck
                                 class={cn(
                                     "mr-2 size-4",
                                     selectedTimezone !== timezone && "text-transparent"

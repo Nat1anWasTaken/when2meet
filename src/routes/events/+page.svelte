@@ -9,7 +9,7 @@
     import * as Select from "$lib/components/ui/select";
     import Separator from "$lib/components/ui/separator/separator.svelte";
     import * as Tabs from "$lib/components/ui/tabs/";
-    import { User } from "lucide-svelte";
+    import IconUser from "~icons/lucide/user";
 
     let sort = $state("");
     let searchQuery = $state("");
@@ -66,7 +66,7 @@
         class="flex min-h-[400px] w-full flex-col items-center justify-center space-y-6 text-center"
     >
         <div class="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-            <User class="h-8 w-8 text-muted-foreground" />
+            <IconUser class="h-8 w-8 text-muted-foreground" />
         </div>
 
         <div>

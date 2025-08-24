@@ -4,7 +4,8 @@
     import * as Avatar from "$lib/components/ui/avatar";
     import { Button } from "$lib/components/ui/button";
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-    import { Calendar, LogOut } from "lucide-svelte";
+    import IconCalendar from "~icons/lucide/calendar";
+    import IconLogOut from "~icons/lucide/log-out";
     import { toast } from "svelte-sonner";
 
     const session = authClient.useSession();
@@ -59,12 +60,12 @@
             </DropdownMenu.Label>
             <DropdownMenu.Separator />
             <DropdownMenu.Item onclick={handleEvents}>
-                <Calendar class="mr-2 h-4 w-4" />
+                <IconCalendar class="mr-2 h-4 w-4" />
                 <span>My Events</span>
             </DropdownMenu.Item>
             <DropdownMenu.Separator />
             <DropdownMenu.Item onclick={handleLogout} variant="destructive">
-                <LogOut class="mr-2 h-4 w-4" />
+                <IconLogOut class="mr-2 h-4 w-4" />
                 <span>Log out</span>
             </DropdownMenu.Item>
         </DropdownMenu.Content>

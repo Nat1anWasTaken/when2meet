@@ -17,7 +17,7 @@
         timeSelectionsToCells,
         type Cell
     } from "$lib/utils";
-    import { ArrowDown } from "lucide-svelte";
+    import IconArrowDown from "~icons/lucide/arrow-down";
     import type { PageProps } from "./$types";
 
     let { data }: PageProps = $props();
@@ -194,7 +194,7 @@
                     {#if participationMode === "view"}
                         {userAlreadyJoined ? "Edit Participation" : "Join Event"}
                     {:else if participationMode === "participate"}
-                        Select your available time below <ArrowDown />
+                        Select your available time below <IconArrowDown />
                     {/if}
                 </Button>
             </Card.Content>

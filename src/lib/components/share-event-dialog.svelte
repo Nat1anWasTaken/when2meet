@@ -5,7 +5,8 @@
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
     import { copyText } from "$lib/utils";
-    import { Copy, Share2 } from "lucide-svelte";
+    import IconCopy from "~icons/lucide/copy";
+    import IconShare2 from "~icons/lucide/share-2";
     import type { Snippet } from "svelte";
     import { toast } from "svelte-sonner";
 
@@ -45,7 +46,7 @@
     <Dialog.Content class="sm:max-w-md">
         <Dialog.Header>
             <Dialog.Title class="flex items-center gap-2">
-                <Share2 class="h-5 w-5" />
+                <IconShare2 class="h-5 w-5" />
                 Share Event
             </Dialog.Title>
             <Dialog.Description>
@@ -70,7 +71,7 @@
                         class="shrink-0"
                         aria-label="Copy invitation link"
                     >
-                        <Copy class="h-4 w-4" />
+                        <IconCopy class="h-4 w-4" />
                     </Button>
                 </div>
             </div>
@@ -89,7 +90,7 @@
                 Close
             </Button>
             <Button onclick={handleCopyLink}>
-                <Copy class="h-4 w-4" />
+                <IconCopy class="h-4 w-4" />
                 Copy Link
             </Button>
         </Dialog.Footer>

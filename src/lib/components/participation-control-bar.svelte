@@ -4,7 +4,7 @@
     import { Button } from "$lib/components/ui/button";
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
-    import { LoaderCircle } from "lucide-svelte";
+    import IconLoaderCircle from "~icons/lucide/loader-circle";
     import { toast } from "svelte-sonner";
     import { backOut } from "svelte/easing";
     import { fly } from "svelte/transition";
@@ -154,7 +154,7 @@
                 >
                     {#if isSaving}
                         <div class="flex items-center gap-2">
-                            <LoaderCircle class="h-4 w-4 animate-spin" />
+                            <IconLoaderCircle class="h-4 w-4 animate-spin" />
                             {userAlreadyJoined ? "Updating..." : "Saving..."}
                         </div>
                     {:else}
