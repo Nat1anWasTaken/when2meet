@@ -1,6 +1,7 @@
 <script lang="ts">
     import * as Tooltip from "$lib/components/ui/tooltip";
     import { cn, type Cell } from "$lib/utils";
+    import LucideCheck from "~icons/lucide/check";
     import ParticipantBadge from "./participant-badge.svelte";
 
     interface Props {
@@ -80,7 +81,7 @@
             style={getCellStyle()}
         >
             {#if selected}
-                Selected
+                <LucideCheck />
             {/if}
         </Tooltip.Trigger>
 
