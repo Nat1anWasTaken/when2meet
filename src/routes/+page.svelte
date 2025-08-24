@@ -51,7 +51,7 @@
         </p>
         <div class="mt-8 flex flex-row justify-center gap-2">
             <Button size="lg" variant="outline">what is this?</Button>
-            <NewEventDialog>
+            <NewEventDialog redirect={true}>
                 <Button size="lg">organize new event</Button>
             </NewEventDialog>
         </div>
