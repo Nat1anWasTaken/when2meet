@@ -15,12 +15,14 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true
     },
-    google: {
-        clientId: GOOGLE_CLIENT_ID,
-        clientSecret: GOOGLE_CLIENT_SECRET
-    },
-    github: {
-        clientId: GITHUB_CLIENT_ID,
-        clientSecret: GITHUB_CLIENT_SECRET
+    socialProviders: {
+        google: {
+            clientId: GOOGLE_CLIENT_ID,
+            clientSecret: GOOGLE_CLIENT_SECRET
+        },
+        github: {
+            clientId: GITHUB_CLIENT_ID,
+            clientSecret: GITHUB_CLIENT_SECRET
+        }
     }
 });
