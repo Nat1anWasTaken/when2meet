@@ -4,9 +4,9 @@
     import * as Avatar from "$lib/components/ui/avatar";
     import { Button } from "$lib/components/ui/button";
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+    import { toast } from "svelte-sonner";
     import IconCalendar from "~icons/lucide/calendar";
     import IconLogOut from "~icons/lucide/log-out";
-    import { toast } from "svelte-sonner";
 
     const session = authClient.useSession();
 
@@ -15,7 +15,7 @@
             toast.info("Logging out...");
             await authClient.signOut();
             toast.success("Logged out successfully");
-            goto("/");
+            await goto("/");
         } catch {
             toast.error("Failed to logout");
         }
