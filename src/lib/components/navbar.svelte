@@ -8,7 +8,7 @@
         <h1 class="text-lg font-bold">
             <a href="/">When2Meet</a>
         </h1>
-        <a href="/">About</a>
+        <a href="/about">About</a>
     </div>
     <div class="flex flex-row items-center gap-2">
         <ModeSwitch />
