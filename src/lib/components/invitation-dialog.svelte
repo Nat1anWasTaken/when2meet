@@ -6,9 +6,10 @@
         open: boolean;
         eventName: string;
         onAccept?: () => void;
+        onDecline?: () => void;
     }
 
-    let { open = $bindable(), eventName, onAccept }: Props = $props();
+    let { open = $bindable(), eventName, onAccept, onDecline }: Props = $props();
 </script>
 
 <Dialog.Root bind:open>
@@ -31,6 +32,7 @@
                 variant="outline"
                 onclick={() => {
                     open = false;
+                    onDecline?.();
                 }}>Maybe Later</Button
             >
             <Button

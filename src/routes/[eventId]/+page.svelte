@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import { authClient } from "$lib/auth-client";
     import ColorMapDisplay from "$lib/components/color-map-display.svelte";
@@ -85,6 +86,12 @@
 
     function acceptInvitation() {
         startParticipation();
+    }
+
+    function cancelInvitation() {
+        let url = page.url;
+        url.searchParams.delete("invited");
+        goto(url);
     }
 
     function startParticipation() {
@@ -259,5 +266,8 @@
         bind:open={invitationDialogOpen}
         eventName={data.name}
         onAccept={acceptInvitation}
+        onDecline={
+
+        }
     />
 {/if}
