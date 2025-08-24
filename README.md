@@ -1,6 +1,6 @@
 # when2meet.app
 
-A modern, fast scheduling application similar to When2Meet, built with SvelteKit and designed to help you find meeting times that work for everyone.
+[when2meet.com](https://when2meet.com), but better.
 
 ## What is this?
 
