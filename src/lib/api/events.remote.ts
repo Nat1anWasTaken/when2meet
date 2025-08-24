@@ -45,17 +45,13 @@ const deleteEventSchema = z.object({
 export const createEvent = command(createEventSchema, async (data) => {
     const session = await getAuthenticatedSession();
 
-    if (!session) {
-        return error(401, "Unauthorized");
-    }
-
     const newEvent = await db
         .insert(event)
         .values({
             name: data.name,
             timezone: data.timezone,
             organizerName: data.organizerName,
-            organizerId: session.user.id,
+            organizerId: session?.user?.id,
             availableTime: data.availableTime,
             weeklyRecurrence: data.weeklyRecurrence
         })
