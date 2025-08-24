@@ -222,9 +222,14 @@
     <div class="mb-2 h-full w-full"></div>
     {#each generateTimeStrings(intervalInMinutes, false) as time, index (index)}
         <div
-            class="flex h-full w-full items-center justify-center p-2 text-xs text-muted-foreground"
+            class={cn(
+                "flex h-full w-full items-center justify-center p-2 text-xs text-muted-foreground",
+                {
+                    "border-t-1 border-muted": index % 4 === 0
+                }
+            )}
         >
-            {index % 4 == 0 ? time : ""}
+            {time}
         </div>
     {/each}
     {#each days as date, x (date.getTime())}
