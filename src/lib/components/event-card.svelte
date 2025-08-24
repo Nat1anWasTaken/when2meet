@@ -4,8 +4,9 @@
     import * as Card from "$lib/components/ui/card";
     import { cn } from "$lib/utils";
     import { Calendar, Copy, Earth, Repeat, Share2, User } from "lucide-svelte";
-    import CopyButton from "./copy-button.svelte";
+
     import EditEventDialog from "./edit-event-dialog.svelte";
+    import ShareEventDialog from "./share-event-dialog.svelte";
     import Button from "./ui/button/button.svelte";
 
     interface Props {
@@ -66,22 +67,11 @@
                     </div>
                 </div>
                 <div class="flex items-start justify-end">
-                    <CopyButton
-                        content={page.url.origin + `/${eventId}?invitation=${organizerName}`}
-                        variant="outline"
-                        size="icon"
-                        class="text-muted-foreground"
-                    >
-                        <Copy />
-
-                        {#snippet clickToCopyTooltip()}
-                            <span>Click to copy the invitation link</span>
-                        {/snippet}
-
-                        {#snippet copiedTooltip()}
-                            <span>Copied invitation link!</span>
-                        {/snippet}
-                    </CopyButton>
+                    <ShareEventDialog {eventId} eventName={name}>
+                        <Button variant="ghost" size="sm" aria-label="Share event">
+                            <Share2 class="h-4 w-4" />
+                        </Button>
+                    </ShareEventDialog>
                 </div>
             </div>
 
