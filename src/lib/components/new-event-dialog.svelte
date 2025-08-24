@@ -122,11 +122,11 @@
 
             toast.info(`Event "${eventName.trim()}" created successfully!`);
 
-            refreshAll();
-
             if (redirect) {
                 goto(`/${event.id}`);
             }
+
+            refreshAll();
         } catch (error) {
             console.error("Failed to create event:", error);
             toast.error("Failed to create event", {
