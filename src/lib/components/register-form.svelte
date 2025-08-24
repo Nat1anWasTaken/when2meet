@@ -6,6 +6,7 @@
     import { Input } from "$lib/components/ui/input/index.js";
     import { Label } from "$lib/components/ui/label/index.js";
     import { toast } from "svelte-sonner";
+    import RiGoogleFill from "~icons/ri/google-fill";
 
     const id = $props.id();
 
@@ -104,7 +105,7 @@
                 onclick={() => alert("Register with Google is not yet implemented.")}
             >
                 <RiGoogleFill class="h-4 w-4" />
-                Login with Google
+                Continue with Google
             </Button>
         </div>
         <div class="mt-4 text-center text-sm">
