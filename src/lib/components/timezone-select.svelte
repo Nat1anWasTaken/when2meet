@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { cn } from "$lib/utils";
+    import { Button } from "$lib/components/ui/button";
     import * as Command from "$lib/components/ui/command";
     import * as Popover from "$lib/components/ui/popover";
-    import { tick } from "svelte";
-    import { Button } from "$lib/components/ui/button";
+    import { cn } from "$lib/utils";
     import { CheckIcon, ChevronDownIcon } from "lucide-svelte";
+    import { tick } from "svelte";
 
     interface Props {
         class?: string;
@@ -51,7 +51,7 @@
             <Command.List>
                 <Command.Empty>No timezone found.</Command.Empty>
                 <Command.Group>
-                    {#each availableTimezones as timezone (timezone)}
+                    {#each availableTimezones as timezone}
                         <Command.Item
                             value={timezone}
                             onSelect={() => {

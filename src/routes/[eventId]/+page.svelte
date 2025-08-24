@@ -3,15 +3,16 @@
     import { authClient } from "$lib/auth-client";
     import ColorMapDisplay from "$lib/components/color-map-display.svelte";
     import EventCard from "$lib/components/event-card.svelte";
+    import InvitationDialog from "$lib/components/invitation-dialog.svelte";
     import ParticipantBadge from "$lib/components/participant-badge.svelte";
     import ParticipationControlBar from "$lib/components/participation-control-bar.svelte";
     import TimeSelector from "$lib/components/time-selector.svelte";
     import { Button } from "$lib/components/ui/button";
     import * as Card from "$lib/components/ui/card";
     import {
+        cellsToTimeSelections,
         extractPrimaryHue,
         generateAvailabilityColorMap,
-        cellsToTimeSelections,
         generateDaysArray,
         timeSelectionsToCells,
         type Cell
@@ -62,6 +63,21 @@
     let selectedTimes = $derived(cellsToTimeSelections(selectedCells, days, 60));
     let selectorSelectable = $state(false);
     let controlBarRef = $state<{ focusInput?: () => void }>({});
+
+    // Invitation dialog state
+    let invitationFrom = $derived(page.url.searchParams.get("invitation") || null);
+    let invitationDialogOpen = $state(false);
+
+    // Show invitation dialog when invitation parameter is present
+    $effect(() => {
+        if (invitationFrom && !userAlreadyJoined) {
+            invitationDialogOpen = true;
+        }
+    });
+
+    function acceptInvitation() {
+        startParticipation();
+    }
 
     function startParticipation() {
         participationMode = "participate";
@@ -226,5 +242,15 @@
         existingParticipant={currentUserParticipant}
         onSuccess={reset}
         onCancel={reset}
+    />
+{/if}
+
+<!-- Invitation Dialog -->
+{#if invitationFrom}
+    <InvitationDialog
+        bind:open={invitationDialogOpen}
+        eventName={data.name}
+        inviterName={invitationFrom}
+        onAccept={acceptInvitation}
     />
 {/if}

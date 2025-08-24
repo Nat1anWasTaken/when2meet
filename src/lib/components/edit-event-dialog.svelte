@@ -180,7 +180,7 @@
 
         try {
             await deleteEvent({ id: eventId });
-            
+
             open = false; // Close dialog
             refreshAll();
             toast.success("Event deleted successfully");
