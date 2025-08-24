@@ -14,7 +14,30 @@
     let sort = $state("");
     let searchQuery = $state("");
 
-    let triggerContent = $derived(sort ? sort : "Sort");
+    const sortLabels = {
+        "available-time": "Available Time",
+        name: "Name"
+    } as const;
+
+    let triggerContent = $derived(sort ? sortLabels[sort as keyof typeof sortLabels] : "Sort");
+
+    function sortEvents(events: Awaited<ReturnType<typeof getOrganizedEvents>>) {
+        if (!sort) return events;
+
+        return events.toSorted((a, b) => {
+            switch (sort) {
+                case "available-time":
+                    return (
+                        new Date(a.availableTime.startTime).getTime() -
+                        new Date(b.availableTime.startTime).getTime()
+                    );
+                case "name":
+                    return a.name.localeCompare(b.name);
+                default:
+                    return 0;
+            }
+        });
+    }
 
     function handleLogin() {
         const currentUrl = encodeURIComponent(page.url.pathname + page.url.search);
@@ -74,8 +97,12 @@
                 <Select.Root type="single" bind:value={sort}>
                     <Select.Trigger class="w-32">{triggerContent}</Select.Trigger>
                     <Select.Content>
-                        <Select.Item value="available-time">Available Time</Select.Item>
-                        <Select.Item value="name">Name</Select.Item>
+                        <Select.Item value="available-time">
+                            {sortLabels["available-time"]}
+                        </Select.Item>
+                        <Select.Item value="name">
+                            {sortLabels["name"]}
+                        </Select.Item>
                     </Select.Content>
                 </Select.Root>
                 <NewEventDialog>
@@ -90,7 +117,7 @@
                         class="grid grid-flow-row grid-cols-1 gap-2 md:grid-cols-2"
                     >
                         {#await getOrganizedEvents({ name: searchQuery }) then events}
-                            {@render eventGallery(events)}
+                            {@render eventGallery(sortEvents(events))}
                         {/await}
                     </Tabs.Content>
                     <Tabs.Content
@@ -98,7 +125,7 @@
                         class="grid grid-flow-row grid-cols-1 gap-2 md:grid-cols-2"
                     >
                         {#await getParticipatedEvents( { name: searchQuery } ).then( (result) => result.map((entry) => entry.event) ) then events}
-                            {@render eventGallery(events)}
+                            {@render eventGallery(sortEvents(events))}
                         {/await}
                     </Tabs.Content>
 
