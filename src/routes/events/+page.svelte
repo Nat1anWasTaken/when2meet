@@ -23,7 +23,7 @@
 </script>
 
 {#snippet eventGallery(events: Awaited<ReturnType<typeof getOrganizedEvents>>)}
-    {#each events as event}
+    {#each events as event (event.id)}
         <EventCard
             eventId={event.id}
             name={event.name}

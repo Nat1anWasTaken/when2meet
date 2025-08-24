@@ -1,9 +1,8 @@
 <script lang="ts">
-    import { page } from "$app/state";
     import { Badge } from "$lib/components/ui/badge";
     import * as Card from "$lib/components/ui/card";
     import { cn } from "$lib/utils";
-    import { Calendar, Copy, Earth, Repeat, Share2, User } from "lucide-svelte";
+    import { Calendar, Earth, Repeat, Share2, User } from "lucide-svelte";
 
     import EditEventDialog from "./edit-event-dialog.svelte";
     import ShareEventDialog from "./share-event-dialog.svelte";

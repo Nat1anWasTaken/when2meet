@@ -4,7 +4,7 @@
     import * as Avatar from "$lib/components/ui/avatar";
     import { Button } from "$lib/components/ui/button";
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-    import { Calendar, LogOut, User } from "lucide-svelte";
+    import { Calendar, LogOut } from "lucide-svelte";
     import { toast } from "svelte-sonner";
 
     const session = authClient.useSession();

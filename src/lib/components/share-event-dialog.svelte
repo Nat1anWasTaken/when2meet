@@ -32,7 +32,7 @@
         try {
             await copyText(inviteUrl);
             toast.success("Invitation link copied to clipboard!");
-        } catch (error) {
+        } catch {
             toast.error("Failed to copy link");
         }
     }
