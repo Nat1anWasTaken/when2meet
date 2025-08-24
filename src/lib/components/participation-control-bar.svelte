@@ -52,7 +52,8 @@
             return;
         }
 
-        if (!$session.data) {
+        const sessionData = $session.data;
+        if (!sessionData) {
             showWarningDialog = true;
             return;
         }

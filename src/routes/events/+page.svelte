@@ -16,6 +16,7 @@
 
     let triggerContent = $derived(sort ? sort : "Sort");
 
+
     function handleLogin() {
         const currentUrl = encodeURIComponent(page.url.pathname + page.url.search);
         goto(`/login?redirect_to=${currentUrl}`);
@@ -89,17 +90,17 @@
                         value="organized-events"
                         class="grid grid-flow-row grid-cols-1 gap-2 md:grid-cols-2"
                     >
-                        {@render eventGallery(await getOrganizedEvents({ name: searchQuery }))}
+                        {#await getOrganizedEvents({ name: searchQuery }) then events}
+                            {@render eventGallery(events)}
+                        {/await}
                     </Tabs.Content>
                     <Tabs.Content
                         value="attending-events"
                         class="grid grid-flow-row grid-cols-1 gap-2 md:grid-cols-2"
                     >
-                        {@render eventGallery(
-                            (await getParticipatedEvents({ name: searchQuery })).map(
-                                (entry) => entry.event
-                            )
-                        )}
+                        {#await getParticipatedEvents({ name: searchQuery }).then(result => result.map(entry => entry.event)) then events}
+                            {@render eventGallery(events)}
+                        {/await}
                     </Tabs.Content>
 
                     {#snippet pending()}

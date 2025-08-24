@@ -24,12 +24,16 @@
 
     const session = authClient.useSession();
 
+    let currentUserId = $derived($session.data?.user?.id);
+    
     let userAlreadyJoined = $derived.by(() => {
-        return data.participants?.some((p) => p.userId === $session.data?.user?.id) || false;
+        if (!currentUserId) return false;
+        return data.participants?.some((p) => p.userId === currentUserId) || false;
     });
 
     let currentUserParticipant = $derived.by(() => {
-        return data.participants?.find((p) => p.userId === $session.data?.user?.id) || null;
+        if (!currentUserId) return null;
+        return data.participants?.find((p) => p.userId === currentUserId) || null;
     });
 
     let totalParticipants = $derived(data.participants?.length || 0);
@@ -68,9 +72,12 @@
     let isInvited = $derived(page.url.searchParams.get("invited") === "true");
     let invitationDialogOpen = $state(false);
 
-    // Show invitation dialog when invited parameter is present
     $effect(() => {
-        if (isInvited && !userAlreadyJoined) {
+        const invited = page.url.searchParams.get("invited") === "true";
+        const hasUserId = !!currentUserId;
+        const alreadyJoined = hasUserId && data.participants?.some((p) => p.userId === currentUserId);
+        
+        if (invited && !alreadyJoined) {
             invitationDialogOpen = true;
         }
     });
