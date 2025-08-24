@@ -266,8 +266,6 @@
         bind:open={invitationDialogOpen}
         eventName={data.name}
         onAccept={acceptInvitation}
-        onDecline={
-
-        }
+        onDecline={cancelInvitation}
     />
 {/if}
