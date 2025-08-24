@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { refreshAll } from "$app/navigation";
+    import { goto, refreshAll } from "$app/navigation";
     import { createEvent } from "$lib/api/events.remote";
     import { authClient } from "$lib/auth-client";
     import { Button } from "$lib/components/ui/button";
@@ -19,9 +19,10 @@
 
     interface Props {
         children: Snippet;
+        redirect?: boolean;
     }
 
-    let { children }: Props = $props();
+    let { children, redirect = false }: Props = $props();
 
     const session = authClient.useSession();
 
@@ -106,7 +107,7 @@
         }
 
         try {
-            await createEvent({
+            const event = await createEvent({
                 name: eventName.trim(),
                 organizerName: organizerName.trim(),
                 availableTime: {
@@ -119,7 +120,13 @@
 
             open = false; // Close dialog
 
+            toast.info(`Event "${eventName.trim()}" created successfully!`);
+
             refreshAll();
+
+            if (redirect) {
+                goto(`/${event.id}`);
+            }
         } catch (error) {
             console.error("Failed to create event:", error);
             toast.error("Failed to create event", {
@@ -204,9 +211,9 @@
                 {#if validationErrorMessage}
                     <p class="text-sm text-destructive">{validationErrorMessage}</p>
                 {/if}
-                <Button class="w-full" onclick={handleCreateEvent} disabled={!canCreate}
-                    >Create Event</Button
-                >
+                <Button class="w-full" onclick={handleCreateEvent} disabled={!canCreate}>
+                    Create Event
+                </Button>
                 {#if !$session.data?.user}
                     <p class="text-sm text-muted-foreground">
                         You will not be able to edit or delete this event later unless you
