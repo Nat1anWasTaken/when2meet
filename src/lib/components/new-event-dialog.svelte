@@ -120,7 +120,7 @@
 
             open = false; // Close dialog
 
-            toast.info(`Event "${eventName.trim()}" created successfully!`);
+            toast.info(`Event "${eventName.trim()}" created successfully! Redirecting you...`);
 
             if (redirect) {
                 await goto(`/${event.id}`);
