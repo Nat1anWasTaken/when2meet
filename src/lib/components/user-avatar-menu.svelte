@@ -4,7 +4,7 @@
     import * as Avatar from "$lib/components/ui/avatar";
     import { Button } from "$lib/components/ui/button";
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-    import { LogOut, User } from "lucide-svelte";
+    import { Calendar, LogOut, User } from "lucide-svelte";
     import { toast } from "svelte-sonner";
 
     const session = authClient.useSession();
@@ -20,8 +20,8 @@
         }
     };
 
-    const handleProfile = () => {
-        goto("/profile");
+    const handleEvents = () => {
+        goto("/events");
     };
 
     const getUserInitials = (name: string | null | undefined) => {
@@ -58,9 +58,9 @@
                 </div>
             </DropdownMenu.Label>
             <DropdownMenu.Separator />
-            <DropdownMenu.Item onclick={handleProfile}>
-                <User class="mr-2 h-4 w-4" />
-                <span>Profile</span>
+            <DropdownMenu.Item onclick={handleEvents}>
+                <Calendar class="mr-2 h-4 w-4" />
+                <span>My Events</span>
             </DropdownMenu.Item>
             <DropdownMenu.Separator />
             <DropdownMenu.Item onclick={handleLogout} variant="destructive">
