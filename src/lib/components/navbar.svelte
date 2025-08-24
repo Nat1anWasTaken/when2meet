@@ -8,7 +8,7 @@
         <h1 class="text-lg font-bold">
             <a href="/">
                 when2meet
-                <span class="text-primary">.</span>app
+                <span class="text-primary">.app</span>
             </a>
         </h1>
         <a href="/about">About</a>
