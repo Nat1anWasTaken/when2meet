@@ -109,4 +109,4 @@ src/
 
 ---
 
-Built with ❤️
+Built with ❤️.
