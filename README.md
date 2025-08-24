@@ -109,4 +109,4 @@ src/
 
 ---
 
-Built with ❤️ using modern web technologies to make scheduling meetings simple and fast.
+Built with ❤️
