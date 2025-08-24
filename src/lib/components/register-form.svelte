@@ -51,7 +51,7 @@
         <Card.Title class="text-2xl">Register</Card.Title>
         <Card.Description>Create your account to get started</Card.Description>
     </Card.Header>
-    <Card.Content>
+    <Card.Content onkeydown={(e) => e.key === "Enter" && handleRegister()}>
         <div class="grid gap-4">
             <div class="grid gap-2">
                 <Label for="Username-{id}">Username</Label>

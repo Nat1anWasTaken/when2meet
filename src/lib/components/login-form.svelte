@@ -46,7 +46,7 @@
         <Card.Title class="text-2xl">Login</Card.Title>
         <Card.Description>Enter your email below to login to your account</Card.Description>
     </Card.Header>
-    <Card.Content>
+    <Card.Content onkeydown={(e) => e.key === "Enter" && handleLogin()}>
         <div class="grid gap-4">
             <div class="grid gap-2">
                 <Label for="email-{id}">Email</Label>
