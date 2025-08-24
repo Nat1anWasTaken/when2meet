@@ -22,14 +22,14 @@
     let triggerContent = $derived(sort ? sortLabels[sort as keyof typeof sortLabels] : "Sort");
 
     function sortEvents(events: Awaited<ReturnType<typeof getOrganizedEvents>>) {
-        if (!sort) return events;
+        if (!sort || !events || !Array.isArray(events)) return events;
 
-        return events.toSorted((a, b) => {
+        return [...events].sort((a, b) => {
             switch (sort) {
                 case "available-time":
                     return (
-                        new Date(a.availableTime.startTime).getTime() -
-                        new Date(b.availableTime.startTime).getTime()
+                        new Date(a.availableTime.startTime).getDate() -
+                        new Date(b.availableTime.startTime).getDate()
                     );
                 case "name":
                     return a.name.localeCompare(b.name);
