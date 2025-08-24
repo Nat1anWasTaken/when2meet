@@ -65,12 +65,12 @@
     let controlBarRef = $state<{ focusInput?: () => void }>({});
 
     // Invitation dialog state
-    let invitationFrom = $derived(page.url.searchParams.get("invitation") || null);
+    let isInvited = $derived(page.url.searchParams.get("invited") === "true");
     let invitationDialogOpen = $state(false);
 
-    // Show invitation dialog when invitation parameter is present
+    // Show invitation dialog when invited parameter is present
     $effect(() => {
-        if (invitationFrom && !userAlreadyJoined) {
+        if (isInvited && !userAlreadyJoined) {
             invitationDialogOpen = true;
         }
     });
@@ -246,11 +246,10 @@
 {/if}
 
 <!-- Invitation Dialog -->
-{#if invitationFrom}
+{#if isInvited}
     <InvitationDialog
         bind:open={invitationDialogOpen}
         eventName={data.name}
-        inviterName={invitationFrom}
         onAccept={acceptInvitation}
     />
 {/if}

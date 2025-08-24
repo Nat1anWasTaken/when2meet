@@ -1,16 +1,14 @@
 <script lang="ts">
     import { Button } from "$lib/components/ui/button";
     import * as Dialog from "$lib/components/ui/dialog";
-    import type { SvelteComponent } from "svelte";
 
     interface Props {
         open: boolean;
         eventName: string;
-        inviterName: string;
         onAccept?: () => void;
     }
 
-    let { open = $bindable(), eventName, inviterName, onAccept }: Props = $props();
+    let { open = $bindable(), eventName, onAccept }: Props = $props();
 </script>
 
 <Dialog.Root bind:open>
@@ -18,7 +16,7 @@
         <Dialog.Header>
             <Dialog.Title>You're Invited!</Dialog.Title>
             <Dialog.Description>
-                {inviterName} has invited you to sign your available times for
+                You have been invited to join
                 <span class="font-semibold">{eventName}</span>.
             </Dialog.Description>
         </Dialog.Header>

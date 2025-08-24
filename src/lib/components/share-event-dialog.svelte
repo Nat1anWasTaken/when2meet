@@ -23,7 +23,7 @@
         if (!browser) return "";
 
         const url = new URL(`/${eventId}`, window.location.origin);
-        url.searchParams.set("invitation", "true");
+        url.searchParams.set("invited", "true");
 
         return url.toString();
     });
