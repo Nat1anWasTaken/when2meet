@@ -7,6 +7,7 @@
     import { Label } from "$lib/components/ui/label/index.js";
     import { toast } from "svelte-sonner";
     import RiGoogleFill from "~icons/ri/google-fill";
+    import RiGithubFill from "~icons/ri/github-fill";
 
     interface Props {
         redirectTo?: string;
@@ -39,6 +40,34 @@
         toast.success("Login successful! Redirecting to home...");
 
         goto(redirectTo || "/");
+    };
+
+    const handleGoogleSignIn = async () => {
+        toast.info("Signing in with Google...");
+
+        try {
+            await authClient.signIn.social({
+                provider: "google",
+                callbackURL: redirectTo || "/"
+            });
+        } catch (error) {
+            toast.error("Google sign in failed. Please try again.");
+            console.error("Google sign in error:", error);
+        }
+    };
+
+    const handleGithubSignIn = async () => {
+        toast.info("Signing in with GitHub...");
+
+        try {
+            await authClient.signIn.social({
+                provider: "github",
+                callbackURL: redirectTo || "/"
+            });
+        } catch (error) {
+            toast.error("GitHub sign in failed. Please try again.");
+            console.error("GitHub sign in error:", error);
+        }
     };
 </script>
 
@@ -75,10 +104,18 @@
             <Button
                 variant="outline"
                 class="w-full"
-                onclick={() => alert("Login with Google is not yet implemented.")}
+                onclick={handleGoogleSignIn}
             >
                 <RiGoogleFill class="h-4 w-4" />
                 Login with Google
+            </Button>
+            <Button
+                variant="outline"
+                class="w-full"
+                onclick={handleGithubSignIn}
+            >
+                <RiGithubFill class="h-4 w-4" />
+                Login with GitHub
             </Button>
         </div>
         <div class="mt-4 text-center text-sm">

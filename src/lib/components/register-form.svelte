@@ -7,6 +7,7 @@
     import { Label } from "$lib/components/ui/label/index.js";
     import { toast } from "svelte-sonner";
     import RiGoogleFill from "~icons/ri/google-fill";
+    import RiGithubFill from "~icons/ri/github-fill";
 
     const id = $props.id();
 
@@ -44,6 +45,34 @@
         toast.success("Registration successful! Redirecting to home...");
 
         goto("/");
+    };
+
+    const handleGoogleSignIn = async () => {
+        toast.info("Signing in with Google...");
+
+        try {
+            await authClient.signIn.social({
+                provider: "google",
+                callbackURL: "/"
+            });
+        } catch (error) {
+            toast.error("Google sign in failed. Please try again.");
+            console.error("Google sign in error:", error);
+        }
+    };
+
+    const handleGithubSignIn = async () => {
+        toast.info("Signing in with GitHub...");
+
+        try {
+            await authClient.signIn.social({
+                provider: "github",
+                callbackURL: "/"
+            });
+        } catch (error) {
+            toast.error("GitHub sign in failed. Please try again.");
+            console.error("GitHub sign in error:", error);
+        }
     };
 </script>
 
@@ -102,10 +131,18 @@
             <Button
                 variant="outline"
                 class="w-full"
-                onclick={() => alert("Register with Google is not yet implemented.")}
+                onclick={handleGoogleSignIn}
             >
                 <RiGoogleFill class="h-4 w-4" />
                 Continue with Google
+            </Button>
+            <Button
+                variant="outline"
+                class="w-full"
+                onclick={handleGithubSignIn}
+            >
+                <RiGithubFill class="h-4 w-4" />
+                Continue with GitHub
             </Button>
         </div>
         <div class="mt-4 text-center text-sm">
