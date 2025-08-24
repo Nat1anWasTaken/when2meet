@@ -213,7 +213,7 @@
 <div
     bind:this={timeGrid}
     class={cn(
-        "grid grid-flow-col transition-all duration-200 ease-in-out",
+        "grid grid-flow-col p-2 transition-all duration-200 ease-in-out",
         selectable ? "gap-3" : "gap-1",
         className
     )}
