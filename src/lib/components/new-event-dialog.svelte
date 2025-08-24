@@ -123,7 +123,7 @@
             toast.info(`Event "${eventName.trim()}" created successfully!`);
 
             if (redirect) {
-                goto(`/${event.id}`);
+                await goto(`/${event.id}`);
             }
 
             refreshAll();
