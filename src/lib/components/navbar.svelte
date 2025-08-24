@@ -10,7 +10,7 @@
                 when2meet<span class="text-primary">.app</span>
             </a>
         </h1>
-        <a href="/about">About</a>
+        <a href="/about" class="hidden md:block">About</a>
     </div>
     <div class="flex flex-row items-center gap-2">
         <ModeSwitch />

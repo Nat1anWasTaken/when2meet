@@ -74,7 +74,9 @@
     <div class="h-8 w-8 animate-pulse rounded-full bg-muted"></div>
 {:else}
     <div class="flex gap-2">
-        <Button variant="ghost" size="sm" onclick={() => goto("/login")}>Login</Button>
+        <Button variant="ghost" size="sm" onclick={() => goto("/login")} class="hidden md:block">
+            Login
+        </Button>
         <Button size="sm" onclick={() => goto("/register")}>Sign Up</Button>
     </div>
 {/if}
