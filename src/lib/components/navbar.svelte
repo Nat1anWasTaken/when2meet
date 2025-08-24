@@ -7,8 +7,7 @@
     <div class="flex flex-row items-center gap-2">
         <h1 class="text-lg font-bold">
             <a href="/">
-                when2meet
-                <span class="text-primary">.app</span>
+                when2meet<span class="text-primary">.app</span>
             </a>
         </h1>
         <a href="/about">About</a>
