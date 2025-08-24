@@ -25,7 +25,7 @@
     const session = authClient.useSession();
 
     let currentUserId = $derived($session.data?.user?.id);
-    
+
     let userAlreadyJoined = $derived.by(() => {
         if (!currentUserId) return false;
         return data.participants?.some((p) => p.userId === currentUserId) || false;
@@ -75,8 +75,9 @@
     $effect(() => {
         const invited = page.url.searchParams.get("invited") === "true";
         const hasUserId = !!currentUserId;
-        const alreadyJoined = hasUserId && data.participants?.some((p) => p.userId === currentUserId);
-        
+        const alreadyJoined =
+            hasUserId && data.participants?.some((p) => p.userId === currentUserId);
+
         if (invited && !alreadyJoined) {
             invitationDialogOpen = true;
         }
