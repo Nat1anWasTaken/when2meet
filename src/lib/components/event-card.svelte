@@ -1,8 +1,10 @@
 <script lang="ts">
+    import { page } from "$app/state";
     import { Badge } from "$lib/components/ui/badge";
     import * as Card from "$lib/components/ui/card";
     import { cn } from "$lib/utils";
-    import { Calendar, Earth, Repeat, User } from "lucide-svelte";
+    import { Calendar, Copy, Earth, Repeat, Share2, User } from "lucide-svelte";
+    import CopyButton from "./copy-button.svelte";
     import EditEventDialog from "./edit-event-dialog.svelte";
     import Button from "./ui/button/button.svelte";
 
@@ -47,19 +49,39 @@
 <Card.Root class={cn("@container", className)}>
     <Card.Content>
         <div class="flex flex-col gap-3">
-            <div class="flex flex-col gap-1">
-                <Card.Title class="text-2xl">{name}</Card.Title>
-                <div class="flex flex-row items-center gap-2">
-                    <div class="flex flex-row items-center gap-1 text-sm text-muted-foreground">
-                        <User class="h-4 w-4" />
-                        <span>Organized by {organizerName}</span>
+            <div class="flex flex-row justify-between">
+                <div class="flex flex-col gap-1">
+                    <Card.Title class="text-2xl">{name}</Card.Title>
+                    <div class="flex flex-row items-center gap-2">
+                        <div class="flex flex-row items-center gap-1 text-sm text-muted-foreground">
+                            <User class="h-4 w-4" />
+                            <span>Organized by {organizerName}</span>
+                        </div>
+                        {#if weeklyRecurrence}
+                            <Badge variant="outline">
+                                <Repeat class="mr-1 h-4 w-4" />
+                                Weekly
+                            </Badge>
+                        {/if}
                     </div>
-                    {#if weeklyRecurrence}
-                        <Badge variant="outline">
-                            <Repeat class="mr-1 h-4 w-4" />
-                            Weekly
-                        </Badge>
-                    {/if}
+                </div>
+                <div class="flex items-start justify-end">
+                    <CopyButton
+                        content={page.url.origin + `/${eventId}?invitation=${organizerName}`}
+                        variant="outline"
+                        size="icon"
+                        class="text-muted-foreground"
+                    >
+                        <Copy />
+
+                        {#snippet clickToCopyTooltip()}
+                            <span>Click to copy the invitation link</span>
+                        {/snippet}
+
+                        {#snippet copiedTooltip()}
+                            <span>Copied invitation link!</span>
+                        {/snippet}
+                    </CopyButton>
                 </div>
             </div>
 

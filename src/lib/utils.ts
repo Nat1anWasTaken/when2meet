@@ -1,5 +1,6 @@
 import { Time } from "@internationalized/date";
 import { clsx, type ClassValue } from "clsx";
+import { toast } from "svelte-sonner";
 import { twMerge } from "tailwind-merge";
 
 export const preservedEventNames = ["events"];
@@ -273,4 +274,13 @@ export function extractPrimaryHue(
     }
 
     return null;
+}
+
+export async function copyText(textToCopy: string) {
+    try {
+        await navigator.clipboard.writeText(textToCopy);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        toast.error("Failed to copy", error);
+    }
 }
