@@ -9,6 +9,7 @@
     import * as Select from "$lib/components/ui/select";
     import Separator from "$lib/components/ui/separator/separator.svelte";
     import * as Tabs from "$lib/components/ui/tabs/";
+    import IconCalendarX from "~icons/lucide/calendar-x?raw";
     import IconUser from "~icons/lucide/user";
 
     let sort = $state("");
@@ -79,6 +80,26 @@
     </div>
 {/snippet}
 
+{#snippet emptyView()}
+    <div
+        class="flex min-h-[400px] w-full flex-col items-center justify-center space-y-6 text-center"
+    >
+        <div class="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+            <IconCalendarX class="h-8 w-8 text-muted-foreground" />
+        </div>
+
+        <div>
+            <h2 class="text-2xl font-semibold">There's nothing here</h2>
+            <p class="mt-2 text-muted-foreground">
+                You haven't organized or joined any events yet. Create a new event to get started!
+            </p>
+        </div>
+        <NewEventDialog redirect={false}>
+            <Button>Create New Event</Button>
+        </NewEventDialog>
+    </div>
+{/snippet}
+
 <div class="flex h-full w-full items-center justify-center p-4">
     <div class="h-full w-full max-w-4xl">
         <h1 class="text-4xl font-bold">Events</h1>
@@ -117,7 +138,11 @@
                         class="grid grid-flow-row grid-cols-1 gap-2 md:grid-cols-2"
                     >
                         {#await getOrganizedEvents({ name: searchQuery }) then events}
-                            {@render eventGallery(sortEvents(events))}
+                            {#if events.length === 0}
+                                {@render emptyView()}
+                            {:else}
+                                {@render eventGallery(sortEvents(events))}
+                            {/if}
                         {/await}
                     </Tabs.Content>
                     <Tabs.Content
@@ -125,7 +150,11 @@
                         class="grid grid-flow-row grid-cols-1 gap-2 md:grid-cols-2"
                     >
                         {#await getParticipatedEvents( { name: searchQuery } ).then( (result) => result.map((entry) => entry.event) ) then events}
-                            {@render eventGallery(sortEvents(events))}
+                            {#if events.length === 0}
+                                {@render emptyView()}
+                            {:else}
+                                {@render eventGallery(sortEvents(events))}
+                            {/if}
                         {/await}
                     </Tabs.Content>
 
