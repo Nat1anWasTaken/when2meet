@@ -2,7 +2,7 @@
 
 An app that helps you and your team find meeting times.
 
-![example-usage](/src/lib/assets/example-usage.mp4)
+![thumbnail](/src/lib/assets/thumbnail.png)
 
 ## What is this?
 
@@ -74,6 +74,10 @@ Visit `http://localhost:5173` to see the application running.
 3. Make your changes and ensure tests pass
 4. Run linting: `pnpm lint`
 5. Submit a pull request
+
+# Credit
+
+This project is heavily inspired by [when2meet.com](https://when2meet.com). So if
 
 ## License
 
