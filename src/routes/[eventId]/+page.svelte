@@ -207,7 +207,11 @@
                     disabled={!canJoin}
                 >
                     {#if participationMode === "view"}
-                        {userAlreadyJoined ? "Edit Participation" : "Join Event"}
+                        {userAlreadyJoined
+                            ? "Edit Participation"
+                            : participated
+                              ? "You have joined"
+                              : "Join Event"}
                     {:else if participationMode === "participate"}
                         Select your available time below <IconArrowDown />
                     {/if}
