@@ -2,6 +2,8 @@
 
 An app that helps you and your team find meeting times.
 
+![example-usage](/src/lib/assets/example-usage.gif)
+
 ## What is this?
 
 To be written...
