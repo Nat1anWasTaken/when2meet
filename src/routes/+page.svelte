@@ -5,12 +5,14 @@
 
 <svelte:head>
     <title>when2meet.app - Find meeting times that work for everyone, fast.</title>
+    <link rel="canonical" href="https://when2meet.app/" />
+
     <meta
         name="description"
         content="Find meeting times that work for everyone, fast. Create events and let participants select their availability to find the best meeting times."
     />
 
-    <!-- OpenGraph meta tags -->
+    <!-- OpenGraph -->
     <meta property="og:type" content="website" />
     <meta
         property="og:title"
@@ -20,16 +22,20 @@
         property="og:description"
         content="Find meeting times that work for everyone, fast. Create events and let participants select their availability to find the best meeting times."
     />
-    <meta property="og:url" content="https://when2meet.app" />
+    <meta property="og:url" content="https://when2meet.app/" />
     <meta property="og:site_name" content="when2meet.app" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:image" content="https://when2meet.app/thumbnail.png" />
+    <meta property="og:image" content="https://when2meet.app/thumbnail.png?v=2" />
+    <meta property="og:image:secure_url" content="https://when2meet.app/thumbnail.png?v=2" />
     <meta
         property="og:image:alt"
         content="when2meet.app - Find meeting times that work for everyone, fast."
     />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
-    <!-- Twitter Card meta tags -->
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta
         name="twitter:title"
@@ -39,16 +45,11 @@
         name="twitter:description"
         content="Find meeting times that work for everyone, fast. Create events and let participants select their availability to find the best meeting times."
     />
-    <meta name="twitter:url" content="https://when2meet.app" />
+    <meta name="twitter:url" content="https://when2meet.app/" />
     <meta name="twitter:site" content="@when2meetapp" />
-    <meta property="twitter:image" content="https://when2meet.app/thumbnail.png" />
-    <meta
-        property="twitter:image:alt"
-        content="when2meet.app - Find meeting times that work for everyone, fast."
-    />
+    <meta name="twitter:image" content="https://when2meet.app/thumbnail.png?v=2" />
 
-    <!-- Additional meta tags -->
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index,follow" />
 </svelte:head>
 
 <section class="flex h-full items-center justify-center px-6 text-center">
