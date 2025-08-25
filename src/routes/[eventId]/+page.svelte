@@ -69,6 +69,9 @@
     let selectorSelectable = $state(false);
     let controlBarRef = $state<{ focusInput?: () => void }>({});
 
+    let participated = $state<boolean>(false);
+    let canJoin = $derived(!participated && !currentUserId && participationMode === "view");
+
     // Invitation dialog state
     let isInvited = $derived(page.url.searchParams.get("invited") === "true");
     let invitationDialogOpen = $state(false);
@@ -113,6 +116,11 @@
         selectorSelectable = false;
         selectedCells = [];
         timeSelectorRef?.resetSelection?.();
+    }
+
+    function handleSuccess() {
+        participated = true;
+        reset();
     }
 </script>
 
@@ -196,7 +204,7 @@
                     size="lg"
                     class="h-16 w-full text-xl"
                     onclick={startParticipation}
-                    disabled={participationMode === "participate"}
+                    disabled={!canJoin}
                 >
                     {#if participationMode === "view"}
                         {userAlreadyJoined ? "Edit Participation" : "Join Event"}
@@ -255,7 +263,7 @@
         eventId={data.id}
         {selectedTimes}
         existingParticipant={currentUserParticipant}
-        onSuccess={reset}
+        onSuccess={handleSuccess}
         onCancel={reset}
     />
 {/if}
