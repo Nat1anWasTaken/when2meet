@@ -19,7 +19,7 @@
         type Cell
     } from "$lib/utils";
     import { backOut } from "svelte/easing";
-    import { fly } from "svelte/transition";
+    import { slide } from "svelte/transition";
     import IconArrowDown from "~icons/lucide/arrow-down";
     import type { PageProps } from "./$types";
 
@@ -265,7 +265,11 @@
 
 <!-- Floating Control Bar -->
 {#if participationMode === "participate"}
-    <div class="h-32"></div>
+    <div
+        class="h-32"
+        in:slide={{ duration: 500, easing: backOut }}
+        out:slide={{ duration: 300 }}
+    ></div>
     <ParticipationControlBar
         bind:this={controlBarRef}
         eventId={data.id}
