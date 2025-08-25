@@ -18,6 +18,8 @@
         timeSelectionsToCells,
         type Cell
     } from "$lib/utils";
+    import { backOut } from "svelte/easing";
+    import { fly } from "svelte/transition";
     import IconArrowDown from "~icons/lucide/arrow-down";
     import type { PageProps } from "./$types";
 
@@ -148,8 +150,8 @@
     <meta name="robots" content="index, follow" />
 </svelte:head>
 
-<div class="flex h-full w-full items-start justify-center p-4">
-    <div class="flex h-full w-full max-w-4xl flex-col gap-6">
+<div class="flex w-full items-start justify-center p-4">
+    <div class="flex w-full max-w-4xl flex-col gap-6">
         <!-- Event Header -->
         <EventCard
             eventId={data.id}
@@ -263,6 +265,7 @@
 
 <!-- Floating Control Bar -->
 {#if participationMode === "participate"}
+    <div class="h-32"></div>
     <ParticipationControlBar
         bind:this={controlBarRef}
         eventId={data.id}

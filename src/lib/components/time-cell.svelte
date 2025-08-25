@@ -13,6 +13,9 @@
         availableParticipants: {
             username: string;
             timeSelection: { startTime: Date; endTime: Date }[];
+            user?: {
+                image?: string;
+            };
         }[];
         cellColor: string;
         selectable?: boolean;
@@ -95,6 +98,7 @@
                         {#each availableParticipants as participant (participant.username)}
                             <ParticipantBadge
                                 name={participant.username}
+                                image={participant.user?.image}
                                 size="sm"
                                 class="border-1 border-accent"
                             />
