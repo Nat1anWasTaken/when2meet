@@ -3,7 +3,7 @@ import { clsx, type ClassValue } from "clsx";
 import { toast } from "svelte-sonner";
 import { twMerge } from "tailwind-merge";
 
-export const preservedEventNames = ["events", "about"];
+export const preservedEventNames = ["events", "about", "login"];
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
