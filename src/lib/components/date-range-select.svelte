@@ -37,9 +37,20 @@
                 )}
                 aria-expanded={open}
             >
-                {selectedDateRange?.start && selectedDateRange?.end
-                    ? `${selectedDateRange.start?.toString()} － ${selectedDateRange.end?.toString()}`
-                    : "Select a date range..."}
+                <div class="flex flex-row justify-start gap-1">
+                    {#if selectedDateRange?.start}
+                        {selectedDateRange.start?.toString()}
+                    {:else}
+                        <span class="text-muted-foreground">Select a start date</span>
+                    {/if}
+                    <span class="text-muted-foreground">－</span>
+                    {#if selectedDateRange?.end}
+                        {selectedDateRange.end?.toString()}
+                    {:else}
+                        <span class="text-muted-foreground">Select a end date</span>
+                    {/if}
+                </div>
+
                 <IconChevronDown />
             </Button>
         {/snippet}
