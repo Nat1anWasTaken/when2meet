@@ -1,24 +1,20 @@
-name: Prettier Format
+name: Prettier Check
 
 on:
+    push:
+        branches: [main]
     pull_request:
         branches: [main]
 
 permissions:
-    contents: write
+    contents: read
 
 jobs:
-    format:
+    prettier-check:
         runs-on: ubuntu-latest
-        if: >
-            github.event_name == 'pull_request' &&
-            github.event.pull_request.head.repo.full_name == github.repository
         steps:
-            - name: Checkout PR HEAD
+            - name: Checkout
               uses: actions/checkout@v4
-              with:
-                  ref: ${{ github.head_ref }}
-                  token: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Setup pnpm
               uses: pnpm/action-setup@v4
@@ -34,11 +30,12 @@ jobs:
             - name: Install deps
               run: pnpm install --frozen-lockfile
 
-            - name: Format code
-              run: pnpm format
+            - name: Enable Prettier annotations
+              run: echo "::add-matcher::.github/matchers/prettier-list-different.json"
 
-            - name: Commit formatting changes
-              uses: stefanzweifel/git-auto-commit-action@v5
-              with:
-                  commit_message: "style(*): auto-format code with Prettier"
-                  branch: ${{ github.head_ref }}
+            - name: Run Prettier check
+              run: pnpm exec prettier --list-different .
+
+            - name: Disable matcher
+              if: always()
+              run: echo "::remove-matcher owner=prettier-list-different::"
