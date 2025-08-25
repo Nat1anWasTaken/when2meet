@@ -6,12 +6,15 @@ on:
     pull_request:
         branches: [main]
 
+permissions:
+    contents: read
+
 jobs:
     eslint-check:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout code
+            - name: Checkout
               uses: actions/checkout@v4
 
             - name: Setup pnpm
@@ -19,14 +22,21 @@ jobs:
               with:
                   version: 9
 
-            - name: Setup Node.js
+            - name: Setup Node
               uses: actions/setup-node@v4
               with:
-                  node-version: "20"
-                  cache: "pnpm"
+                  node-version: 20
+                  cache: pnpm
 
-            - name: Install dependencies
+            - name: Install deps
               run: pnpm install --frozen-lockfile
 
-            - name: Run ESLint check
-              run: pnpm exec eslint . -f github
+            - name: Enable ESLint annotations
+              run: echo "::add-matcher::.github/matchers/eslint-unix.json"
+
+            - name: Run ESLint
+              run: pnpm exec eslint . -f unix --max-warnings=0
+
+            - name: Disable matcher
+              if: always()
+              run: echo "::remove-matcher owner=eslint-unix::"
