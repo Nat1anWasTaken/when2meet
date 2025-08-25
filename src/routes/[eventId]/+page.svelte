@@ -70,9 +70,7 @@
     let controlBarRef = $state<{ focusInput?: () => void }>({});
 
     let participated = $state<boolean>(false);
-    let canJoin = $derived(
-        (currentUserId || (!currentUserId && !participated)) && participationMode == "view"
-    );
+    let canJoin = $derived((currentUserId || !participated) && participationMode == "view");
 
     // Invitation dialog state
     let isInvited = $derived(page.url.searchParams.get("invited") === "true");
