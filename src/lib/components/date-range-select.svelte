@@ -8,10 +8,17 @@
 
     interface Props {
         class?: string;
+        minDays?: number;
+        maxDays?: number;
         selectedDateRange?: DateRange;
     }
 
-    let { class: className, selectedDateRange = $bindable(undefined) }: Props = $props();
+    let {
+        class: className,
+        minDays,
+        maxDays,
+        selectedDateRange = $bindable(undefined)
+    }: Props = $props();
 
     let open = $state(false);
     let triggerRef = $state<HTMLButtonElement>(null!);
@@ -40,6 +47,8 @@
     <Popover.Content class="p-0" side="top">
         <RangeCalendar
             bind:value={selectedDateRange}
+            {minDays}
+            {maxDays}
             class="flex w-full items-center justify-center"
         />
     </Popover.Content>

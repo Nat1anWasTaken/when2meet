@@ -169,33 +169,6 @@
             </div>
 
             <div class="flex flex-col gap-2">
-                <Label>What date range might work?</Label>
-                <div class="grid grid-cols-4 grid-rows-2 gap-2" style="place-items: center start;">
-                    <p class=" col-span-1 text-xs text-muted-foreground">Date range:</p>
-                    <!-- <RangeCalendar
-                        bind:value={selectedDateRange}
-                        class="flex w-full items-center justify-center"
-                    /> -->
-                    <DateRangeSelect class="col-span-3 w-full" bind:selectedDateRange />
-                    <p class="col-span-1 text-xs text-muted-foreground">Timezone:</p>
-                    <TimezoneSelect class="col-span-3 w-full" bind:selectedTimezone />
-                </div>
-                <!-- <div class="flex w-full flex-col items-start justify-between gap-2">
-                    <p class="text-xs text-muted-foreground">
-                        Select date range (time will be set from 00:00 to 23:59):
-                    </p>
-                    <RangeCalendar
-                        bind:value={selectedDateRange}
-                        class="flex w-full items-center justify-center"
-                    />
-                    <div class="flex w-full flex-col gap-2 md:flex-row md:items-center">
-                        <p class="text-xs text-muted-foreground">Timezone:</p>
-                        <TimezoneSelect class="w-full md:w-auto" bind:selectedTimezone />
-                    </div>
-                </div> -->
-            </div>
-
-            <div class="flex flex-col gap-2">
                 <Label class="flex items-center gap-2">Is this a weekly recurring event?</Label>
                 <RadioGroup.Root bind:value={weeklyRecurrence}>
                     <div class="flex flex-row items-center gap-2">
@@ -207,6 +180,20 @@
                         <Label for="once">No, it's a one-time event</Label>
                     </div>
                 </RadioGroup.Root>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <Label>What date range might work?</Label>
+                <div class="grid grid-cols-4 grid-rows-2 gap-2" style="place-items: center start;">
+                    <p class=" col-span-1 text-xs text-muted-foreground">Date range:</p>
+                    <DateRangeSelect
+                        class="col-span-3 w-full"
+                        bind:selectedDateRange
+                        maxDays={weeklyRecurrence ? 7 : undefined}
+                    />
+                    <p class="col-span-1 text-xs text-muted-foreground">Timezone:</p>
+                    <TimezoneSelect class="col-span-3 w-full" bind:selectedTimezone />
+                </div>
             </div>
 
             <div class="flex flex-col gap-2">
