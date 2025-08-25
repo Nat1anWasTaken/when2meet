@@ -2,7 +2,7 @@
 
 An app that helps you and your team find meeting times.
 
-![example-usage](/src/lib/assets/example-usage.gif)
+![example-usage](/src/lib/assets/example-usage.mp4)
 
 ## What is this?
 
