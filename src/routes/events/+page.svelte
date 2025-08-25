@@ -9,7 +9,7 @@
     import * as Select from "$lib/components/ui/select";
     import Separator from "$lib/components/ui/separator/separator.svelte";
     import * as Tabs from "$lib/components/ui/tabs/";
-    import IconCalendarX from "~icons/lucide/calendar-x?raw";
+    import IconCalendarX from "~icons/lucide/calendar-x";
     import IconUser from "~icons/lucide/user";
 
     let sort = $state("");
@@ -64,7 +64,7 @@
 
 {#snippet unauthorizedView()}
     <div
-        class="flex min-h-[400px] w-full flex-col items-center justify-center space-y-6 text-center"
+        class="col-span-full flex min-h-[400px] w-full flex-col items-center justify-center space-y-6 text-center"
     >
         <div class="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
             <IconUser class="h-8 w-8 text-muted-foreground" />
@@ -82,7 +82,7 @@
 
 {#snippet emptyView()}
     <div
-        class="flex min-h-[400px] w-full flex-col items-center justify-center space-y-6 text-center"
+        class="col-span-full flex min-h-[400px] w-full flex-col items-center justify-center space-y-6 text-center"
     >
         <div class="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
             <IconCalendarX class="h-8 w-8 text-muted-foreground" />
@@ -133,33 +133,8 @@
 
             <div class="mt-4">
                 <svelte:boundary>
-                    <Tabs.Content
-                        value="organized-events"
-                        class="grid grid-flow-row grid-cols-1 gap-2 md:grid-cols-2"
-                    >
-                        {#await getOrganizedEvents({ name: searchQuery }) then events}
-                            {#if events.length === 0}
-                                {@render emptyView()}
-                            {:else}
-                                {@render eventGallery(sortEvents(events))}
-                            {/if}
-                        {/await}
-                    </Tabs.Content>
-                    <Tabs.Content
-                        value="attending-events"
-                        class="grid grid-flow-row grid-cols-1 gap-2 md:grid-cols-2"
-                    >
-                        {#await getParticipatedEvents( { name: searchQuery } ).then( (result) => result.map((entry) => entry.event) ) then events}
-                            {#if events.length === 0}
-                                {@render emptyView()}
-                            {:else}
-                                {@render eventGallery(sortEvents(events))}
-                            {/if}
-                        {/await}
-                    </Tabs.Content>
-
                     {#snippet pending()}
-                        <div class="flex items-center justify-center py-8">
+                        <div class="col-span-full flex items-center justify-center py-8">
                             <p class="text-muted-foreground">Loading events...</p>
                         </div>
                     {/snippet}
@@ -168,7 +143,9 @@
                         {#if error && typeof error === "object" && "status" in error && error.status === 401}
                             {@render unauthorizedView()}
                         {:else}
-                            <div class="flex flex-col items-center justify-center py-8 text-center">
+                            <div
+                                class="col-span-full flex flex-col items-center justify-center py-8 text-center"
+                            >
                                 <h3 class="text-xl font-semibold text-destructive">
                                     Something went wrong
                                 </h3>
@@ -183,6 +160,39 @@
                             </div>
                         {/if}
                     {/snippet}
+
+                    <Tabs.Content
+                        value="organized-events"
+                        class="grid grid-flow-row grid-cols-1 gap-2 md:grid-cols-2"
+                    >
+                        {#await getOrganizedEvents({ name: searchQuery })}
+                            {@render pending()}
+                        {:then events}
+                            {#if !events?.length}
+                                {@render emptyView()}
+                            {:else}
+                                {@render eventGallery(sortEvents(events))}
+                            {/if}
+                        {:catch error}
+                            {@render failed(error)}
+                        {/await}
+                    </Tabs.Content>
+                    <Tabs.Content
+                        value="attending-events"
+                        class="grid grid-flow-row grid-cols-1 gap-2 md:grid-cols-2"
+                    >
+                        {#await getParticipatedEvents( { name: searchQuery } ).then( (result) => result.map((entry) => entry.event) )}
+                            {@render pending()}
+                        {:then events}
+                            {#if !events?.length}
+                                {@render emptyView()}
+                            {:else}
+                                {@render eventGallery(sortEvents(events))}
+                            {/if}
+                        {:catch error}
+                            {@render failed(error)}
+                        {/await}
+                    </Tabs.Content>
                 </svelte:boundary>
             </div>
         </Tabs.Root>
