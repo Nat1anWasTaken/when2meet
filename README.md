@@ -1,6 +1,6 @@
 # when2meet.app
 
-[when2meet.com](https://when2meet.com), but better.
+An app that helps you and your team find meeting times.
 
 ## What is this?
 
@@ -19,7 +19,7 @@ To be written...
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Nat1anWasTaken/when2meet.git
 cd when2meet
 ```
 
@@ -38,9 +38,17 @@ cp .env.example .env
 4. Configure your environment variables in `.env`:
 
 ```env
-DATABASE_URL="your-postgresql-connection-string"
-BETTER_AUTH_SECRET="your-secret-key"
-BETTER_AUTH_URL="http://localhost:5173"
+BETTER_AUTH_SECRET=
+BETTER_AUTH_URL=http://localhost:5173
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+
+DATABASE_URL="postgres://user:password@host:port/db-name"
+
 ```
 
 5. Run database migrations:
@@ -56,44 +64,6 @@ pnpm dev
 ```
 
 Visit `http://localhost:5173` to see the application running.
-
-### Available Scripts
-
-- `pnpm dev` - Start development server
-- `pnpm build` - Create production build
-- `pnpm preview` - Preview production build
-- `pnpm check` - Run Svelte type checking
-- `pnpm check:watch` - Run type checking in watch mode
-- `pnpm format` - Format code with Prettier
-- `pnpm lint` - Run linting (Prettier + ESLint)
-
-### Database Commands
-
-- `pnpm db:push` - Push schema changes to database
-- `pnpm db:migrate` - Run database migrations
-- `pnpm db:studio` - Open Drizzle Studio for database management
-
-### Project Structure
-
-```
-src/
-├── lib/
-│   ├── components/          # Reusable Svelte components
-│   │   ├── ui/             # shadcn-svelte components
-│   │   ├── time-selector.svelte # Interactive time selection grid
-│   │   └── ...
-│   ├── server/
-│   │   └── db/
-│   │       ├── schema.ts   # Main database schema
-│   │       └── auth-schema.ts # Authentication schema
-│   └── utils.ts           # Utility functions
-├── routes/
-│   ├── +page.svelte       # Landing page
-│   ├── [eventId]/         # Event participation page
-│   ├── events/            # User's events dashboard
-│   └── ...
-└── app.html               # App shell
-```
 
 ## Contributing
 
