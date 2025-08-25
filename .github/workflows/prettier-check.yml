@@ -6,12 +6,14 @@ on:
     pull_request:
         branches: [main]
 
+permissions:
+    contents: read
+
 jobs:
     prettier-check:
         runs-on: ubuntu-latest
-
         steps:
-            - name: Checkout code
+            - name: Checkout
               uses: actions/checkout@v4
 
             - name: Setup pnpm
@@ -19,17 +21,21 @@ jobs:
               with:
                   version: 9
 
-            - name: Setup Node.js
+            - name: Setup Node
               uses: actions/setup-node@v4
               with:
-                  node-version: "20"
-                  cache: "pnpm"
+                  node-version: 20
+                  cache: pnpm
 
-            - name: Install dependencies
+            - name: Install deps
               run: pnpm install --frozen-lockfile
 
+            - name: Enable Prettier annotations
+              run: echo "::add-matcher::.github/matchers/prettier-list-different.json"
+
             - name: Run Prettier check
-              uses: creyD/prettier_action@v4.3
-              with:
-                  dry: true
-                  prettier_options: "--check ."
+              run: pnpm exec prettier --list-different .
+
+            - name: Disable matcher
+              if: always()
+              run: echo "::remove-matcher owner=prettier-list-different::"

@@ -1,0 +1,13 @@
+{
+    "problemMatcher": [
+        {
+            "owner": "prettier-list-different",
+            "pattern": [
+                {
+                    "regexp": "^(.*)$",
+                    "file": 1
+                }
+            ]
+        }
+    ]
+}
