@@ -6,7 +6,7 @@ An app that helps you and your team find meeting times.
 
 ## What is this?
 
-> Every time I try to schedule a meeting with my team, it usually turns into several rounds of “Can you do XX o’clock?” followed by “No, I can’t,” and then we have to keep searching for another time. This wastes a lot of time, so I built this app to help people quickly find a time when everyone is available.
+> Every time I try to schedule a meeting with my team, it usually turns into several rounds of “Can you do XX o’clock?” followed by “No, I'm dating my girlfriend at that time.” and then we have to keep searching for another time. This wastes a lot of time, so I built this app to help people quickly find a time when everyone is available.
 
 ## Running locally
 
