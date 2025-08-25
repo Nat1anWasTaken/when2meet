@@ -101,19 +101,11 @@
                 <Input id="password-{id}" type="password" required bind:value={password} />
             </div>
             <Button type="submit" class="w-full" onclick={() => handleLogin()}>Login</Button>
-            <Button
-                variant="outline"
-                class="w-full"
-                onclick={handleGoogleSignIn}
-            >
+            <Button variant="outline" class="w-full" onclick={handleGoogleSignIn}>
                 <RiGoogleFill class="h-4 w-4" />
                 Login with Google
             </Button>
-            <Button
-                variant="outline"
-                class="w-full"
-                onclick={handleGithubSignIn}
-            >
+            <Button variant="outline" class="w-full" onclick={handleGithubSignIn}>
                 <RiGithubFill class="h-4 w-4" />
                 Login with GitHub
             </Button>

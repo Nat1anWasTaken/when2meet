@@ -128,19 +128,11 @@
                 onclick={() => handleRegister()}
                 disabled={!checkPasswordsMatch() || !checkEmailValid()}>Register</Button
             >
-            <Button
-                variant="outline"
-                class="w-full"
-                onclick={handleGoogleSignIn}
-            >
+            <Button variant="outline" class="w-full" onclick={handleGoogleSignIn}>
                 <RiGoogleFill class="h-4 w-4" />
                 Continue with Google
             </Button>
-            <Button
-                variant="outline"
-                class="w-full"
-                onclick={handleGithubSignIn}
-            >
+            <Button variant="outline" class="w-full" onclick={handleGithubSignIn}>
                 <RiGithubFill class="h-4 w-4" />
                 Continue with GitHub
             </Button>
