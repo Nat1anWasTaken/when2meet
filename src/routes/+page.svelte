@@ -50,9 +50,9 @@
             Find meeting times that work for everyone, fast.
         </p>
         <div class="mt-8 flex flex-row justify-center gap-2">
-            <Button size="lg" variant="outline" href="/about">what is this?</Button>
+            <Button size="lg" variant="outline" href="/about">What is this?</Button>
             <NewEventDialog redirect={true}>
-                <Button size="lg">organize new event</Button>
+                <Button size="lg">Organize new event</Button>
             </NewEventDialog>
         </div>
     </div>
