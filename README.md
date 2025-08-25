@@ -2,7 +2,7 @@
 
 An app that helps you and your team find meeting times.
 
-![thumbnail](/src/lib/assets/thumbnail.png)
+![thumbnail](/static/thumbnail.png)
 
 ## What is this?
 

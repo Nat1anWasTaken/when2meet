@@ -23,6 +23,11 @@
     <meta property="og:url" content="https://when2meet.app" />
     <meta property="og:site_name" content="when2meet.app" />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://when2meet.app/thumbnail.png" />
+    <meta
+        property="og:image:alt"
+        content="when2meet.app - Find meeting times that work for everyone, fast."
+    />
 
     <!-- Twitter Card meta tags -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -36,6 +41,11 @@
     />
     <meta name="twitter:url" content="https://when2meet.app" />
     <meta name="twitter:site" content="@when2meetapp" />
+    <meta property="twitter:image" content="https://when2meet.app/thumbnail.png" />
+    <meta
+        property="twitter:image:alt"
+        content="when2meet.app - Find meeting times that work for everyone, fast."
+    />
 
     <!-- Additional meta tags -->
     <meta name="robots" content="index, follow" />
