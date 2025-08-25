@@ -14,6 +14,7 @@
         class?: string;
         startDate: Date;
         endDate: Date;
+        showDates?: boolean;
         intervalInMinutes?: number;
         cellHeight?: string;
         selectable?: boolean;
@@ -30,6 +31,7 @@
         class: className,
         startDate,
         endDate,
+        showDates = false,
         intervalInMinutes = 30,
         cellHeight = "1fr",
         selectable = $bindable(false),
@@ -235,7 +237,9 @@
     {#each days as date, x (date.getTime())}
         <div class="sticky top-0 flex h-full w-full flex-col items-center justify-center">
             <h2 class="text-sm font-bold">{getDayString(date).slice(0, 3)}</h2>
-            <p class="text-sm text-muted-foreground">{date.getMonth()}/{date.getDate()}</p>
+            {#if showDates}
+                <p class="text-sm text-muted-foreground">{date.getMonth()}/{date.getDate()}</p>
+            {/if}
         </div>
         {#each Array(cellsPerDay).entries() as [y] (y)}
             {@const participantCount = getAvailabilityCount(x, y)}

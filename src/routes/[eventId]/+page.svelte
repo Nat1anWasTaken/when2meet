@@ -246,6 +246,7 @@
                         bind:this={timeSelectorRef}
                         startDate={data.availableTime.startTime}
                         endDate={data.availableTime.endTime}
+                        showDates={!data.weeklyRecurrence}
                         intervalInMinutes={60}
                         cellHeight="40px"
                         class="w-full overflow-auto"
