@@ -1,4 +1,4 @@
-name: Auto Format
+name: Prettier Format
 
 on:
     pull_request:
