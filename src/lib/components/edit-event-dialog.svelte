@@ -196,7 +196,7 @@
 <svelte:window
     onkeydown={(event) => {
         if (event.key === "Enter") {
-            handleCreateEvent();
+            handleUpdateEvent();
         }
     }}
 />
