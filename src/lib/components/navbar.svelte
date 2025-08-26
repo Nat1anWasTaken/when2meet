@@ -18,7 +18,7 @@
     </div>
     <div class="flex flex-row items-center gap-2">
         <LanguageSelect />
-        <Button href="https://github.com/Nat1anWasTaken/when2meet" variant="ghost">
+        <Button href="https://github.com/Nat1anWasTaken/when2meet" variant="ghost" size="icon">
             <RiGithubFill />
         </Button>
         <ModeSwitch />
