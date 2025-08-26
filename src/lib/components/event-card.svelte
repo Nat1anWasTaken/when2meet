@@ -8,10 +8,10 @@
     import IconShare2 from "~icons/lucide/share-2";
     import IconUser from "~icons/lucide/user";
 
+    import { m } from "$i18n";
     import EditEventDialog from "./edit-event-dialog.svelte";
     import ShareEventDialog from "./share-event-dialog.svelte";
     import Button from "./ui/button/button.svelte";
-    import { m } from "$i18n";
 
     interface Props {
         eventId: string;
@@ -120,14 +120,7 @@
 
             {#if showActions}
                 <div class="mt-2 grid w-full grid-cols-2 justify-center gap-2">
-                    <EditEventDialog
-                        {eventId}
-                        {name}
-                        {organizerName}
-                        {weeklyRecurrence}
-                        {availableTime}
-                        {timezone}
-                    >
+                    <EditEventDialog {eventId} {name} {organizerName} {availableTime} {timezone}>
                         <Button class="w-full">{m.event_card_button_edit()}</Button>
                     </EditEventDialog>
                     <Button class="w-full" variant="outline" href={`/${eventId}`}
