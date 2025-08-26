@@ -3,7 +3,7 @@
     "hello_world": "Hello, {name} from en!",
     "home_description": "一個幫你找到開會時間的簡單工具",
     "home_learn_more": "這啥？",
-    "home_organize_new_event": "開始找會議時間",
+    "home_organize_new_event": "創建新的會議",
     "event_details_participant_list_description": "這個會議的參加者",
     "event_details_participant_list_title": "參加者 ({totalParticipants})",
     "event_details_participant_list_empty": "還沒有人參加這個會議",
