@@ -9,6 +9,7 @@
     import ParticipationControlBar from "$lib/components/participation-control-bar.svelte";
     import TimeSelector from "$lib/components/time-selector.svelte";
     import { Button } from "$lib/components/ui/button";
+    import { m } from "$lib/paraglide/messages";
     import * as Card from "$lib/components/ui/card";
     import {
         cellsToTimeSelections,
@@ -54,7 +55,17 @@
     let eventUrl = $derived(page.url.toString());
     let eventTitle = $derived(`${data.name} - when2meet.app`);
     let eventDescription = $derived(
-        `Join "${data.name}" organized by ${data.organizerName}. ${totalParticipants} ${totalParticipants === 1 ? "person has" : "people have"} already joined. Find times that work for everyone!`
+        totalParticipants === 1 
+            ? m.event_details_meta_description_singular({
+                eventName: data.name,
+                organizerName: data.organizerName,
+                participantCount: totalParticipants
+            })
+            : m.event_details_meta_description_plural({
+                eventName: data.name,
+                organizerName: data.organizerName,
+                participantCount: totalParticipants
+            })
     );
 
     let days = $derived(
@@ -167,12 +178,16 @@
         <!-- Participation Section -->
         <Card.Root class="w-full">
             <Card.Header>
-                <Card.Title>Participants ({totalParticipants})</Card.Title>
+                <Card.Title
+                    >{m.event_details_participant_list_title({
+                        totalParticipants: totalParticipants
+                    })}</Card.Title
+                >
                 <Card.Description>
                     {#if totalParticipants > 0}
-                        People who have joined this event and selected their available times.
+                        {m.event_details_participant_list_description()}
                     {:else}
-                        No one has joined this event yet.
+                        {m.event_details_participant_list_empty()}
                     {/if}
                 </Card.Description>
             </Card.Header>
@@ -183,7 +198,7 @@
                             <ParticipantBadge
                                 name={participant.username ||
                                     participant.user?.name ||
-                                    "Unknown User"}
+                                    m.unknown_user()}
                                 image={participant.user?.image}
                             />
                         {/each}
@@ -195,10 +210,13 @@
         <!-- Join Event -->
         <Card.Root>
             <Card.Header>
-                <Card.Title>Want to join <span class="font-semibold">{data.name}</span>?</Card.Title
-                >
+                <Card.Title>
+                    {m.event_details_join_title({
+                        eventName: data.name
+                    })}
+                </Card.Title>
                 <Card.Description>
-                    Join this event and select your available times below.
+                    {m.event_details_join_description()}
                 </Card.Description>
             </Card.Header>
             <Card.Content>
@@ -210,12 +228,12 @@
                 >
                     {#if participationMode === "view"}
                         {userAlreadyJoined
-                            ? "Edit Participation"
+                            ? m.event_details_edit_participation()
                             : participated
-                              ? "You have joined"
-                              : "Join Event"}
+                              ? m.event_details_joined()
+                              : m.event_details_join_event()}
                     {:else if participationMode === "participate"}
-                        Select your available time below <IconArrowDown />
+                        {m.event_details_select_time_instruction()} <IconArrowDown />
                     {/if}
                 </Button>
             </Card.Content>
@@ -227,16 +245,16 @@
                 <Card.Header>
                     <Card.Title>
                         {#if participationMode === "view"}
-                            Available Time Range
+                            {m.event_details_time_selection_title_viewing()}
                         {:else}
-                            Select Your Available Times
+                            {m.event_details_time_selection_title_participating()}
                         {/if}
                     </Card.Title>
                     <Card.Description>
                         {#if participationMode === "view"}
-                            This event is scheduled within the time range shown below.
+                            {m.event_details_time_selection_description_viewing()}
                         {:else}
-                            Click and drag to select the times when you're available.
+                            {m.event_details_time_selection_description_participating()}
                         {/if}
                     </Card.Description>
                 </Card.Header>

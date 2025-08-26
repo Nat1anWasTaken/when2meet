@@ -11,6 +11,7 @@
     import EditEventDialog from "./edit-event-dialog.svelte";
     import ShareEventDialog from "./share-event-dialog.svelte";
     import Button from "./ui/button/button.svelte";
+    import { m } from "$i18n";
 
     interface Props {
         eventId: string;
@@ -57,12 +58,12 @@
                     <div class="flex flex-row items-center gap-2">
                         <div class="flex flex-row items-center gap-1 text-sm text-muted-foreground">
                             <IconUser class="h-4 w-4" />
-                            <span>Organized by {organizerName}</span>
+                            <span>{m.event_card_organized_by()} {organizerName}</span>
                         </div>
                         {#if weeklyRecurrence}
                             <Badge variant="outline">
                                 <IconRepeat class="mr-1 h-4 w-4" />
-                                Weekly
+                                {m.event_card_badge_weekly()}
                             </Badge>
                         {/if}
                     </div>
@@ -79,14 +80,14 @@
             {#if availableTime}
                 <div class="flex flex-col gap-2">
                     <h3 class="text-xs font-medium tracking-wide text-muted-foreground">
-                        Event Details
+                        {m.event_card_section_event_details()}
                     </h3>
 
                     {#snippet timeRangeDisplay(availableTime: { startTime: Date; endTime: Date })}
                         <div class="flex items-center gap-2">
                             <IconCalendar class="h-4 w-4 shrink-0 text-muted-foreground" />
                             <div class="min-w-0">
-                                <span class="block text-sm font-medium">Available Time</span>
+                                <span class="block text-sm font-medium">{m.event_card_available_time()}</span>
                                 <span class="text-sm text-muted-foreground">
                                     {formatDateTime(availableTime.startTime)}
                                     <span class="mx-1">~</span>
@@ -100,7 +101,7 @@
                         <div class="flex items-center gap-2">
                             <IconEarth class="h-4 w-4 shrink-0 text-muted-foreground" />
                             <div class="min-w-0">
-                                <span class="block text-sm font-medium">Timezone</span>
+                                <span class="block text-sm font-medium">{m.event_card_timezone()}</span>
                                 <span class="text-sm text-muted-foreground">{timezone}</span>
                             </div>
                         </div>
@@ -123,9 +124,9 @@
                         {availableTime}
                         {timezone}
                     >
-                        <Button class="w-full">Edit</Button>
+                        <Button class="w-full">{m.event_card_button_edit()}</Button>
                     </EditEventDialog>
-                    <Button class="w-full" variant="outline" href={`/${eventId}`}>View</Button>
+                    <Button class="w-full" variant="outline" href={`/${eventId}`}>{m.event_card_button_view()}</Button>
                 </div>
             {/if}
         </div>

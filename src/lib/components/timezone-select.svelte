@@ -6,6 +6,7 @@
     import IconCheck from "~icons/lucide/check";
     import IconChevronDown from "~icons/lucide/chevron-down";
     import { tick } from "svelte";
+    import { m } from "$i18n";
 
     interface Props {
         class?: string;
@@ -41,16 +42,16 @@
                 role="combobox"
                 aria-expanded={open}
             >
-                {selectedTimezone || "Select a timezone..."}
+                {selectedTimezone || m.timezone_select_placeholder()}
                 <IconChevronDown />
             </Button>
         {/snippet}
     </Popover.Trigger>
     <Popover.Content class="p-0" side="top">
         <Command.Root>
-            <Command.Input placeholder="Search timezone..." />
+            <Command.Input placeholder={m.timezone_select_search_placeholder()} />
             <Command.List>
-                <Command.Empty>No timezone found.</Command.Empty>
+                <Command.Empty>{m.timezone_select_no_results()}</Command.Empty>
                 <Command.Group>
                     {#each availableTimezones as timezone (timezone)}
                         <Command.Item

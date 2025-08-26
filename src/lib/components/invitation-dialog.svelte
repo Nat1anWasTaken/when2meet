@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Button } from "$lib/components/ui/button";
     import * as Dialog from "$lib/components/ui/dialog";
+    import { m } from "$i18n";
 
     interface Props {
         open: boolean;
@@ -15,16 +16,14 @@
 <Dialog.Root bind:open>
     <Dialog.Content class="sm:max-w-md">
         <Dialog.Header>
-            <Dialog.Title>You're Invited!</Dialog.Title>
+            <Dialog.Title>{m.invitation_dialog_title()}</Dialog.Title>
             <Dialog.Description>
-                You have been invited to join
-                <span class="font-semibold">{eventName}</span>.
+                {m.invitation_dialog_description({ eventName })}
             </Dialog.Description>
         </Dialog.Header>
         <div class="flex flex-col gap-3 py-4">
             <p class="text-sm text-muted-foreground">
-                Join this event and select the times when you're available to help everyone find the
-                best meeting time.
+                {m.invitation_dialog_explanation()}
             </p>
         </div>
         <Dialog.Footer class="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
@@ -33,13 +32,13 @@
                 onclick={() => {
                     open = false;
                     onDecline?.();
-                }}>Maybe Later</Button
+                }}>{m.invitation_dialog_decline()}</Button
             >
             <Button
                 onclick={() => {
                     open = false;
                     onAccept?.();
-                }}>Join & Select Times</Button
+                }}>{m.invitation_dialog_accept()}</Button
             >
         </Dialog.Footer>
     </Dialog.Content>

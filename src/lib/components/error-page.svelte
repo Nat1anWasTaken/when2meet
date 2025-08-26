@@ -4,6 +4,7 @@
     import { Badge } from "$lib/components/ui/badge/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
     import * as Card from "$lib/components/ui/card/index.js";
+    import { m } from "$i18n";
 
     interface Props {
         code: number;
@@ -18,53 +19,53 @@
     // Comprehensive error configurations
     const errorConfig = {
         400: {
-            title: "Bad Request",
-            description: "Your request could not be processed.",
+            title: m.error_400_title(),
+            description: m.error_400_description(),
             emoji: "⚠️",
             color: "destructive" as const,
-            suggestions: "Please check your request and try again."
+            suggestions: m.error_400_suggestion()
         },
         401: {
-            title: "Unauthorized",
-            description: "You need to sign in to access this page.",
+            title: m.error_401_title(),
+            description: m.error_401_description(),
             emoji: "🔐",
             color: "destructive" as const,
-            suggestions: "Please sign in to continue."
+            suggestions: m.error_401_suggestion()
         },
         403: {
-            title: "Access Denied",
-            description: "You do not have permission to view this page.",
+            title: m.error_403_title(),
+            description: m.error_403_description(),
             emoji: "🚫",
             color: "destructive" as const,
-            suggestions: "You don't have permission to access this resource."
+            suggestions: m.error_403_suggestion()
         },
         404: {
-            title: "Page Not Found",
-            description: "The page you are looking for does not exist.",
+            title: m.error_404_title(),
+            description: m.error_404_description(),
             emoji: "🔍",
             color: "destructive" as const,
-            suggestions: "The page you're looking for might have been moved or deleted."
+            suggestions: m.error_404_suggestion()
         },
         500: {
-            title: "Server Error",
-            description: "Something went wrong on our servers.",
+            title: m.error_500_title(),
+            description: m.error_500_description(),
             emoji: "⚠️",
             color: "destructive" as const,
-            suggestions: "Something went wrong on our end. Please try again later."
+            suggestions: m.error_500_suggestion()
         },
         503: {
-            title: "Service Unavailable",
-            description: "The service is temporarily unavailable.",
+            title: m.error_503_title(),
+            description: m.error_503_description(),
             emoji: "🛠️",
             color: "destructive" as const,
-            suggestions: "Our service is temporarily down for maintenance. Please try again later."
+            suggestions: m.error_503_suggestion()
         },
         default: {
-            title: "Unknown Error",
-            description: "An unexpected error has occurred.",
+            title: m.error_default_title(),
+            description: m.error_default_description(),
             emoji: "❌",
             color: "destructive" as const,
-            suggestions: "An unexpected error occurred. Please try again."
+            suggestions: m.error_default_suggestion()
         }
     };
 
@@ -85,11 +86,11 @@
         </Card.Header>
 
         <Card.Content class="space-y-2">
-            <h2 class="text-lg font-semibold">What happened?</h2>
+            <h2 class="text-lg font-semibold">{m.error_what_happened()}</h2>
             <p>{config.suggestions}</p>
             <Accordion.Root type="single" class="w-full text-muted-foreground">
                 <Accordion.Item value="details">
-                    <Accordion.Trigger>Technical Details</Accordion.Trigger>
+                    <Accordion.Trigger>{m.error_technical_details()}</Accordion.Trigger>
                     <Accordion.Content>
                         <p>{JSON.stringify(page.error)}</p>
                     </Accordion.Content>
@@ -100,13 +101,13 @@
         <Card.Footer class="flex flex-col gap-2">
             <div class="flex w-full gap-2">
                 {#if onRetry}
-                    <Button onclick={onRetry} variant="outline" class="flex-1">Try Again</Button>
+                    <Button onclick={onRetry} variant="outline" class="flex-1">{m.error_try_again()}</Button>
                 {/if}
 
                 {#if onGoHome}
-                    <Button onclick={onGoHome} class="flex-1">Go Home</Button>
+                    <Button onclick={onGoHome} class="flex-1">{m.error_go_home()}</Button>
                 {:else}
-                    <Button href="/" class="flex-1">Go Home</Button>
+                    <Button href="/" class="flex-1">{m.error_go_home()}</Button>
                 {/if}
             </div>
         </Card.Footer>

@@ -14,6 +14,7 @@
     import { toast } from "svelte-sonner";
     import DateRangeSelect from "./date-range-select.svelte";
     import TimezoneSelect from "./timezone-select.svelte";
+    import { m } from "$i18n";
 
     type WeeklyRecurrence = "weekly" | "once";
 
@@ -69,28 +70,28 @@
         let missingFields = [];
 
         if (eventName.trim() === "") {
-            missingFields.push("Event Name");
+            missingFields.push(m.new_event_field_name());
         }
 
         if (organizerName.trim() === "") {
-            missingFields.push("Organizer Name");
+            missingFields.push(m.new_event_field_organizer_name());
         }
 
         if (!selectedDateRange) {
-            missingFields.push("Date Range");
+            missingFields.push(m.new_event_field_date_range());
         }
 
         if (!selectedTimezone) {
-            missingFields.push("Timezone");
+            missingFields.push(m.new_event_field_timezone());
         }
 
         if (missingFields.length > 0) {
-            validationErrorMessage = `Please fill in the following fields: ${missingFields.join(", ")}`;
+            validationErrorMessage = m.new_event_validation_missing_fields() + missingFields.join(", ");
             return false;
         }
 
         if (preservedEventNames.includes(eventName.trim())) {
-            validationErrorMessage = `Event name "${eventName.trim()}" is reserved.`;
+            validationErrorMessage = m.new_event_validation_reserved_name({ eventName: eventName.trim() });
             return false;
         }
 
@@ -121,7 +122,7 @@
             open = false; // Close dialog
 
             toast.info(
-                `Event "${eventName.trim()}" created successfully!${redirect ? " Redirecting you..." : ""}`
+                m.toast_event_created_success({ eventName: eventName.trim() }) + (redirect ? m.new_event_success_redirecting() : "")
             );
 
             if (redirect) {
@@ -131,7 +132,7 @@
             refreshAll();
         } catch (error) {
             console.error("Failed to create event:", error);
-            toast.error("Failed to create event", {
+            toast.error(m.new_event_error_title(), {
                 description: `${error}`
             });
         } finally {
@@ -153,45 +154,45 @@
     </Dialog.Trigger>
     <Dialog.Content>
         <Dialog.Header>
-            <Dialog.Title>New Event</Dialog.Title>
-            <Dialog.Description>create a new event</Dialog.Description>
+            <Dialog.Title>{m.new_event_dialog_title()}</Dialog.Title>
+            <Dialog.Description>{m.new_event_dialog_description()}</Dialog.Description>
         </Dialog.Header>
 
         <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
-                <Label>What is the event called?</Label>
-                <Input placeholder="Event Name" bind:value={eventName} />
+                <Label>{m.new_event_label_event_name()}</Label>
+                <Input placeholder={m.new_event_placeholder_event_name()} bind:value={eventName} />
             </div>
 
             <div class="flex flex-col gap-2">
-                <Label>Who is the organizer?</Label>
-                <Input placeholder="Organizer Name" bind:value={organizerName} />
+                <Label>{m.new_event_label_organizer_name()}</Label>
+                <Input placeholder={m.new_event_placeholder_organizer_name()} bind:value={organizerName} />
             </div>
 
             <div class="flex flex-col gap-2">
-                <Label class="flex items-center gap-2">Is this a weekly recurring event?</Label>
+                <Label class="flex items-center gap-2">{m.new_event_label_weekly_recurring()}</Label>
                 <RadioGroup.Root bind:value={weeklyRecurrence}>
                     <div class="flex flex-row items-center gap-2">
                         <RadioGroup.Item value="weekly" id="weekly" />
-                        <Label for="weekly">Yes, it's recurring every week</Label>
+                        <Label for="weekly">{m.new_event_option_weekly_yes()}</Label>
                     </div>
                     <div class="flex flex-row items-center gap-2">
                         <RadioGroup.Item value="once" id="once" />
-                        <Label for="once">No, it's a one-time event</Label>
+                        <Label for="once">{m.new_event_option_weekly_no()}</Label>
                     </div>
                 </RadioGroup.Root>
             </div>
 
             <div class="flex flex-col gap-2">
-                <Label>What date range might work?</Label>
+                <Label>{m.new_event_label_date_range()}</Label>
                 <div class="grid grid-cols-4 grid-rows-2 gap-2" style="place-items: center start;">
-                    <p class=" col-span-1 text-xs text-muted-foreground">Date range:</p>
+                    <p class=" col-span-1 text-xs text-muted-foreground">{m.new_event_sublabel_date_range()}</p>
                     <DateRangeSelect
                         class="col-span-3 w-full"
                         bind:selectedDateRange
                         maxDays={weeklyRecurrence ? 7 : undefined}
                     />
-                    <p class="col-span-1 text-xs text-muted-foreground">Timezone:</p>
+                    <p class="col-span-1 text-xs text-muted-foreground">{m.new_event_sublabel_timezone()}</p>
                     <TimezoneSelect class="col-span-3 w-full" bind:selectedTimezone />
                 </div>
             </div>
@@ -201,12 +202,11 @@
                     <p class="text-sm text-destructive">{validationErrorMessage}</p>
                 {/if}
                 <Button class="w-full" onclick={handleCreateEvent} disabled={!canCreate}>
-                    Create Event
+                    {m.new_event_button_create()}
                 </Button>
                 {#if !$session.data?.user}
                     <p class="text-sm text-muted-foreground">
-                        You will not be able to edit or delete this event later unless you
-                        <a href="/login" class="underline">log in</a>.
+                        {m.new_event_login_warning()}
                     </p>
                 {/if}
             </div>

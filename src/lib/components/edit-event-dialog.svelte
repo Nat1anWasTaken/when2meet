@@ -13,6 +13,7 @@
     import { toast } from "svelte-sonner";
     import DateRangeSelect from "./date-range-select.svelte";
     import TimezoneSelect from "./timezone-select.svelte";
+    import { m } from "$i18n";
 
     type WeeklyRecurrence = "weekly" | "once";
 
@@ -102,28 +103,28 @@
         let missingFields = [];
 
         if (!name || name.trim() === "") {
-            missingFields.push("Event Name");
+            missingFields.push(m.edit_event_field_name());
         }
 
         if (!organizerName || organizerName.trim() === "") {
-            missingFields.push("Organizer Name");
+            missingFields.push(m.edit_event_field_organizer_name());
         }
 
         if (!selectedDateRange) {
-            missingFields.push("Date Range");
+            missingFields.push(m.edit_event_field_date_range());
         }
 
         if (!timezone) {
-            missingFields.push("Timezone");
+            missingFields.push(m.edit_event_field_timezone());
         }
 
         if (missingFields.length > 0) {
-            validationErrorMessage = `Please fill in the following fields: ${missingFields.join(", ")}`;
+            validationErrorMessage = m.edit_event_validation_missing_fields() + missingFields.join(", ");
             return false;
         }
 
         if (preservedEventNames.includes(name.trim())) {
-            validationErrorMessage = `Event name "${name.trim()}" is reserved.`;
+            validationErrorMessage = m.edit_event_validation_reserved_name({ name: name.trim() });
             return false;
         }
 
@@ -164,10 +165,10 @@
             open = false; // Close dialog
 
             refreshAll();
-            toast.success("Event updated successfully");
+            toast.success(m.edit_event_success_message());
         } catch (error) {
             console.error("Failed to update event:", error);
-            toast.error("Failed to update event", {
+            toast.error(m.edit_event_error_update_title(), {
                 description: `${error}`
             });
         } finally {
@@ -183,10 +184,10 @@
 
             open = false; // Close dialog
             refreshAll();
-            toast.success("Event deleted successfully");
+            toast.success(m.edit_event_success_delete_message());
         } catch (error) {
             console.error("Failed to delete event:", error);
-            toast.error("Failed to delete event", {
+            toast.error(m.edit_event_error_delete_title(), {
                 description: `${error}`
             });
         } finally {
@@ -208,45 +209,45 @@
     </Dialog.Trigger>
     <Dialog.Content>
         <Dialog.Header>
-            <Dialog.Title>Edit Event</Dialog.Title>
-            <Dialog.Description>Update your event details</Dialog.Description>
+            <Dialog.Title>{m.edit_event_dialog_title()}</Dialog.Title>
+            <Dialog.Description>{m.edit_event_dialog_description()}</Dialog.Description>
         </Dialog.Header>
 
         <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
-                <Label>What is the event called?</Label>
-                <Input placeholder="Event Name" bind:value={name} />
+                <Label>{m.edit_event_label_event_name()}</Label>
+                <Input placeholder={m.edit_event_placeholder_event_name()} bind:value={name} />
             </div>
 
             <div class="flex flex-col gap-2">
-                <Label>Who is the organizer?</Label>
-                <Input placeholder="Organizer Name" bind:value={organizerName} />
+                <Label>{m.edit_event_label_organizer_name()}</Label>
+                <Input placeholder={m.edit_event_placeholder_organizer_name()} bind:value={organizerName} />
             </div>
 
             <div class="flex flex-col gap-2">
-                <Label class="flex items-center gap-2">Is this a weekly recurring event?</Label>
+                <Label class="flex items-center gap-2">{m.edit_event_label_weekly_recurring()}</Label>
                 <RadioGroup.Root bind:value={weeklyRecurrenceState}>
                     <div class="flex flex-row items-center gap-2">
                         <RadioGroup.Item value="weekly" id="weekly" />
-                        <Label for="weekly">Yes, it's recurring every week</Label>
+                        <Label for="weekly">{m.edit_event_option_weekly_yes()}</Label>
                     </div>
                     <div class="flex flex-row items-center gap-2">
                         <RadioGroup.Item value="once" id="once" />
-                        <Label for="once">No, it's a one-time event</Label>
+                        <Label for="once">{m.edit_event_option_weekly_no()}</Label>
                     </div>
                 </RadioGroup.Root>
             </div>
 
             <div class="flex flex-col gap-2">
-                <Label>What date range might work?</Label>
+                <Label>{m.edit_event_label_date_range()}</Label>
                 <div class="grid grid-cols-4 grid-rows-2 gap-2" style="place-items: center start;">
-                    <p class=" col-span-1 text-xs text-muted-foreground">Date range:</p>
+                    <p class=" col-span-1 text-xs text-muted-foreground">{m.edit_event_sublabel_date_range()}</p>
                     <DateRangeSelect
                         class="col-span-3 w-full"
                         bind:selectedDateRange
                         maxDays={weeklyRecurrence ? 7 : undefined}
                     />
-                    <p class="col-span-1 text-xs text-muted-foreground">Timezone:</p>
+                    <p class="col-span-1 text-xs text-muted-foreground">{m.edit_event_sublabel_timezone()}</p>
                     <TimezoneSelect class="col-span-3 w-full" bind:selectedTimezone={timezone} />
                 </div>
             </div>
@@ -257,13 +258,13 @@
                 {/if}
                 <div class="flex gap-2">
                     <Button variant="destructive" onclick={handleDeleteEvent} disabled={!canDelete}>
-                        Delete
+                        {m.edit_event_button_delete()}
                     </Button>
                     <Button class="flex-1" variant="outline" onclick={() => (open = false)}>
-                        Cancel
+                        {m.edit_event_button_cancel()}
                     </Button>
                     <Button class="flex-1" onclick={handleUpdateEvent} disabled={!canUpdate}>
-                        Update Event
+                        {m.edit_event_button_update()}
                     </Button>
                 </div>
             </div>

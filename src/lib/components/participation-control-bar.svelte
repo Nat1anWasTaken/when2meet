@@ -9,6 +9,7 @@
     import { backOut } from "svelte/easing";
     import { fly } from "svelte/transition";
     import GuestWarningDialog from "./guest-warning-dialog.svelte";
+    import { m } from "$i18n";
 
     interface Props {
         eventId: string;
@@ -43,12 +44,12 @@
         validationErrorMessage = undefined;
 
         if (!participantName.trim()) {
-            validationErrorMessage = "Please enter your name";
+            validationErrorMessage = m.participation_control_bar_error_name_required();
             return;
         }
 
         if (selectedTimes.length === 0) {
-            validationErrorMessage = "Please select at least one time slot";
+            validationErrorMessage = m.participation_control_bar_error_no_time_selected();
             return;
         }
 
@@ -74,7 +75,7 @@
                         endTime: t.endTime.toISOString()
                     }))
                 });
-                toast.success("Your availability has been updated!");
+                toast.success(m.participation_control_bar_success_updated());
             } else {
                 await createParticipant({
                     eventId,
@@ -84,12 +85,12 @@
                         endTime: t.endTime.toISOString()
                     }))
                 });
-                toast.success("Your availability has been saved!");
+                toast.success(m.participation_control_bar_success_saved());
             }
 
             onSuccess();
         } catch {
-            validationErrorMessage = "Failed to save your availability. Please try again.";
+            validationErrorMessage = m.participation_control_bar_error_save_failed();
         } finally {
             isSaving = false;
         }
@@ -116,10 +117,10 @@
     <div class="flex flex-col items-center gap-4 sm:flex-row sm:items-end">
         <div class="w-full flex-1 sm:w-auto">
             <div class="mb-1 flex items-center gap-2">
-                <Label for="floatingName" class="text-sm text-muted-foreground">Your Name</Label>
+                <Label for="floatingName" class="text-sm text-muted-foreground">{m.participation_control_bar_label_your_name()}</Label>
                 {#if !$session.data}
                     <span class="text-sm text-muted-foreground/60 italic">
-                        💡 You won't be able to edit later unless you log in
+                        💡 {m.participation_control_bar_warning_guest_edit()}
                     </span>
                 {/if}
             </div>
@@ -127,7 +128,7 @@
                 bind:ref={inputRef}
                 id="floatingName"
                 bind:value={participantName}
-                placeholder="Enter your name to participate"
+                placeholder={m.participation_control_bar_placeholder_name()}
                 disabled={isSaving}
                 class="transition-all duration-200"
             />
@@ -144,7 +145,7 @@
                     disabled={isSaving}
                     class="transition-all duration-200"
                 >
-                    Cancel
+                    {m.participation_control_bar_button_cancel()}
                 </Button>
 
                 <Button
@@ -155,10 +156,10 @@
                     {#if isSaving}
                         <div class="flex items-center gap-2">
                             <IconLoaderCircle class="h-4 w-4 animate-spin" />
-                            {userAlreadyJoined ? "Updating..." : "Saving..."}
+                            {userAlreadyJoined ? m.participation_control_bar_button_updating() : m.participation_control_bar_button_saving()}
                         </div>
                     {:else}
-                        {userAlreadyJoined ? "Update" : "Save"} ({selectedTimes.length} slots)
+                        {userAlreadyJoined ? m.participation_control_bar_button_update() : m.participation_control_bar_button_save()} ({selectedTimes.length} {m.participation_control_bar_slots()})
                     {/if}
                 </Button>
             </div>

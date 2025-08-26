@@ -9,6 +9,7 @@
     import IconShare2 from "~icons/lucide/share-2";
     import type { Snippet } from "svelte";
     import { toast } from "svelte-sonner";
+    import { m } from "$i18n";
 
     interface Props {
         eventId: string;
@@ -32,9 +33,9 @@
     async function handleCopyLink() {
         try {
             await copyText(inviteUrl);
-            toast.success("Invitation link copied to clipboard!");
+            toast.success(m.share_event_success_copied());
         } catch {
-            toast.error("Failed to copy link");
+            toast.error(m.share_event_error_copy());
         }
     }
 </script>
@@ -47,16 +48,15 @@
         <Dialog.Header>
             <Dialog.Title class="flex items-center gap-2">
                 <IconShare2 class="h-5 w-5" />
-                Share Event
+                {m.share_event_dialog_title()}
             </Dialog.Title>
             <Dialog.Description>
-                Share <span class="font-semibold">{eventName}</span> with others so they can sign their
-                available times.
+                {m.share_event_dialog_description_with_name({ eventName })}
             </Dialog.Description>
         </Dialog.Header>
         <div class="flex flex-col gap-4 py-4">
             <div class="space-y-2">
-                <Label for="invite-url">Invitation Link</Label>
+                <Label for="invite-url">{m.share_event_label_invitation_link()}</Label>
                 <div class="flex gap-2">
                     <Input
                         id="invite-url"
@@ -69,15 +69,14 @@
                         size="sm"
                         onclick={handleCopyLink}
                         class="shrink-0"
-                        aria-label="Copy invitation link"
+                        aria-label={m.share_event_aria_copy_link()}
                     >
                         <IconCopy class="h-4 w-4" />
                     </Button>
                 </div>
             </div>
             <p class="text-sm text-muted-foreground">
-                Anyone with this link can view the event and add their availability. Share it with
-                participants via email, messaging apps, or social media.
+                {m.share_event_instructions()}
             </p>
         </div>
         <Dialog.Footer class="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
@@ -87,11 +86,11 @@
                     open = false;
                 }}
             >
-                Close
+                {m.share_event_button_close()}
             </Button>
             <Button onclick={handleCopyLink}>
                 <IconCopy class="h-4 w-4" />
-                Copy Link
+                {m.share_event_button_copy_link()}
             </Button>
         </Dialog.Footer>
     </Dialog.Content>

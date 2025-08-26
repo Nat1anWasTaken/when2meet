@@ -4,6 +4,7 @@
 
     import { toggleMode } from "mode-watcher";
     import { Button } from "$lib/components/ui/button/index.js";
+    import { m } from "$i18n";
 </script>
 
 <Button onclick={toggleMode} variant="ghost" size="icon">
@@ -13,5 +14,5 @@
     <MoonIcon
         class="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 !transition-all dark:scale-100 dark:rotate-0"
     />
-    <span class="sr-only">Toggle theme</span>
+    <span class="sr-only">{m.mode_switch_toggle_theme()}</span>
 </Button>

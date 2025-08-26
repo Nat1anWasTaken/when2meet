@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { AvailabilityColorMap } from "$lib/utils";
+    import { m } from "$i18n";
 
     let {
         availabilityColorMap,
@@ -20,13 +21,13 @@
 </script>
 
 <div class="flex items-center justify-between gap-4">
-    <span class="text-sm text-muted-foreground">0/{totalParticipants} Available</span>
+    <span class="text-sm text-muted-foreground">{m.color_map_available_count({ count: 0, total: totalParticipants })}</span>
     <div class="flex h-6 flex-1 overflow-hidden rounded-full border border-accent shadow-sm">
         {#each colorSegments as segment (segment.count)}
             <div class="flex-1" style="background-color: {segment.color}"></div>
         {/each}
     </div>
     <span class="text-sm text-muted-foreground"
-        >{totalParticipants}/{totalParticipants} Available</span
+        >{m.color_map_available_count({ count: totalParticipants, total: totalParticipants })}</span
     >
 </div>

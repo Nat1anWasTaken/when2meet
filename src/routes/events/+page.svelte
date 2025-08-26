@@ -11,16 +11,17 @@
     import * as Tabs from "$lib/components/ui/tabs/";
     import IconCalendarX from "~icons/lucide/calendar-x";
     import IconUser from "~icons/lucide/user";
+    import { m } from "$lib/paraglide/messages";
 
     let sort = $state("");
     let searchQuery = $state("");
 
     const sortLabels = {
-        "available-time": "Available Time",
-        name: "Name"
+        "available-time": m.events_sort_available_time(),
+        name: m.events_sort_name()
     } as const;
 
-    let triggerContent = $derived(sort ? sortLabels[sort as keyof typeof sortLabels] : "Sort");
+    let triggerContent = $derived(sort ? sortLabels[sort as keyof typeof sortLabels] : m.events_sort_placeholder());
 
     function sortEvents(events: Awaited<ReturnType<typeof getOrganizedEvents>>) {
         if (!sort || !events || !Array.isArray(events)) return events;
@@ -71,12 +72,12 @@
         </div>
 
         <div>
-            <h2 class="text-2xl font-semibold">Sign In Required</h2>
+            <h2 class="text-2xl font-semibold">{m.events_unauthorized_title()}</h2>
             <p class="mt-2 text-muted-foreground">
-                You need to be logged in to view your events and create new ones.
+                {m.events_unauthorized_description()}
             </p>
         </div>
-        <Button onclick={handleLogin}>Sign In to Continue</Button>
+        <Button onclick={handleLogin}>{m.events_unauthorized_continue()}</Button>
     </div>
 {/snippet}
 
@@ -89,32 +90,32 @@
         </div>
 
         <div>
-            <h2 class="text-2xl font-semibold">There's nothing here</h2>
+            <h2 class="text-2xl font-semibold">{m.events_empty_title()}</h2>
             <p class="mt-2 text-muted-foreground">
-                You haven't organized or joined any events yet. Create a new event to get started!
+                {m.events_empty_description()}
             </p>
         </div>
         <NewEventDialog redirect={false}>
-            <Button>Create New Event</Button>
+            <Button>{m.events_empty_create_new()}</Button>
         </NewEventDialog>
     </div>
 {/snippet}
 
 <div class="flex h-full w-full items-center justify-center p-4">
     <div class="h-full w-full max-w-4xl">
-        <h1 class="text-4xl font-bold">Events</h1>
-        <p class="text-muted-foreground">all your events in one place</p>
+        <h1 class="text-4xl font-bold">{m.events_title()}</h1>
+        <p class="text-muted-foreground">{m.events_description()}</p>
 
         <Separator class="my-2" />
 
         <Tabs.Root value="organized-events">
             <Tabs.List class="w-full">
-                <Tabs.Trigger value="organized-events">Organized</Tabs.Trigger>
-                <Tabs.Trigger value="attending-events">Attending</Tabs.Trigger>
+                <Tabs.Trigger value="organized-events">{m.events_tab_organized()}</Tabs.Trigger>
+                <Tabs.Trigger value="attending-events">{m.events_tab_attending()}</Tabs.Trigger>
             </Tabs.List>
 
             <div class="flex flex-row items-center gap-2">
-                <Input class="flex-1" placeholder="search" bind:value={searchQuery} />
+                <Input class="flex-1" placeholder={m.events_search_placeholder()} bind:value={searchQuery} />
                 <Select.Root type="single" bind:value={sort}>
                     <Select.Trigger class="w-32">{triggerContent}</Select.Trigger>
                     <Select.Content>
@@ -127,7 +128,7 @@
                     </Select.Content>
                 </Select.Root>
                 <NewEventDialog>
-                    <Button>New Event</Button>
+                    <Button>{m.events_create_new()}</Button>
                 </NewEventDialog>
             </div>
 
@@ -135,7 +136,7 @@
                 <svelte:boundary>
                     {#snippet pending()}
                         <div class="col-span-full flex items-center justify-center py-8">
-                            <p class="text-muted-foreground">Loading events...</p>
+                            <p class="text-muted-foreground">{m.events_loading()}</p>
                         </div>
                     {/snippet}
 
@@ -147,7 +148,7 @@
                                 class="col-span-full flex flex-col items-center justify-center py-8 text-center"
                             >
                                 <h3 class="text-xl font-semibold text-destructive">
-                                    Something went wrong
+                                    {m.events_error_title()}
                                 </h3>
                                 <p class="mt-2 text-muted-foreground">
                                     {error &&
@@ -155,7 +156,7 @@
                                     "message" in error &&
                                     typeof error.message === "string"
                                         ? error.message
-                                        : "An unexpected error occurred"}
+                                        : m.events_error_description()}
                                 </p>
                             </div>
                         {/if}

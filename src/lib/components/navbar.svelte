@@ -1,16 +1,17 @@
 <script>
     import ModeSwitch from "./mode-switch.svelte";
     import UserAvatarMenu from "./user-avatar-menu.svelte";
+    import { m } from "$i18n";
 </script>
 
 <div class="flex h-16 flex-row items-center justify-between px-4">
     <div class="flex flex-row items-center gap-2">
         <h1 class="text-lg font-bold">
             <a href="/">
-                when2meet<span class="text-primary">.app</span>
+                {m.brand_name()}<span class="text-primary">{m.brand_extension()}</span>
             </a>
         </h1>
-        <a href="/about" class="hidden md:block">About</a>
+        <a href="/about" class="hidden md:block">{m.nav_about()}</a>
     </div>
     <div class="flex flex-row items-center gap-2">
         <ModeSwitch />

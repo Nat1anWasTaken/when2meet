@@ -5,6 +5,7 @@
     import type { DateRange } from "bits-ui";
     import IconChevronDown from "~icons/lucide/chevron-down";
     import { RangeCalendar } from "./ui/range-calendar";
+    import { m } from "$i18n";
 
     interface Props {
         class?: string;
@@ -41,13 +42,13 @@
                     {#if selectedDateRange?.start}
                         {selectedDateRange.start?.toString()}
                     {:else}
-                        <span class="text-muted-foreground">Select a start date</span>
+                        <span class="text-muted-foreground">{m.date_range_select_placeholder_start()}</span>
                     {/if}
                     <span class="text-muted-foreground">－</span>
                     {#if selectedDateRange?.end}
                         {selectedDateRange.end?.toString()}
                     {:else}
-                        <span class="text-muted-foreground">Select a end date</span>
+                        <span class="text-muted-foreground">{m.date_range_select_placeholder_end()}</span>
                     {/if}
                 </div>
 
