@@ -27,7 +27,7 @@
         {selectedLanguage ? availableLanguages[selectedLanguage] : m.navbar_language_select()}
     </Select.Trigger>
     <Select.Content>
-        {#each Object.entries(availableLanguages) as [lang, label]}
+        {#each Object.entries(availableLanguages) as [lang, label] (lang)}
             <Select.Item value={lang}>
                 {label}
             </Select.Item>
