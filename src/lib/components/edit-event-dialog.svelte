@@ -193,6 +193,14 @@
     });
 </script>
 
+<svelte:window
+    onkeydown={(event) => {
+        if (event.key === "Enter") {
+            handleCreateEvent();
+        }
+    }}
+/>
+
 <Dialog.Root bind:open>
     <Dialog.Trigger>
         {@render children()}
