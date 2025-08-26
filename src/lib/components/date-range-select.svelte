@@ -1,11 +1,12 @@
 <script lang="ts">
+    import { m } from "$i18n";
     import { Button } from "$lib/components/ui/button";
     import * as Popover from "$lib/components/ui/popover";
     import { cn } from "$lib/utils";
+    import { getLocalTimeZone, today } from "@internationalized/date";
     import type { DateRange } from "bits-ui";
     import IconChevronDown from "~icons/lucide/chevron-down";
     import { RangeCalendar } from "./ui/range-calendar";
-    import { m } from "$i18n";
 
     interface Props {
         class?: string;
@@ -63,7 +64,8 @@
     <Popover.Content class="p-0" side="top">
         <RangeCalendar
             bind:value={selectedDateRange}
-            {minDays}
+            isDateUnavailable={(date) => date.compare(today(getLocalTimeZone())) < 0}
+            numberOfMonths={minDays}
             {maxDays}
             class="flex w-full items-center justify-center"
         />
