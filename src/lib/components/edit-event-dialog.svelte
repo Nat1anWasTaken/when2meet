@@ -1,11 +1,11 @@
 <script lang="ts">
     import { refreshAll } from "$app/navigation";
+    import { m } from "$i18n";
     import { deleteEvent, updateEvent } from "$lib/api/events.remote";
     import { Button } from "$lib/components/ui/button";
     import * as Dialog from "$lib/components/ui/dialog/";
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
-    import * as RadioGroup from "$lib/components/ui/radio-group";
     import { preservedEventNames } from "$lib/utils";
     import { CalendarDate, Time, toCalendarDateTime } from "@internationalized/date";
     import type { DateRange } from "bits-ui";
@@ -13,16 +13,12 @@
     import { toast } from "svelte-sonner";
     import DateRangeSelect from "./date-range-select.svelte";
     import TimezoneSelect from "./timezone-select.svelte";
-    import { m } from "$i18n";
-
-    type WeeklyRecurrence = "weekly" | "once";
 
     interface Props {
         children: Snippet;
         eventId: string;
         name?: string;
         organizerName?: string;
-        weeklyRecurrence?: boolean;
         availableTime?: {
             startTime: Date;
             endTime: Date;
@@ -35,7 +31,6 @@
         eventId,
         name = $bindable(""),
         organizerName = $bindable(""),
-        weeklyRecurrence = $bindable(false),
         availableTime = $bindable(),
         timezone = $bindable()
     }: Props = $props();
@@ -45,8 +40,6 @@
 
     let open = $state<boolean>(false);
     let validationErrorMessage = $state<string | undefined>(undefined);
-
-    let weeklyRecurrenceState = $state<WeeklyRecurrence>(weeklyRecurrence ? "weekly" : "once");
 
     // Convert initial dates to DateRange format
     let selectedDateRange = $state<DateRange | undefined>(
@@ -66,8 +59,6 @@
             : undefined
     );
 
-    let selectedWeeklyRecurrence = $derived(weeklyRecurrenceState === "weekly");
-
     let startingDateTime = $derived(
         selectedDateRange?.start
             ? toCalendarDateTime(selectedDateRange.start, new Time(0, 0))
@@ -82,7 +73,7 @@
 
     const resetForm = () => {
         validationErrorMessage = undefined;
-        weeklyRecurrenceState = weeklyRecurrence ? "weekly" : "once";
+
         selectedDateRange = availableTime
             ? {
                   start: new CalendarDate(
@@ -151,11 +142,9 @@
                     endTime: endingDateTime!.toString()
                 },
                 timezone: timezone!,
-                weeklyRecurrence: selectedWeeklyRecurrence
+                weeklyRecurrence: false
             });
 
-            // Update bindable props to reflect changes
-            weeklyRecurrence = selectedWeeklyRecurrence;
             if (startingDateTime && endingDateTime) {
                 availableTime = {
                     startTime: new Date(startingDateTime.toString()),
@@ -229,32 +218,12 @@
             </div>
 
             <div class="flex flex-col gap-2">
-                <Label class="flex items-center gap-2"
-                    >{m.edit_event_label_weekly_recurring()}</Label
-                >
-                <RadioGroup.Root bind:value={weeklyRecurrenceState}>
-                    <div class="flex flex-row items-center gap-2">
-                        <RadioGroup.Item value="weekly" id="weekly" />
-                        <Label for="weekly">{m.edit_event_option_weekly_yes()}</Label>
-                    </div>
-                    <div class="flex flex-row items-center gap-2">
-                        <RadioGroup.Item value="once" id="once" />
-                        <Label for="once">{m.edit_event_option_weekly_no()}</Label>
-                    </div>
-                </RadioGroup.Root>
-            </div>
-
-            <div class="flex flex-col gap-2">
                 <Label>{m.edit_event_label_date_range()}</Label>
                 <div class="grid grid-cols-4 grid-rows-2 gap-2" style="place-items: center start;">
                     <p class=" col-span-1 text-xs text-muted-foreground">
                         {m.edit_event_sublabel_date_range()}
                     </p>
-                    <DateRangeSelect
-                        class="col-span-3 w-full"
-                        bind:selectedDateRange
-                        maxDays={weeklyRecurrence ? 7 : undefined}
-                    />
+                    <DateRangeSelect class="col-span-3 w-full" bind:selectedDateRange />
                     <p class="col-span-1 text-xs text-muted-foreground">
                         {m.edit_event_sublabel_timezone()}
                     </p>

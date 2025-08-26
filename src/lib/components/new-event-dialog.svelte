@@ -1,12 +1,12 @@
 <script lang="ts">
     import { goto, refreshAll } from "$app/navigation";
+    import { m } from "$i18n";
     import { createEvent } from "$lib/api/events.remote";
     import { authClient } from "$lib/auth-client";
     import { Button } from "$lib/components/ui/button";
     import * as Dialog from "$lib/components/ui/dialog/";
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
-    import * as RadioGroup from "$lib/components/ui/radio-group";
     import { preservedEventNames } from "$lib/utils";
     import { Time, toCalendarDateTime } from "@internationalized/date";
     import type { DateRange } from "bits-ui";
@@ -14,9 +14,6 @@
     import { toast } from "svelte-sonner";
     import DateRangeSelect from "./date-range-select.svelte";
     import TimezoneSelect from "./timezone-select.svelte";
-    import { m } from "$i18n";
-
-    type WeeklyRecurrence = "weekly" | "once";
 
     interface Props {
         children: Snippet;
@@ -34,15 +31,12 @@
 
     let eventName = $state<string>("");
     let organizerName = $state<string>("");
-    let weeklyRecurrence = $state<WeeklyRecurrence>("weekly");
 
     let selectedDateRange = $state<DateRange | undefined>(undefined);
 
     let selectedTimezone = $state<string | undefined>(
         Intl.DateTimeFormat().resolvedOptions().timeZone
     );
-
-    let selectedWeeklyRecurrence = $derived(weeklyRecurrence === "weekly");
 
     let startingDateTime = $derived(
         selectedDateRange?.start
@@ -61,7 +55,6 @@
 
         eventName = "";
         organizerName = "";
-        weeklyRecurrence = "weekly";
         selectedDateRange = undefined;
         selectedTimezone = undefined;
     };
@@ -119,7 +112,7 @@
                     endTime: endingDateTime!.toString()
                 },
                 timezone: selectedTimezone!,
-                weeklyRecurrence: selectedWeeklyRecurrence
+                weeklyRecurrence: false
             });
 
             open = false; // Close dialog
@@ -177,31 +170,12 @@
             </div>
 
             <div class="flex flex-col gap-2">
-                <Label class="flex items-center gap-2">{m.new_event_label_weekly_recurring()}</Label
-                >
-                <RadioGroup.Root bind:value={weeklyRecurrence}>
-                    <div class="flex flex-row items-center gap-2">
-                        <RadioGroup.Item value="weekly" id="weekly" />
-                        <Label for="weekly">{m.new_event_option_weekly_yes()}</Label>
-                    </div>
-                    <div class="flex flex-row items-center gap-2">
-                        <RadioGroup.Item value="once" id="once" />
-                        <Label for="once">{m.new_event_option_weekly_no()}</Label>
-                    </div>
-                </RadioGroup.Root>
-            </div>
-
-            <div class="flex flex-col gap-2">
                 <Label>{m.new_event_label_date_range()}</Label>
                 <div class="grid grid-cols-4 grid-rows-2 gap-2" style="place-items: center start;">
                     <p class=" col-span-1 text-xs text-muted-foreground">
                         {m.new_event_sublabel_date_range()}
                     </p>
-                    <DateRangeSelect
-                        class="col-span-3 w-full"
-                        bind:selectedDateRange
-                        maxDays={weeklyRecurrence ? 7 : undefined}
-                    />
+                    <DateRangeSelect class="col-span-3 w-full" bind:selectedDateRange />
                     <p class="col-span-1 text-xs text-muted-foreground">
                         {m.new_event_sublabel_timezone()}
                     </p>
