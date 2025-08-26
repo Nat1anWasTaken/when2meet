@@ -56,7 +56,7 @@
         eventName = "";
         organizerName = "";
         selectedDateRange = undefined;
-        selectedTimezone = undefined;
+        selectedTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     };
 
     const validateFormData = () => {
