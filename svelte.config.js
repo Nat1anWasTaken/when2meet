@@ -14,6 +14,9 @@ const config = {
         adapter: adapter(),
         experimental: {
             remoteFunctions: true
+        },
+        alias: {
+            "$i18n": "src/lib/paraglide/messages.js",
         }
     },
 
