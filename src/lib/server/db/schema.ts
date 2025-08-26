@@ -1,5 +1,5 @@
-import { boolean, customType, date, pgTable, serial, text } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
+import { boolean, customType, date, pgTable, serial, text } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 
 type TimeSelection = {
@@ -35,7 +35,7 @@ export const event = pgTable("event", {
     organizerName: text("organizer_name").notNull(),
     organizerId: text("organizer_id").references(() => user.id, { onDelete: "set null" }),
     availableTime: timeSelection("available_time").notNull(),
-    weeklyRecurrence: boolean("weekly_recurrence").notNull().default(false)
+    weeklyRecurrence: boolean("weekly_recurrence").notNull().default(false) // TODO: This is currently disabled, we need to figure a way out to re-enable it with a good ux
 });
 
 export const participant = pgTable("participant", {
