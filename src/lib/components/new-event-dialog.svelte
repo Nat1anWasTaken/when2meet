@@ -86,12 +86,15 @@
         }
 
         if (missingFields.length > 0) {
-            validationErrorMessage = m.new_event_validation_missing_fields() + missingFields.join(", ");
+            validationErrorMessage =
+                m.new_event_validation_missing_fields() + missingFields.join(", ");
             return false;
         }
 
         if (preservedEventNames.includes(eventName.trim())) {
-            validationErrorMessage = m.new_event_validation_reserved_name({ eventName: eventName.trim() });
+            validationErrorMessage = m.new_event_validation_reserved_name({
+                eventName: eventName.trim()
+            });
             return false;
         }
 
@@ -122,7 +125,8 @@
             open = false; // Close dialog
 
             toast.info(
-                m.toast_event_created_success({ eventName: eventName.trim() }) + (redirect ? m.new_event_success_redirecting() : "")
+                m.toast_event_created_success({ eventName: eventName.trim() }) +
+                    (redirect ? m.new_event_success_redirecting() : "")
             );
 
             if (redirect) {
@@ -166,11 +170,15 @@
 
             <div class="flex flex-col gap-2">
                 <Label>{m.new_event_label_organizer_name()}</Label>
-                <Input placeholder={m.new_event_placeholder_organizer_name()} bind:value={organizerName} />
+                <Input
+                    placeholder={m.new_event_placeholder_organizer_name()}
+                    bind:value={organizerName}
+                />
             </div>
 
             <div class="flex flex-col gap-2">
-                <Label class="flex items-center gap-2">{m.new_event_label_weekly_recurring()}</Label>
+                <Label class="flex items-center gap-2">{m.new_event_label_weekly_recurring()}</Label
+                >
                 <RadioGroup.Root bind:value={weeklyRecurrence}>
                     <div class="flex flex-row items-center gap-2">
                         <RadioGroup.Item value="weekly" id="weekly" />
@@ -186,13 +194,17 @@
             <div class="flex flex-col gap-2">
                 <Label>{m.new_event_label_date_range()}</Label>
                 <div class="grid grid-cols-4 grid-rows-2 gap-2" style="place-items: center start;">
-                    <p class=" col-span-1 text-xs text-muted-foreground">{m.new_event_sublabel_date_range()}</p>
+                    <p class=" col-span-1 text-xs text-muted-foreground">
+                        {m.new_event_sublabel_date_range()}
+                    </p>
                     <DateRangeSelect
                         class="col-span-3 w-full"
                         bind:selectedDateRange
                         maxDays={weeklyRecurrence ? 7 : undefined}
                     />
-                    <p class="col-span-1 text-xs text-muted-foreground">{m.new_event_sublabel_timezone()}</p>
+                    <p class="col-span-1 text-xs text-muted-foreground">
+                        {m.new_event_sublabel_timezone()}
+                    </p>
                     <TimezoneSelect class="col-span-3 w-full" bind:selectedTimezone />
                 </div>
             </div>

@@ -55,17 +55,17 @@
     let eventUrl = $derived(page.url.toString());
     let eventTitle = $derived(`${data.name} - when2meet.app`);
     let eventDescription = $derived(
-        totalParticipants === 1 
+        totalParticipants === 1
             ? m.event_details_meta_description_singular({
-                eventName: data.name,
-                organizerName: data.organizerName,
-                participantCount: totalParticipants
-            })
+                  eventName: data.name,
+                  organizerName: data.organizerName,
+                  participantCount: totalParticipants
+              })
             : m.event_details_meta_description_plural({
-                eventName: data.name,
-                organizerName: data.organizerName,
-                participantCount: totalParticipants
-            })
+                  eventName: data.name,
+                  organizerName: data.organizerName,
+                  participantCount: totalParticipants
+              })
     );
 
     let days = $derived(

@@ -21,7 +21,9 @@
         name: m.events_sort_name()
     } as const;
 
-    let triggerContent = $derived(sort ? sortLabels[sort as keyof typeof sortLabels] : m.events_sort_placeholder());
+    let triggerContent = $derived(
+        sort ? sortLabels[sort as keyof typeof sortLabels] : m.events_sort_placeholder()
+    );
 
     function sortEvents(events: Awaited<ReturnType<typeof getOrganizedEvents>>) {
         if (!sort || !events || !Array.isArray(events)) return events;
@@ -115,7 +117,11 @@
             </Tabs.List>
 
             <div class="flex flex-row items-center gap-2">
-                <Input class="flex-1" placeholder={m.events_search_placeholder()} bind:value={searchQuery} />
+                <Input
+                    class="flex-1"
+                    placeholder={m.events_search_placeholder()}
+                    bind:value={searchQuery}
+                />
                 <Select.Root type="single" bind:value={sort}>
                     <Select.Trigger class="w-32">{triggerContent}</Select.Trigger>
                     <Select.Content>

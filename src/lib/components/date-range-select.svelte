@@ -42,13 +42,17 @@
                     {#if selectedDateRange?.start}
                         {selectedDateRange.start?.toString()}
                     {:else}
-                        <span class="text-muted-foreground">{m.date_range_select_placeholder_start()}</span>
+                        <span class="text-muted-foreground"
+                            >{m.date_range_select_placeholder_start()}</span
+                        >
                     {/if}
                     <span class="text-muted-foreground">－</span>
                     {#if selectedDateRange?.end}
                         {selectedDateRange.end?.toString()}
                     {:else}
-                        <span class="text-muted-foreground">{m.date_range_select_placeholder_end()}</span>
+                        <span class="text-muted-foreground"
+                            >{m.date_range_select_placeholder_end()}</span
+                        >
                     {/if}
                 </div>
 

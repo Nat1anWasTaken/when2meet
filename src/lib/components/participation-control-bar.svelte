@@ -117,7 +117,9 @@
     <div class="flex flex-col items-center gap-4 sm:flex-row sm:items-end">
         <div class="w-full flex-1 sm:w-auto">
             <div class="mb-1 flex items-center gap-2">
-                <Label for="floatingName" class="text-sm text-muted-foreground">{m.participation_control_bar_label_your_name()}</Label>
+                <Label for="floatingName" class="text-sm text-muted-foreground"
+                    >{m.participation_control_bar_label_your_name()}</Label
+                >
                 {#if !$session.data}
                     <span class="text-sm text-muted-foreground/60 italic">
                         💡 {m.participation_control_bar_warning_guest_edit()}
@@ -156,10 +158,15 @@
                     {#if isSaving}
                         <div class="flex items-center gap-2">
                             <IconLoaderCircle class="h-4 w-4 animate-spin" />
-                            {userAlreadyJoined ? m.participation_control_bar_button_updating() : m.participation_control_bar_button_saving()}
+                            {userAlreadyJoined
+                                ? m.participation_control_bar_button_updating()
+                                : m.participation_control_bar_button_saving()}
                         </div>
                     {:else}
-                        {userAlreadyJoined ? m.participation_control_bar_button_update() : m.participation_control_bar_button_save()} ({selectedTimes.length} {m.participation_control_bar_slots()})
+                        {userAlreadyJoined
+                            ? m.participation_control_bar_button_update()
+                            : m.participation_control_bar_button_save()} ({selectedTimes.length}
+                        {m.participation_control_bar_slots()})
                     {/if}
                 </Button>
             </div>

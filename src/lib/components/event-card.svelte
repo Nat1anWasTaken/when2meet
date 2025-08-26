@@ -87,7 +87,9 @@
                         <div class="flex items-center gap-2">
                             <IconCalendar class="h-4 w-4 shrink-0 text-muted-foreground" />
                             <div class="min-w-0">
-                                <span class="block text-sm font-medium">{m.event_card_available_time()}</span>
+                                <span class="block text-sm font-medium"
+                                    >{m.event_card_available_time()}</span
+                                >
                                 <span class="text-sm text-muted-foreground">
                                     {formatDateTime(availableTime.startTime)}
                                     <span class="mx-1">~</span>
@@ -101,7 +103,9 @@
                         <div class="flex items-center gap-2">
                             <IconEarth class="h-4 w-4 shrink-0 text-muted-foreground" />
                             <div class="min-w-0">
-                                <span class="block text-sm font-medium">{m.event_card_timezone()}</span>
+                                <span class="block text-sm font-medium"
+                                    >{m.event_card_timezone()}</span
+                                >
                                 <span class="text-sm text-muted-foreground">{timezone}</span>
                             </div>
                         </div>
@@ -126,7 +130,9 @@
                     >
                         <Button class="w-full">{m.event_card_button_edit()}</Button>
                     </EditEventDialog>
-                    <Button class="w-full" variant="outline" href={`/${eventId}`}>{m.event_card_button_view()}</Button>
+                    <Button class="w-full" variant="outline" href={`/${eventId}`}
+                        >{m.event_card_button_view()}</Button
+                    >
                 </div>
             {/if}
         </div>

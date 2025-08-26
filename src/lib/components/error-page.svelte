@@ -101,7 +101,9 @@
         <Card.Footer class="flex flex-col gap-2">
             <div class="flex w-full gap-2">
                 {#if onRetry}
-                    <Button onclick={onRetry} variant="outline" class="flex-1">{m.error_try_again()}</Button>
+                    <Button onclick={onRetry} variant="outline" class="flex-1"
+                        >{m.error_try_again()}</Button
+                    >
                 {/if}
 
                 {#if onGoHome}

@@ -34,9 +34,15 @@
                 {m.guest_warning_additional_info()}
             </p>
             <div class="flex justify-end gap-2">
-                <Button variant="outline" onclick={handleCancel}>{m.guest_warning_button_cancel()}</Button>
-                <Button variant="secondary" onclick={handleLogin}>{m.guest_warning_button_login()}</Button>
-                <Button onclick={onContinueAsGuest}>{m.guest_warning_button_continue_guest()}</Button>
+                <Button variant="outline" onclick={handleCancel}
+                    >{m.guest_warning_button_cancel()}</Button
+                >
+                <Button variant="secondary" onclick={handleLogin}
+                    >{m.guest_warning_button_login()}</Button
+                >
+                <Button onclick={onContinueAsGuest}
+                    >{m.guest_warning_button_continue_guest()}</Button
+                >
             </div>
         </div>
     </Dialog.Content>

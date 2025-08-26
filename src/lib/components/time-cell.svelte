@@ -93,7 +93,8 @@
             <Tooltip.Content class="max-w-xs">
                 <div class="flex flex-col gap-2">
                     <p class="text-sm">
-                        {participantCount}/{totalParticipants} {m.time_cell_tooltip_available()}
+                        {participantCount}/{totalParticipants}
+                        {m.time_cell_tooltip_available()}
                     </p>
                     <div class="flex flex-row flex-wrap gap-2">
                         {#each availableParticipants as participant (participant.username)}

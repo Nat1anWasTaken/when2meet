@@ -16,7 +16,7 @@ const config = {
             remoteFunctions: true
         },
         alias: {
-            "$i18n": "src/lib/paraglide/messages.js",
+            $i18n: "src/lib/paraglide/messages.js"
         }
     },
 

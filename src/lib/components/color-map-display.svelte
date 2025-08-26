@@ -21,7 +21,9 @@
 </script>
 
 <div class="flex items-center justify-between gap-4">
-    <span class="text-sm text-muted-foreground">{m.color_map_available_count({ count: 0, total: totalParticipants })}</span>
+    <span class="text-sm text-muted-foreground"
+        >{m.color_map_available_count({ count: 0, total: totalParticipants })}</span
+    >
     <div class="flex h-6 flex-1 overflow-hidden rounded-full border border-accent shadow-sm">
         {#each colorSegments as segment (segment.count)}
             <div class="flex-1" style="background-color: {segment.color}"></div>

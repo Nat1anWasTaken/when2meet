@@ -8,44 +8,26 @@
     <title>{m.home_meta_title()}</title>
     <link rel="canonical" href="https://when2meet.app/" />
 
-    <meta
-        name="description"
-        content={m.home_meta_description()}
-    />
+    <meta name="description" content={m.home_meta_description()} />
 
     <!-- OpenGraph -->
     <meta property="og:type" content="website" />
-    <meta
-        property="og:title"
-        content={m.home_meta_title()}
-    />
-    <meta
-        property="og:description"
-        content={m.home_meta_description()}
-    />
+    <meta property="og:title" content={m.home_meta_title()} />
+    <meta property="og:description" content={m.home_meta_description()} />
     <meta property="og:url" content="https://when2meet.app/" />
     <meta property="og:site_name" content="when2meet.app" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:image" content="https://when2meet.app/thumbnail.png?v=2" />
     <meta property="og:image:secure_url" content="https://when2meet.app/thumbnail.png?v=2" />
-    <meta
-        property="og:image:alt"
-        content={m.home_meta_title()}
-    />
+    <meta property="og:image:alt" content={m.home_meta_title()} />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta
-        name="twitter:title"
-        content={m.home_meta_title()}
-    />
-    <meta
-        name="twitter:description"
-        content={m.home_meta_description()}
-    />
+    <meta name="twitter:title" content={m.home_meta_title()} />
+    <meta name="twitter:description" content={m.home_meta_description()} />
     <meta name="twitter:url" content="https://when2meet.app/" />
     <meta name="twitter:site" content="@when2meetapp" />
     <meta name="twitter:image" content="https://when2meet.app/thumbnail.png?v=2" />
