@@ -1,7 +1,8 @@
 <script>
+    import { m } from "$i18n";
+    import LanguageSelect from "./language-select.svelte";
     import ModeSwitch from "./mode-switch.svelte";
     import UserAvatarMenu from "./user-avatar-menu.svelte";
-    import { m } from "$i18n";
 </script>
 
 <div class="flex h-16 flex-row items-center justify-between px-4">
@@ -14,6 +15,7 @@
         <a href="/about" class="hidden md:block">{m.nav_about()}</a>
     </div>
     <div class="flex flex-row items-center gap-2">
+        <LanguageSelect />
         <ModeSwitch />
         <UserAvatarMenu />
     </div>

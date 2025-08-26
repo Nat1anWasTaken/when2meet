@@ -34,28 +34,23 @@
     "events_error_description": "An unexpected error occurred",
     "events_sort_placeholder": "Sort",
     "events_search_placeholder": "search",
-    
     "_comment_home": "Home page strings",
     "home_meta_title": "when2meet.app - Find meeting times that work for everyone, fast.",
     "home_meta_description": "Find meeting times that work for everyone, fast. Create events and let participants select their availability to find the best meeting times.",
-    
     "_comment_about": "About page strings",
     "about_page_title": "About - when2meet.app",
     "about_meta_description": "Learn more about when2meet.app - the fast and easy way to find meeting times that work for everyone.",
     "about_under_construction": "This page is still under construction",
-    
     "_comment_event_details": "Event details page strings",
     "event_details_meta_description_singular": "Join \"{eventName}\" organized by {organizerName}. {participantCount} person has already joined. Find times that work for everyone!",
     "event_details_meta_description_plural": "Join \"{eventName}\" organized by {organizerName}. {participantCount} people have already joined. Find times that work for everyone!",
     "event_details_join_description": "Join this event and select your available times below.",
     "event_details_select_time_instruction": "Select your available time below",
-    
     "_comment_navbar": "Navigation strings",
     "brand_name": "when2meet",
     "brand_extension": ".app",
     "nav_about": "About",
     "nav_my_events": "My Events",
-    
     "_comment_auth": "Authentication strings",
     "auth_logging_out": "Logging out...",
     "auth_logged_out_success": "Logged out successfully",
@@ -70,11 +65,9 @@
     "login_description": "Continue with your social accounts",
     "login_continue_google": "Continue with Google",
     "login_continue_github": "Continue with GitHub",
-    
     "_comment_user": "User interface strings",
     "user_avatar_alt": "User",
     "user_fallback_name": "User",
-    
     "_comment_errors": "Error page strings",
     "error_400_title": "Bad Request",
     "error_400_description": "Your request could not be processed.",
@@ -101,7 +94,6 @@
     "error_technical_details": "Technical Details",
     "error_try_again": "Try Again",
     "error_go_home": "Go Home",
-    
     "_comment_new_event": "New event dialog strings",
     "new_event_field_name": "Event Name",
     "new_event_field_organizer_name": "Organizer Name",
@@ -125,7 +117,6 @@
     "new_event_sublabel_timezone": "Timezone:",
     "new_event_button_create": "Create Event",
     "new_event_login_warning": "You are not logged in. If you continue as a guest, you won't be able to edit this event later.",
-    
     "_comment_edit_event": "Edit event dialog strings",
     "edit_event_field_name": "Event Name",
     "edit_event_field_organizer_name": "Organizer Name",
@@ -152,7 +143,6 @@
     "edit_event_button_delete": "Delete",
     "edit_event_button_cancel": "Cancel",
     "edit_event_button_update": "Update Event",
-    
     "_comment_share_event": "Share event dialog strings",
     "share_event_success_copied": "Invitation link copied to clipboard!",
     "share_event_error_copy": "Failed to copy link",
@@ -163,7 +153,6 @@
     "share_event_instructions": "Send this link to anyone you want to invite to this event. They can join and select their available times without needing to sign up.",
     "share_event_button_close": "Close",
     "share_event_button_copy_link": "Copy Link",
-    
     "_comment_guest_warning": "Guest warning dialog strings",
     "guest_warning_dialog_title": "Continue as Guest?",
     "guest_warning_dialog_description": "You're not signed in. If you continue as a guest, you won't be able to edit your participation later.",
@@ -171,14 +160,12 @@
     "guest_warning_button_cancel": "Cancel",
     "guest_warning_button_login": "Login / Sign Up",
     "guest_warning_button_continue_guest": "Continue as Guest",
-    
     "_comment_invitation": "Invitation dialog strings",
     "invitation_dialog_title": "You're Invited!",
     "invitation_dialog_description": "You have been invited to join {eventName}.",
     "invitation_dialog_explanation": "Join this event and select the times when you're available to help everyone find the best meeting time.",
     "invitation_dialog_decline": "Maybe Later",
     "invitation_dialog_accept": "Join & Select Times",
-    
     "_comment_participation": "Participation control strings",
     "participation_control_bar_error_name_required": "Please enter your name",
     "participation_control_bar_error_no_time_selected": "Please select at least one time slot",
@@ -194,7 +181,6 @@
     "participation_control_bar_button_update": "Update",
     "participation_control_bar_button_save": "Save",
     "participation_control_bar_slots": "slots",
-    
     "_comment_time_components": "Time-related component strings",
     "time_cell_tooltip_available": "available",
     "timezone_select_placeholder": "Select a timezone...",
@@ -202,7 +188,6 @@
     "timezone_select_no_results": "No timezone found.",
     "date_range_select_placeholder_start": "Select a start date",
     "date_range_select_placeholder_end": "Select a end date",
-    
     "_comment_event_card": "Event card strings",
     "event_card_organized_by": "Organized by",
     "event_card_badge_weekly": "Weekly",
@@ -211,28 +196,24 @@
     "event_card_timezone": "Timezone",
     "event_card_button_edit": "Edit",
     "event_card_button_view": "View",
-    
     "_comment_ui_components": "UI component strings",
     "color_map_display_available": "Available",
     "mode_switch_toggle_theme": "Toggle theme",
-    
     "_comment_share_event_dialog": "Share event dialog strings (additional)",
     "share_event_dialog_description_with_name": "Share {eventName} with others so they can sign their available times.",
     "share_event_instruction_text": "Anyone with this link can view the event and add their availability. Share it with participants via email, messaging apps, or social media.",
-    
-    "_comment_user_menu": "User dropdown menu strings", 
+    "_comment_user_menu": "User dropdown menu strings",
     "user_menu_my_events": "My Events",
-    
     "_comment_various_toast_messages": "Various toast/notification messages",
     "toast_invitation_link_copied": "Invitation link copied to clipboard!",
     "toast_copy_failed": "Failed to copy link",
     "toast_event_created_success": "Event \"{eventName}\" created successfully!",
     "toast_event_create_failed": "Failed to create event",
     "toast_event_updated_success": "Event updated successfully",
-    "toast_event_update_failed": "Failed to update event", 
+    "toast_event_update_failed": "Failed to update event",
     "toast_event_deleted_success": "Event deleted successfully",
     "toast_event_delete_failed": "Failed to delete event",
-    
     "_comment_color_map_display": "Color map display strings",
-    "color_map_available_count": "{count}/{total} Available"
+    "color_map_available_count": "{count}/{total} Available",
+    "navbar_language_select": "Select a language"
 }
