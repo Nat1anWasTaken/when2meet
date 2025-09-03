@@ -145,6 +145,11 @@
             return;
         }
 
+        // Set pointer capture for better mobile touch handling
+        if (event.target instanceof Element) {
+            event.target.setPointerCapture(event.pointerId);
+        }
+
         // Set selection
         isSelecting = true;
         lastHovered = [x, y];
@@ -238,7 +243,7 @@
         <div class="sticky top-0 flex h-full w-full flex-col items-center justify-center">
             <h2 class="text-sm font-bold">{getDayString(date).slice(0, 3)}</h2>
             {#if showDates}
-                <p class="text-sm text-muted-foreground">{date.getMonth()}/{date.getDate()}</p>
+                <p class="text-sm text-muted-foreground">{date.getMonth() + 1}/{date.getDate()}</p>
             {/if}
         </div>
         {#each Array(cellsPerDay).entries() as [y] (y)}

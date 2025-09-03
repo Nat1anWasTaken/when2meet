@@ -1,9 +1,9 @@
 <script lang="ts">
+    import { m } from "$i18n";
     import * as Tooltip from "$lib/components/ui/tooltip";
     import { cn, type Cell } from "$lib/utils";
     import LucideCheck from "~icons/lucide/check";
     import ParticipantBadge from "./participant-badge.svelte";
-    import { m } from "$i18n";
 
     interface Props {
         cell: Cell;
