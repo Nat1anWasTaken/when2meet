@@ -203,7 +203,11 @@ export function timeSelectionsToCells(
 
         // Calculate start and end cell indices
         const startMinutes = startTime.getHours() * 60 + startTime.getMinutes();
-        const endMinutes = endTime.getHours() * 60 + endTime.getMinutes();
+        let endMinutes = endTime.getHours() * 60 + endTime.getMinutes();
+
+        if (endTime.getTime() > startTime.getTime() && endMinutes <= startMinutes) {
+            endMinutes += 24 * 60;
+        }
 
         const startY = Math.floor(startMinutes / intervalInMinutes);
         const endY = Math.floor(endMinutes / intervalInMinutes);
