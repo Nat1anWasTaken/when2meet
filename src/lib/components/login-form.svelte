@@ -9,9 +9,10 @@
 
     interface Props {
         redirectTo?: string;
+        showCard?: boolean;
     }
 
-    const { redirectTo }: Props = $props();
+    const { redirectTo, showCard = true }: Props = $props();
 
     const handleGoogleSignIn = async () => {
         toast.info(m.login_signing_in_google());
@@ -42,13 +43,32 @@
     };
 </script>
 
-<Card.Root class="mx-auto w-full max-w-sm">
-    <Card.Header>
-        <Card.Title class="text-2xl">{m.login_title()}</Card.Title>
-        <Card.Description>{m.login_description()}</Card.Description>
-    </Card.Header>
-    <Card.Content>
-        <div class="flex flex-col gap-4">
+{#if showCard}
+    <Card.Root class="mx-auto w-full max-w-sm">
+        <Card.Header>
+            <Card.Title class="text-2xl">{m.login_title()}</Card.Title>
+            <Card.Description>{m.login_description()}</Card.Description>
+        </Card.Header>
+        <Card.Content>
+            <div class="flex flex-col gap-4">
+                <Button variant="outline" class="w-full" onclick={handleGoogleSignIn}>
+                    <RiGoogleFill class="h-4 w-4" />
+                    {m.login_continue_google()}
+                </Button>
+                <Button variant="outline" class="w-full" onclick={handleGithubSignIn}>
+                    <RiGithubFill class="h-4 w-4" />
+                    {m.login_continue_github()}
+                </Button>
+            </div>
+        </Card.Content>
+    </Card.Root>
+{:else}
+    <div class="flex flex-col gap-4">
+        <div>
+            <h2 class="text-2xl font-bold">{m.login_title()}</h2>
+            <p class="text-sm text-muted-foreground">{m.login_description()}</p>
+        </div>
+        <div class="flex flex-col gap-3">
             <Button variant="outline" class="w-full" onclick={handleGoogleSignIn}>
                 <RiGoogleFill class="h-4 w-4" />
                 {m.login_continue_google()}
@@ -58,5 +78,5 @@
                 {m.login_continue_github()}
             </Button>
         </div>
-    </Card.Content>
-</Card.Root>
+    </div>
+{/if}

@@ -1,7 +1,7 @@
 <script lang="ts">
     import * as Dialog from "$lib/components/ui/dialog";
     import { Button } from "$lib/components/ui/button";
-    import { goto } from "$app/navigation";
+    import AuthDialog from "$lib/components/auth-dialog.svelte";
     import { m } from "$i18n";
 
     interface Props {
@@ -11,9 +11,11 @@
 
     let { open = $bindable(), onContinueAsGuest }: Props = $props();
 
+    let authDialogOpen = $state(false);
+
     function handleLogin() {
         open = false;
-        goto("/login");
+        authDialogOpen = true;
     }
 
     function handleCancel() {
@@ -47,3 +49,5 @@
         </div>
     </Dialog.Content>
 </Dialog.Root>
+
+<AuthDialog bind:open={authDialogOpen} />

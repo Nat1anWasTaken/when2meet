@@ -1,7 +1,6 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
-    import { page } from "$app/state";
     import { getOrganizedEvents, getParticipatedEvents } from "$lib/api/events.remote";
+    import AuthDialog from "$lib/components/auth-dialog.svelte";
     import EventCard from "$lib/components/event-card.svelte";
     import NewEventDialog from "$lib/components/new-event-dialog.svelte";
     import Button from "$lib/components/ui/button/button.svelte";
@@ -42,11 +41,6 @@
             }
         });
     }
-
-    function handleLogin() {
-        const currentUrl = encodeURIComponent(page.url.pathname + page.url.search);
-        goto(`/login?redirect_to=${currentUrl}`);
-    }
 </script>
 
 {#snippet eventGallery(events: Awaited<ReturnType<typeof getOrganizedEvents>>)}
@@ -79,7 +73,9 @@
                 {m.events_unauthorized_description()}
             </p>
         </div>
-        <Button onclick={handleLogin}>{m.events_unauthorized_continue()}</Button>
+        <AuthDialog>
+            <Button>{m.events_unauthorized_continue()}</Button>
+        </AuthDialog>
     </div>
 {/snippet}
 
