@@ -40,7 +40,7 @@
 
 {#if $session.data?.user && !$session.isPending}
     <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
+        <DropdownMenu.Trigger class="cursor-pointer">
             <Avatar.Root class="h-8 w-8">
                 <Avatar.Image
                     src={$session.data.user.image}
