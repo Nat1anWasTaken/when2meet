@@ -1,9 +1,15 @@
 import type { Node } from "@takumi-rs/helpers";
 import { container, image, text } from "@takumi-rs/helpers";
+import { generateAvailabilityColorMap } from "$lib/utils";
 
 export type EventOgParticipant = {
     name: string;
     image?: string | null;
+};
+
+export type EventOgAvailabilityBlock = {
+    date: Date;
+    level: number;
 };
 
 export type EventOgCardPayload = {
@@ -13,6 +19,7 @@ export type EventOgCardPayload = {
     availableStart: Date;
     availableEnd: Date;
     participants: EventOgParticipant[];
+    availabilityBlocks: EventOgAvailabilityBlock[];
 };
 
 const palette = {
@@ -32,7 +39,15 @@ const brand = {
 const CANVAS = { width: 1024, height: 512, padding: 64 } as const;
 
 export function createEventOgCard(payload: EventOgCardPayload): Node {
-    const { name, organizerName, timezone, availableStart, availableEnd, participants } = payload;
+    const {
+        name,
+        organizerName,
+        timezone,
+        availableStart,
+        availableEnd,
+        participants,
+        availabilityBlocks
+    } = payload;
 
     const dateRange = formatDateRange(availableStart, availableEnd, timezone);
     const timezoneLabel = formatTimezoneLabel(timezone, availableStart);
@@ -53,7 +68,16 @@ export function createEventOgCard(payload: EventOgCardPayload): Node {
         },
         children: [
             buildHeader({ name, organizerName }),
-            buildFooter({ dateRange, timezoneLabel, participants, participantSummary })
+            buildFooter({
+                dateRange,
+                timezoneLabel,
+                participants,
+                participantSummary,
+                availabilityBlocks,
+                availableStart,
+                availableEnd,
+                timezone
+            })
         ]
     });
 }
@@ -111,25 +135,50 @@ function buildFooter({
     dateRange,
     timezoneLabel,
     participants,
-    participantSummary
+    participantSummary,
+    availabilityBlocks,
+    availableStart,
+    availableEnd,
+    timezone
 }: {
     dateRange: string;
     timezoneLabel: string;
     participants: EventOgParticipant[];
     participantSummary: string;
+    availabilityBlocks: EventOgAvailabilityBlock[];
+    availableStart: Date;
+    availableEnd: Date;
+    timezone: string;
 }): Node {
     return container({
         style: {
             display: "flex",
-            flexDirection: "row",
-            gap: 20,
-            justifyContent: "space-between",
+            flexDirection: "column",
+            gap: 24,
             width: "100%"
         },
         children: [
-            buildInfoBlock("Available dates", dateRange),
-            buildInfoBlock("Timezone", timezoneLabel),
-            buildParticipantsBlock(participants, participantSummary)
+            container({
+                style: {
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: 20,
+                    justifyContent: "space-between",
+                    width: "100%"
+                },
+                children: [
+                    buildInfoBlock("Available dates", dateRange),
+                    buildInfoBlock("Timezone", timezoneLabel),
+                    buildParticipantsBlock(participants, participantSummary)
+                ]
+            }),
+            buildAvailabilityTimeline({
+                blocks: availabilityBlocks,
+                availableStart,
+                availableEnd,
+                timezone,
+                totalParticipants: participants.length
+            })
         ]
     });
 }
@@ -334,6 +383,92 @@ function summarizeParticipants(participants: EventOgParticipant[]): string {
     }
 
     return `${visible.join(", ")} +${remaining} more`;
+}
+
+function buildAvailabilityTimeline({
+    blocks,
+    availableStart,
+    availableEnd,
+    timezone,
+    totalParticipants
+}: {
+    blocks: EventOgAvailabilityBlock[];
+    availableStart: Date;
+    availableEnd: Date;
+    timezone: string;
+    totalParticipants: number;
+}): Node {
+    const startLabel = formatTimelineLabel(availableStart, timezone);
+    const endLabel = formatTimelineLabel(availableEnd, timezone);
+    const colorMap = generateAvailabilityColorMap(totalParticipants, 277, "light");
+    colorMap.set(0, palette.border);
+
+    const segments = (blocks.length > 0 ? blocks : [{ date: availableStart, level: 0 }]).map(
+        (block) =>
+            container({
+                style: {
+                    flex: 1,
+                    height: "100%",
+                    backgroundColor: colorMap.get(block.level) ?? palette.primary
+                }
+            })
+    );
+
+    return container({
+        style: {
+            display: "flex",
+            flexDirection: "column",
+            gap: 10,
+            width: "100%"
+        },
+        children: [
+            container({
+                style: {
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    fontSize: 14,
+                    color: palette.muted,
+                    textTransform: "uppercase",
+                    letterSpacing: 1
+                },
+                children: [
+                    text(startLabel, {
+                        fontSize: 14,
+                        color: palette.muted,
+                        fontWeight: 600
+                    }),
+                    text(endLabel, {
+                        fontSize: 14,
+                        color: palette.muted,
+                        fontWeight: 600
+                    })
+                ]
+            }),
+            container({
+                style: {
+                    display: "flex",
+                    flexDirection: "row",
+                    width: "100%",
+                    height: 14,
+                    borderRadius: 999,
+                    overflow: "hidden",
+                    backgroundColor: palette.border
+                },
+                children: segments
+            })
+        ]
+    });
+}
+
+function formatTimelineLabel(date: Date, timeZone: string): string {
+    const formatter = new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+        timeZone
+    });
+
+    return formatter.format(date);
 }
 
 function getInitials(name: string): string {
