@@ -31,7 +31,7 @@ This is a SvelteKit application for scheduling meetings, similar to When2Meet. T
 
 **Database & ORM:**
 
-- PostgreSQL with Neon serverless
+- PostgreSQL with standard postgres driver
 - Drizzle ORM for database operations
 - Database schemas split across two files:
     - `src/lib/server/db/schema.ts` - Main app schema (events, participants)
@@ -63,7 +63,7 @@ This is a SvelteKit application for scheduling meetings, similar to When2Meet. T
 
 **Environment Requirements:**
 
-- `DATABASE_URL` environment variable required for Neon PostgreSQL connection
+- `DATABASE_URL` environment variable required for PostgreSQL connection
 
 The application uses a custom time selection system where users can drag to select available time slots on a grid, with support for both adding and removing selections.
 

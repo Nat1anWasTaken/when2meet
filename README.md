@@ -14,7 +14,7 @@ An app that helps you and your team find meeting times.
 
 - Node.js 18+
 - pnpm
-- PostgreSQL database (or Neon account)
+- PostgreSQL database
 
 ### Installation
 
