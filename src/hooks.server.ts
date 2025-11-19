@@ -5,9 +5,9 @@ import { auth } from "$lib/auth";
 import { svelteKitHandler } from "better-auth/svelte-kit";
 import { building } from "$app/environment";
 
-async function originalHandle({ event, resolve }) {
+const originalHandle: Handle = async ({ event, resolve }) => {
     return svelteKitHandler({ event, resolve, auth, building });
-}
+};
 
 const handleParaglide: Handle = ({ event, resolve }) =>
     paraglideMiddleware(event.request, ({ request, locale }) => {

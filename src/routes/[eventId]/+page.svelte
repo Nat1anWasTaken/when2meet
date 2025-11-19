@@ -19,6 +19,7 @@
         timeSelectionsToCells,
         type Cell
     } from "$lib/utils";
+    import { mode as colorModeStore } from "mode-watcher";
     import { backOut } from "svelte/easing";
     import { slide } from "svelte/transition";
     import IconArrowDown from "~icons/lucide/arrow-down";
@@ -42,13 +43,19 @@
 
     let totalParticipants = $derived(data.participants?.length || 0);
 
+    let colorMode: "light" | "dark" = $derived(
+        colorModeStore.current === "dark" ? "dark" : "light"
+    );
+
     let availabilityColorMap = $derived.by(() => {
+        const currentMode = colorMode;
+
         if (totalParticipants === 0) {
-            return generateAvailabilityColorMap(0);
+            return generateAvailabilityColorMap(0, 277, currentMode);
         }
 
         const primaryHue = extractPrimaryHue() || 277;
-        return generateAvailabilityColorMap(totalParticipants, primaryHue);
+        return generateAvailabilityColorMap(totalParticipants, primaryHue, currentMode);
     });
 
     // Meta tag data

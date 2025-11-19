@@ -229,7 +229,8 @@ export function timeSelectionsToCells(
  */
 export function generateAvailabilityColorMap(
     totalParticipants: number,
-    primaryHue: number = 277
+    primaryHue: number = 277,
+    mode: "light" | "dark" = "light"
 ): AvailabilityColorMap {
     const colorMap = new Map<number, string>();
 
@@ -240,9 +241,16 @@ export function generateAvailabilityColorMap(
         // Generate colors for each participant count using OKLCH
         for (let count = 1; count <= totalParticipants; count++) {
             const ratio = count / totalParticipants;
-            // Vary lightness and chroma while keeping primary hue
-            const lightness = Math.max(0.3, 0.85 - ratio * 0.4); // 0.85 to 0.45
-            const chroma = Math.min(0.15, 0.05 + ratio * 0.1); // 0.05 to 0.15
+
+            if (mode === "dark") {
+                const lightness = Math.min(0.9, 0.35 + ratio * 0.55); // 0.35 to 0.9
+                const chroma = Math.min(0.18, 0.08 + ratio * 0.08); // 0.08 to 0.16
+                colorMap.set(count, `oklch(${lightness} ${chroma} ${primaryHue})`);
+                continue;
+            }
+
+            const lightness = Math.max(0.3, 0.9 - ratio * 0.5); // 0.9 to 0.4
+            const chroma = Math.min(0.18, 0.06 + ratio * 0.12); // 0.06 to 0.18
             colorMap.set(count, `oklch(${lightness} ${chroma} ${primaryHue})`);
         }
     }

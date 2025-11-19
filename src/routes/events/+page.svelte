@@ -103,6 +103,32 @@
     </div>
 {/snippet}
 
+{#snippet eventsPending()}
+    <div class="col-span-full flex items-center justify-center py-8">
+        <p class="text-muted-foreground">{m.events_loading()}</p>
+    </div>
+{/snippet}
+
+{#snippet eventsFailed(error: unknown)}
+    {#if error && typeof error === "object" && "status" in error && error.status === 401}
+        {@render unauthorizedView()}
+    {:else}
+        <div class="col-span-full flex flex-col items-center justify-center py-8 text-center">
+            <h3 class="text-xl font-semibold text-destructive">
+                {m.events_error_title()}
+            </h3>
+            <p class="mt-2 text-muted-foreground">
+                {error &&
+                typeof error === "object" &&
+                "message" in error &&
+                typeof error.message === "string"
+                    ? error.message
+                    : m.events_error_description()}
+            </p>
+        </div>
+    {/if}
+{/snippet}
+
 <div class="flex h-full w-full items-center justify-center p-4">
     <div class="h-full w-full max-w-4xl">
         <h1 class="text-4xl font-bold">{m.events_title()}</h1>
@@ -140,40 +166,12 @@
 
             <div class="mt-4">
                 <svelte:boundary>
-                    {#snippet pending()}
-                        <div class="col-span-full flex items-center justify-center py-8">
-                            <p class="text-muted-foreground">{m.events_loading()}</p>
-                        </div>
-                    {/snippet}
-
-                    {#snippet failed(error)}
-                        {#if error && typeof error === "object" && "status" in error && error.status === 401}
-                            {@render unauthorizedView()}
-                        {:else}
-                            <div
-                                class="col-span-full flex flex-col items-center justify-center py-8 text-center"
-                            >
-                                <h3 class="text-xl font-semibold text-destructive">
-                                    {m.events_error_title()}
-                                </h3>
-                                <p class="mt-2 text-muted-foreground">
-                                    {error &&
-                                    typeof error === "object" &&
-                                    "message" in error &&
-                                    typeof error.message === "string"
-                                        ? error.message
-                                        : m.events_error_description()}
-                                </p>
-                            </div>
-                        {/if}
-                    {/snippet}
-
                     <Tabs.Content
                         value="organized-events"
                         class="grid grid-flow-row grid-cols-1 gap-2 md:grid-cols-2"
                     >
                         {#await getOrganizedEvents({ name: searchQuery })}
-                            {@render pending()}
+                            {@render eventsPending()}
                         {:then events}
                             {#if !events?.length}
                                 {@render emptyView()}
@@ -181,7 +179,7 @@
                                 {@render eventGallery(sortEvents(events))}
                             {/if}
                         {:catch error}
-                            {@render failed(error)}
+                            {@render eventsFailed(error)}
                         {/await}
                     </Tabs.Content>
                     <Tabs.Content
@@ -189,7 +187,7 @@
                         class="grid grid-flow-row grid-cols-1 gap-2 md:grid-cols-2"
                     >
                         {#await getParticipatedEvents( { name: searchQuery } ).then( (result) => result.map((entry) => entry.event) )}
-                            {@render pending()}
+                            {@render eventsPending()}
                         {:then events}
                             {#if !events?.length}
                                 {@render emptyView()}
@@ -197,7 +195,7 @@
                                 {@render eventGallery(sortEvents(events))}
                             {/if}
                         {:catch error}
-                            {@render failed(error)}
+                            {@render eventsFailed(error)}
                         {/await}
                     </Tabs.Content>
                 </svelte:boundary>

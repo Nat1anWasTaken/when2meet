@@ -29,3 +29,6 @@ prisma/generated
 
 # Paraglide
 src/lib/paraglide
+
+# AI Tools
+.mcp.json
