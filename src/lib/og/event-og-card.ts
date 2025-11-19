@@ -57,26 +57,60 @@ export function createEventOgCard(payload: EventOgCardPayload): Node {
         style: {
             width: CANVAS.width,
             height: CANVAS.height,
-            padding: CANVAS.padding,
             backgroundColor: palette.background,
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
-            gap: 32,
+            gap: 0,
             color: palette.text,
             fontFamily: "'Plus Jakarta Sans', 'Geist', 'Inter', sans-serif"
         },
         children: [
-            buildHeader({ name, organizerName }),
-            buildFooter({
-                dateRange,
-                timezoneLabel,
-                participants,
-                participantSummary,
-                availabilityBlocks,
+            container({
+                style: {
+                    flex: 1,
+                    minHeight: 0,
+                    padding: CANVAS.padding,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    gap: 32
+                },
+                children: [
+                    buildHeader({ name, organizerName }),
+                    buildFooter({
+                        dateRange,
+                        timezoneLabel,
+                        participants,
+                        participantSummary,
+                        availableStart,
+                        availableEnd,
+                        timezone
+                    })
+                ]
+            }),
+            container({
+                style: {
+                    width: "100%",
+                    padding: `0 ${CANVAS.padding}px 16px`,
+                    boxSizing: "border-box",
+                    display: "flex"
+                },
+                children: [
+                    container({
+                        style: {
+                            width: "100%",
+                            display: "flex"
+                        },
+                        children: [
+                            buildAvailabilityLabels({ availableStart, availableEnd, timezone })
+                        ]
+                    })
+                ]
+            }),
+            buildAvailabilityStripe({
+                blocks: availabilityBlocks,
                 availableStart,
-                availableEnd,
-                timezone
+                totalParticipants: participants.length
             })
         ]
     });
@@ -136,7 +170,6 @@ function buildFooter({
     timezoneLabel,
     participants,
     participantSummary,
-    availabilityBlocks,
     availableStart,
     availableEnd,
     timezone
@@ -145,7 +178,6 @@ function buildFooter({
     timezoneLabel: string;
     participants: EventOgParticipant[];
     participantSummary: string;
-    availabilityBlocks: EventOgAvailabilityBlock[];
     availableStart: Date;
     availableEnd: Date;
     timezone: string;
@@ -171,13 +203,6 @@ function buildFooter({
                     buildInfoBlock("Timezone", timezoneLabel),
                     buildParticipantsBlock(participants, participantSummary)
                 ]
-            }),
-            buildAvailabilityTimeline({
-                blocks: availabilityBlocks,
-                availableStart,
-                availableEnd,
-                timezone,
-                totalParticipants: participants.length
             })
         ]
     });
@@ -385,23 +410,55 @@ function summarizeParticipants(participants: EventOgParticipant[]): string {
     return `${visible.join(", ")} +${remaining} more`;
 }
 
-function buildAvailabilityTimeline({
-    blocks,
+function buildAvailabilityLabels({
     availableStart,
     availableEnd,
-    timezone,
+    timezone
+}: {
+    availableStart: Date;
+    availableEnd: Date;
+    timezone: string;
+}): Node {
+    const startLabel = formatTimelineLabel(availableStart, timezone);
+    const endLabel = formatTimelineLabel(availableEnd, timezone);
+
+    return container({
+        style: {
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "100%",
+            fontSize: 14,
+            color: palette.muted,
+            textTransform: "uppercase",
+            letterSpacing: 1
+        },
+        children: [
+            text(startLabel, {
+                fontSize: 14,
+                color: palette.muted,
+                fontWeight: 600
+            }),
+            text(endLabel, {
+                fontSize: 14,
+                color: palette.muted,
+                fontWeight: 600
+            })
+        ]
+    });
+}
+
+function buildAvailabilityStripe({
+    blocks,
+    availableStart,
     totalParticipants
 }: {
     blocks: EventOgAvailabilityBlock[];
     availableStart: Date;
-    availableEnd: Date;
-    timezone: string;
     totalParticipants: number;
 }): Node {
-    const startLabel = formatTimelineLabel(availableStart, timezone);
-    const endLabel = formatTimelineLabel(availableEnd, timezone);
     const colorMap = generateAvailabilityColorMap(totalParticipants, 277, "light");
-    colorMap.set(0, palette.border);
+    colorMap.set(0, palette.primary);
 
     const segments = (blocks.length > 0 ? blocks : [{ date: availableStart, level: 0 }]).map(
         (block) =>
@@ -417,47 +474,14 @@ function buildAvailabilityTimeline({
     return container({
         style: {
             display: "flex",
-            flexDirection: "column",
-            gap: 10,
-            width: "100%"
+            flexDirection: "row",
+            width: "100%",
+            height: 24,
+            flexBasis: 24,
+            overflow: "hidden",
+            flexShrink: 0
         },
-        children: [
-            container({
-                style: {
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    fontSize: 14,
-                    color: palette.muted,
-                    textTransform: "uppercase",
-                    letterSpacing: 1
-                },
-                children: [
-                    text(startLabel, {
-                        fontSize: 14,
-                        color: palette.muted,
-                        fontWeight: 600
-                    }),
-                    text(endLabel, {
-                        fontSize: 14,
-                        color: palette.muted,
-                        fontWeight: 600
-                    })
-                ]
-            }),
-            container({
-                style: {
-                    display: "flex",
-                    flexDirection: "row",
-                    width: "100%",
-                    height: 14,
-                    borderRadius: 999,
-                    overflow: "hidden",
-                    backgroundColor: palette.border
-                },
-                children: segments
-            })
-        ]
+        children: segments
     });
 }
 
