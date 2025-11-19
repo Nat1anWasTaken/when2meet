@@ -75,6 +75,7 @@
                   participantCount: totalParticipants
               })
     );
+    let ogImageUrl = $derived(`${page.url.origin}/${data.id}/og`);
 
     let days = $derived(
         data?.availableTime
@@ -192,6 +193,10 @@
     <meta property="og:url" content={eventUrl} />
     <meta property="og:site_name" content="when2meet.app" />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:type" content="image/png" />
 
     <!-- Twitter Card meta tags -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -199,6 +204,7 @@
     <meta name="twitter:description" content={eventDescription} />
     <meta name="twitter:url" content={eventUrl} />
     <meta name="twitter:site" content="@when2meetapp" />
+    <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- Additional meta tags -->
     <meta name="author" content={data.organizerName} />
