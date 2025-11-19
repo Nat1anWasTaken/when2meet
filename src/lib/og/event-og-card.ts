@@ -81,10 +81,7 @@ export function createEventOgCard(payload: EventOgCardPayload): Node {
                         dateRange,
                         timezoneLabel,
                         participants,
-                        participantSummary,
-                        availableStart,
-                        availableEnd,
-                        timezone
+                        participantSummary
                     })
                 ]
             }),
@@ -192,18 +189,12 @@ function buildFooter({
     dateRange,
     timezoneLabel,
     participants,
-    participantSummary,
-    availableStart,
-    availableEnd,
-    timezone
+    participantSummary
 }: {
     dateRange: string;
     timezoneLabel: string;
     participants: EventOgParticipant[];
     participantSummary: string;
-    availableStart: Date;
-    availableEnd: Date;
-    timezone: string;
 }): Node {
     return container({
         style: {

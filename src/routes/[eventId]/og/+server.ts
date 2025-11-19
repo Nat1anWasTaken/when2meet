@@ -102,7 +102,7 @@ async function loadImageAsDataUrl(url: string, fetchFn: typeof fetch): Promise<s
         const contentType = response.headers.get("content-type") ?? "image/png";
         const base64 = buffer.toString("base64");
         return `data:${contentType};base64,${base64}`;
-    } catch (error) {
+    } catch {
         return null;
     }
 }
@@ -113,7 +113,6 @@ function buildAvailabilityBlocks(
     availableEnd: Date
 ): EventOgAvailabilityBlock[] {
     const dayList = enumerateDays(availableStart, availableEnd);
-    const minutesPerMs = 1 / (1000 * 60);
 
     return dayList.map((day) => {
         const windowStart = clampDateToRange(
