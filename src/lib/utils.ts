@@ -296,3 +296,43 @@ export async function copyText(textToCopy: string) {
         toast.error("Failed to copy", error);
     }
 }
+
+/**
+ * Encode an array of cells into a URL-safe string.
+ * @param cells The array of cell coordinates to encode.
+ * @returns A compact string representation (e.g., "0-5,0-6,1-10").
+ */
+export function encodeCells(cells: Cell[]): string {
+    if (cells.length === 0) return "";
+    return cells.map(([day, row]) => `${day}-${row}`).join(",");
+}
+
+/**
+ * Decode a URL parameter string back into an array of cells.
+ * @param str The encoded string to decode.
+ * @returns An array of cells or null if the format is invalid.
+ */
+export function decodeCells(str: string): Cell[] | null {
+    if (!str || str.trim() === "") return [];
+
+    try {
+        const cells: Cell[] = [];
+        const parts = str.split(",");
+
+        for (const part of parts) {
+            const [dayStr, rowStr] = part.split("-");
+            const day = parseInt(dayStr, 10);
+            const row = parseInt(rowStr, 10);
+
+            if (isNaN(day) || isNaN(row) || day < 0 || row < 0) {
+                return null; // Invalid format
+            }
+
+            cells.push([day, row]);
+        }
+
+        return cells;
+    } catch {
+        return null; // Parsing error
+    }
+}

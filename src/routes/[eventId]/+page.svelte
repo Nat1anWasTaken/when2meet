@@ -13,6 +13,7 @@
     import * as Card from "$lib/components/ui/card";
     import {
         cellsToTimeSelections,
+        decodeCells,
         extractPrimaryHue,
         generateAvailabilityColorMap,
         generateDaysArray,
@@ -105,6 +106,42 @@
         if (invited && !alreadyJoined) {
             invitationDialogOpen = true;
         }
+    });
+
+    // Restore selections after login
+    $effect(() => {
+        const selectionsParam = page.url.searchParams.get("selections");
+        if (!selectionsParam) return;
+
+        const hasSession = !!$session.data;
+        if (!hasSession) return;
+
+        const alreadyParticipated = currentUserParticipant !== null;
+        if (alreadyParticipated || participationMode !== "view") return;
+
+        const decoded = decodeCells(selectionsParam);
+        if (!decoded || decoded.length === 0) return;
+
+        // Validate cells against current days array
+        const validCells = decoded.filter(
+            ([day, row]) => day >= 0 && day < days.length && row >= 0 && row < 24
+        );
+        if (validCells.length === 0) return;
+
+        // Restore state
+        selectedCells = validCells;
+        participationMode = "participate";
+        selectorSelectable = true;
+
+        // Clean URL by removing the selections parameter
+        const url = new URL(page.url);
+        url.searchParams.delete("selections");
+        goto(url, { replaceState: true, noScroll: true });
+
+        // Focus input after a short delay
+        setTimeout(() => {
+            controlBarRef?.focusInput?.();
+        }, 100);
     });
 
     function acceptInvitation() {
@@ -299,6 +336,7 @@
         bind:this={controlBarRef}
         eventId={data.id}
         {selectedTimes}
+        {selectedCells}
         existingParticipant={currentUserParticipant}
         onSuccess={handleSuccess}
         onCancel={reset}

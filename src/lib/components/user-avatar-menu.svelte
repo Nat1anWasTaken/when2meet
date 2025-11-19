@@ -1,6 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { authClient } from "$lib/auth-client";
+    import AuthDialog from "$lib/components/auth-dialog.svelte";
     import * as Avatar from "$lib/components/ui/avatar";
     import { Button } from "$lib/components/ui/button";
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
@@ -74,7 +75,7 @@
 {:else if $session.isPending}
     <div class="h-8 w-8 animate-pulse rounded-full bg-muted"></div>
 {:else}
-    <div class="flex gap-2">
-        <Button size="sm" onclick={() => goto("/login")}>{m.auth_login()}</Button>
-    </div>
+    <AuthDialog>
+        <Button size="sm">{m.auth_login()}</Button>
+    </AuthDialog>
 {/if}

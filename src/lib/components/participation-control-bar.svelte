@@ -10,10 +10,12 @@
     import { fly } from "svelte/transition";
     import GuestWarningDialog from "./guest-warning-dialog.svelte";
     import { m } from "$i18n";
+    import type { Cell } from "$lib/utils";
 
     interface Props {
         eventId: string;
         selectedTimes: { startTime: Date; endTime: Date }[];
+        selectedCells: Cell[];
         existingParticipant: {
             id: number;
             username: string;
@@ -23,7 +25,8 @@
         onCancel: () => void;
     }
 
-    let { eventId, selectedTimes, existingParticipant, onSuccess, onCancel }: Props = $props();
+    let { eventId, selectedTimes, selectedCells, existingParticipant, onSuccess, onCancel }: Props =
+        $props();
 
     let userAlreadyJoined = $derived(!!existingParticipant);
 
@@ -177,6 +180,7 @@
 <!-- Guest Warning Dialog -->
 <GuestWarningDialog
     bind:open={showWarningDialog}
+    {selectedCells}
     onContinueAsGuest={() => {
         showWarningDialog = false;
         submitParticipation();

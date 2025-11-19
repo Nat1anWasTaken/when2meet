@@ -1,19 +1,33 @@
 <script lang="ts">
     import * as Dialog from "$lib/components/ui/dialog";
     import { Button } from "$lib/components/ui/button";
-    import { goto } from "$app/navigation";
+    import AuthDialog from "$lib/components/auth-dialog.svelte";
     import { m } from "$i18n";
+    import { goto } from "$app/navigation";
+    import { page } from "$app/stores";
+    import { encodeCells, type Cell } from "$lib/utils";
 
     interface Props {
         open: boolean;
+        selectedCells: Cell[];
         onContinueAsGuest: () => void;
     }
 
-    let { open = $bindable(), onContinueAsGuest }: Props = $props();
+    let { open = $bindable(), selectedCells, onContinueAsGuest }: Props = $props();
+
+    let authDialogOpen = $state(false);
 
     function handleLogin() {
+        // Encode selections and add to URL before opening auth dialog
+        const encoded = encodeCells(selectedCells);
+        if (encoded) {
+            const url = new URL($page.url);
+            url.searchParams.set("selections", encoded);
+            goto(url, { replaceState: true, noScroll: true });
+        }
+
         open = false;
-        goto("/login");
+        authDialogOpen = true;
     }
 
     function handleCancel() {
@@ -47,3 +61,5 @@
         </div>
     </Dialog.Content>
 </Dialog.Root>
+
+<AuthDialog bind:open={authDialogOpen} />
