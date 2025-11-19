@@ -113,13 +113,7 @@ export function createEventOgCard(payload: EventOgCardPayload): Node {
     });
 }
 
-function buildHeader({
-    name,
-    organizerName
-}: {
-    name: string;
-    organizerName: string;
-}): Node {
+function buildHeader({ name, organizerName }: { name: string; organizerName: string }): Node {
     return container({
         style: {
             display: "flex",
@@ -263,9 +257,9 @@ function buildParticipantsBlock(participants: EventOgParticipant[], summary: str
         });
     }
 
-    const avatarNodes = participants.slice(0, 5).map((participant, index) =>
-        buildAvatarNode(participant, index)
-    );
+    const avatarNodes = participants
+        .slice(0, 5)
+        .map((participant, index) => buildAvatarNode(participant, index));
 
     return container({
         style: {
@@ -385,9 +379,7 @@ function extractOffset(timeZone: string, date: Date): string {
         timeZoneName: "shortOffset"
     });
 
-    const match = formatter
-        .formatToParts(date)
-        .find((part) => part.type === "timeZoneName")?.value;
+    const match = formatter.formatToParts(date).find((part) => part.type === "timeZoneName")?.value;
 
     if (!match) {
         return "UTC";
@@ -510,10 +502,7 @@ function formatTimelineLabel(date: Date, timeZone: string): string {
 }
 
 function getInitials(name: string): string {
-    const segments = name
-        .split(/\s+/)
-        .filter(Boolean)
-        .slice(0, 2);
+    const segments = name.split(/\s+/).filter(Boolean).slice(0, 2);
 
     if (segments.length === 0) {
         return "?";
