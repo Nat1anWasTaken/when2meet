@@ -134,27 +134,50 @@ function buildHeader({
                 style: {
                     display: "flex",
                     flexDirection: "row",
-                    gap: 0,
-                    alignItems: "baseline"
+                    alignItems: "flex-start",
+                    justifyContent: "space-between",
+                    gap: 24,
+                    width: "100%"
                 },
                 children: [
-                    text(brand.name, {
-                        fontSize: 32,
-                        fontWeight: 800,
-                        letterSpacing: -0.8
+                    container({
+                        style: {
+                            flex: 1,
+                            minWidth: 0
+                        },
+                        children: [
+                            text(name, {
+                                fontSize: 68,
+                                fontWeight: 700,
+                                lineHeight: 1.05,
+                                whiteSpace: "normal",
+                                wordBreak: "break-word"
+                            })
+                        ]
                     }),
-                    text(brand.extension, {
-                        fontSize: 32,
-                        fontWeight: 800,
-                        color: palette.primary,
-                        letterSpacing: -0.8
+                    container({
+                        style: {
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: 0,
+                            alignItems: "baseline",
+                            flexShrink: 0
+                        },
+                        children: [
+                            text(brand.name, {
+                                fontSize: 32,
+                                fontWeight: 800,
+                                letterSpacing: -0.8
+                            }),
+                            text(brand.extension, {
+                                fontSize: 32,
+                                fontWeight: 800,
+                                color: palette.primary,
+                                letterSpacing: -0.8
+                            })
+                        ]
                     })
                 ]
-            }),
-            text(name, {
-                fontSize: 68,
-                fontWeight: 700,
-                lineHeight: 1.05
             }),
             text(`by ${organizerName}`, {
                 fontSize: 24,
