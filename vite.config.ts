@@ -15,13 +15,14 @@ export default defineConfig({
         })
     ],
     optimizeDeps: {
-        exclude: [
-            "@takumi-rs/core",
-            "@takumi-rs/helpers",
-            "@takumi-rs/image-response"
-        ]
+        exclude: ["@takumi-rs/core", "@takumi-rs/image-response"]
     },
     ssr: {
         external: ["@takumi-rs/image-response", "@takumi-rs/core"]
+    },
+    build: {
+        rollupOptions: {
+            external: ["@takumi-rs/core", "@takumi-rs/image-response"]
+        }
     }
 });
