@@ -24,6 +24,10 @@ const config = {
         experimental: {
             async: true
         }
+    },
+
+    ssr: {
+        noExternal: ["@takumi-rs/core"]
     }
 };
 
