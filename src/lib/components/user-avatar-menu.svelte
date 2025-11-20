@@ -9,6 +9,7 @@
     import IconCalendar from "~icons/lucide/calendar";
     import IconLogOut from "~icons/lucide/log-out";
     import { m } from "$i18n";
+    import { localizeHref } from "$lib/paraglide/runtime";
 
     const session = authClient.useSession();
 
@@ -17,14 +18,14 @@
             toast.info(m.auth_logging_out());
             await authClient.signOut();
             toast.success(m.auth_logged_out_success());
-            await goto("/");
+            await goto(localizeHref("/"));
         } catch {
             toast.error(m.auth_logout_failed());
         }
     };
 
     const handleEvents = () => {
-        goto("/events");
+        goto(localizeHref("/events"));
     };
 
     const getUserInitials = (name: string | null | undefined) => {

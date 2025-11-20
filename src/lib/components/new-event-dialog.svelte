@@ -14,6 +14,7 @@
     import { toast } from "svelte-sonner";
     import DateRangeSelect from "./date-range-select.svelte";
     import TimezoneSelect from "./timezone-select.svelte";
+    import { localizeHref } from "$lib/paraglide/runtime";
 
     interface Props {
         children: Snippet;
@@ -123,7 +124,7 @@
             );
 
             if (redirect) {
-                await goto(`/${event.id}`);
+                await goto(localizeHref(`/${event.id}`));
             }
 
             refreshAll();

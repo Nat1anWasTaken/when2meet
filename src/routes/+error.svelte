@@ -2,6 +2,7 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import ErrorPage from "$lib/components/error-page.svelte";
+    import { localizeHref } from "$lib/paraglide/runtime";
 
     const status = $derived($page.status || 500);
 
@@ -10,7 +11,7 @@
     }
 
     function handleGoHome() {
-        goto("/");
+        goto(localizeHref("/"));
     }
 </script>
 

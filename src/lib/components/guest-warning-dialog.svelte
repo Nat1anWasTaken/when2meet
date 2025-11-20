@@ -6,6 +6,7 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import { encodeCells, type Cell } from "$lib/utils";
+    import { localizeUrl } from "$lib/paraglide/runtime";
 
     interface Props {
         open: boolean;
@@ -23,7 +24,7 @@
         if (encoded) {
             const url = new URL($page.url);
             url.searchParams.set("selections", encoded);
-            goto(url, { replaceState: true, noScroll: true });
+            goto(localizeUrl(url), { replaceState: true, noScroll: true });
         }
 
         open = false;

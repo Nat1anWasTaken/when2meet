@@ -5,16 +5,17 @@
     import ModeSwitch from "./mode-switch.svelte";
     import { Button } from "./ui/button";
     import UserAvatarMenu from "./user-avatar-menu.svelte";
+    import { localizeHref } from "$lib/paraglide/runtime";
 </script>
 
 <div class="flex h-16 flex-row items-center justify-between px-4">
     <div class="flex flex-row items-center gap-2">
         <h1 class="text-lg font-bold">
-            <a href="/">
+            <a href={localizeHref("/")}>
                 {m.brand_name()}<span class="text-primary">{m.brand_extension()}</span>
             </a>
         </h1>
-        <a href="/about" class="hidden md:block">{m.nav_about()}</a>
+        <a href={localizeHref("/about")} class="hidden md:block">{m.nav_about()}</a>
     </div>
     <div class="flex flex-row items-center gap-2">
         <LanguageSelect />

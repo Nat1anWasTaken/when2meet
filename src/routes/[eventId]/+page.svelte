@@ -11,6 +11,7 @@
     import { Button } from "$lib/components/ui/button";
     import { m } from "$lib/paraglide/messages";
     import * as Card from "$lib/components/ui/card";
+    import { localizeUrl } from "$lib/paraglide/runtime";
     import {
         cellsToTimeSelections,
         decodeCells,
@@ -137,7 +138,7 @@
         // Clean URL by removing the selections parameter
         const url = new URL(page.url);
         url.searchParams.delete("selections");
-        goto(url, { replaceState: true, noScroll: true });
+        goto(localizeUrl(url), { replaceState: true, noScroll: true });
 
         // Focus input after a short delay
         setTimeout(() => {
@@ -152,7 +153,7 @@
     function cancelInvitation() {
         let url = page.url;
         url.searchParams.delete("invited");
-        goto(url);
+        goto(localizeUrl(url));
     }
 
     function startParticipation() {
