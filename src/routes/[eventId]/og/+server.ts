@@ -1,7 +1,6 @@
 import { Buffer } from "node:buffer";
-import { readFile } from "node:fs/promises";
-import { createRequire } from "node:module";
 import init, { Renderer } from "@takumi-rs/wasm";
+import wasmUrl from "@takumi-rs/wasm/takumi_wasm_bg.wasm?url";
 import { error } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import {
@@ -25,24 +24,16 @@ type ParticipantRecord = {
     } | null;
 };
 
-const require = createRequire(import.meta.url);
-const wasmBinaryPromise = readFile(require.resolve("@takumi-rs/wasm/takumi_wasm_bg.wasm"));
-
 type EventOgFontWeight = (typeof EVENT_OG_FONT_WEIGHTS)[number];
 
-const FONT_SOURCE_BY_WEIGHT: Record<EventOgFontWeight, string> = {
-    500: "https://fonts.gstatic.com/s/notosans/v42/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyDPA99d.ttf",
-    600: "https://fonts.gstatic.com/s/notosans/v42/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyAjBN9d.ttf",
-    700: "https://fonts.gstatic.com/s/notosans/v42/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyAaBN9d.ttf",
-    800: "https://fonts.gstatic.com/s/notosans/v42/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyB9BN9d.ttf"
-};
+const LOCAL_FONT_URL = "/fonts/NotoSansCJK-VF.otf";
 
 let rendererPromise: Promise<Renderer> | null = null;
-const fontBinaryCache = new Map<EventOgFontWeight, Uint8Array>();
+let fontBinaryPromise: Promise<Uint8Array> | null = null;
 
-function getRenderer(): Promise<Renderer> {
+function getRenderer(fetchFn: typeof fetch, origin: string): Promise<Renderer> {
     if (!rendererPromise) {
-        rendererPromise = initializeRenderer().catch((error) => {
+        rendererPromise = initializeRenderer(fetchFn, origin).catch((error) => {
             rendererPromise = null;
             throw error;
         });
@@ -51,51 +42,43 @@ function getRenderer(): Promise<Renderer> {
     return rendererPromise;
 }
 
-async function initializeRenderer(): Promise<Renderer> {
-    const wasmBinary = await wasmBinaryPromise;
-    await init(wasmBinary);
+async function initializeRenderer(fetchFn: typeof fetch, origin: string): Promise<Renderer> {
+    const wasmResource = new URL(wasmUrl, origin).toString();
+    await init(wasmResource);
     const renderer = new Renderer();
-    await registerFonts(renderer);
+    await registerFonts(renderer, fetchFn, origin);
     return renderer;
 }
 
-async function registerFonts(renderer: Renderer): Promise<void> {
-    await Promise.all(
-        EVENT_OG_FONT_WEIGHTS.map(async (weight) => {
-            const data = await loadFontBinary(weight);
-            renderer.loadFont({
-                name: EVENT_OG_FONT_FAMILY,
-                data,
-                weight
-            });
-        })
-    );
+async function registerFonts(renderer: Renderer, fetchFn: typeof fetch, origin: string): Promise<void> {
+    const data = await loadFontBinary(fetchFn, origin);
+    EVENT_OG_FONT_WEIGHTS.forEach((weight) => {
+        renderer.loadFont({
+            name: EVENT_OG_FONT_FAMILY,
+            data,
+            weight
+        });
+    });
 }
 
-async function loadFontBinary(weight: EventOgFontWeight): Promise<Uint8Array> {
-    const cached = fontBinaryCache.get(weight);
-    if (cached) {
-        return cached;
+async function loadFontBinary(fetchFn: typeof fetch, origin: string): Promise<Uint8Array> {
+    if (!fontBinaryPromise) {
+        fontBinaryPromise = (async () => {
+            const fontUrl = new URL(LOCAL_FONT_URL, origin).toString();
+            const response = await fetchFn(fontUrl);
+            if (!response.ok) {
+                throw new Error(`Failed to load OG font from ${fontUrl}`);
+            }
+
+            const arrayBuffer = await response.arrayBuffer();
+            return new Uint8Array(arrayBuffer);
+        })();
     }
 
-    const fetchFn = globalThis.fetch;
-    if (!fetchFn) {
-        throw new Error("Global fetch is not available to load OG fonts.");
-    }
-
-    const fontUrl = FONT_SOURCE_BY_WEIGHT[weight];
-    const response = await fetchFn(fontUrl);
-    if (!response.ok) {
-        throw new Error(`Failed to load OG font ${weight} from ${fontUrl}`);
-    }
-
-    const arrayBuffer = await response.arrayBuffer();
-    const bytes = new Uint8Array(arrayBuffer);
-    fontBinaryCache.set(weight, bytes);
-    return bytes;
+    return fontBinaryPromise;
 }
 
-export const GET: RequestHandler = async ({ params, fetch }) => {
+export const GET: RequestHandler = async ({ params, fetch, request }) => {
     const { eventId } = params;
 
     const eventRecord = (await db.select().from(event).where(eq(event.id, eventId)).limit(1)).at(0);
@@ -141,7 +124,7 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
         availabilityBlocks
     });
 
-    const renderer = await getRenderer();
+    const renderer = await getRenderer(fetch, new URL(request.url).origin);
 
     const png = renderer.render(tree, {
         width: 1024,

@@ -36,10 +36,10 @@ const brand = {
     extension: ".app"
 };
 
-export const EVENT_OG_FONT_FAMILY = "Noto Sans";
+export const EVENT_OG_FONT_FAMILY = "Noto Sans CJK JP";
 export const EVENT_OG_FONT_WEIGHTS = [500, 600, 700, 800] as const;
 
-const FONT_STACK = `'${EVENT_OG_FONT_FAMILY}', 'Geist', 'Inter', sans-serif`;
+const FONT_STACK = `'${EVENT_OG_FONT_FAMILY}', 'Noto Sans', 'Geist', 'Inter', sans-serif`;
 
 const CANVAS = { width: 1024, height: 512, padding: 64 } as const;
 
