@@ -144,7 +144,7 @@ function buildHeader({ name, organizerName }: { name: string; organizerName: str
                         children: [
                             text(name, {
                                 fontSize: 68,
-                                fontWeight: 700,
+                                fontWeight: 800,
                                 lineHeight: 1.05,
                                 whiteSpace: "normal",
                                 wordBreak: "break-word"
@@ -178,7 +178,7 @@ function buildHeader({ name, organizerName }: { name: string; organizerName: str
             text(`by ${organizerName}`, {
                 fontSize: 24,
                 color: palette.muted,
-                fontWeight: 500
+                fontWeight: 800
             })
         ]
     });
@@ -238,7 +238,7 @@ function buildInfoBlock(label: string, value: string): Node {
             }),
             text(value, {
                 fontSize: 28,
-                fontWeight: 600
+                fontWeight: 800
             })
         ]
     });
@@ -256,7 +256,7 @@ function buildParticipantsBlock(participants: EventOgParticipant[], summary: str
                 text("Waiting for RSVPs", {
                     fontSize: 18,
                     color: palette.muted,
-                    fontWeight: 500
+                    fontWeight: 800
                 })
             ]
         });
@@ -291,7 +291,7 @@ function buildParticipantsBlock(participants: EventOgParticipant[], summary: str
             }),
             text(summary, {
                 fontSize: 18,
-                fontWeight: 600,
+                fontWeight: 800,
                 color: palette.text
             })
         ]
@@ -336,7 +336,7 @@ function buildAvatarNode(participant: EventOgParticipant, index: number): Node {
         children: [
             text(getInitials(participant.name), {
                 fontSize: 24,
-                fontWeight: 700,
+                fontWeight: 800,
                 color: "#ffffff"
             })
         ]
@@ -448,12 +448,12 @@ function buildAvailabilityLabels({
             text(startLabel, {
                 fontSize: 14,
                 color: palette.muted,
-                fontWeight: 600
+                fontWeight: 800
             }),
             text(endLabel, {
                 fontSize: 14,
                 color: palette.muted,
-                fontWeight: 600
+                fontWeight: 800
             })
         ]
     });
