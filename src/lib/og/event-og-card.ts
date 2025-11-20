@@ -36,6 +36,11 @@ const brand = {
     extension: ".app"
 };
 
+export const EVENT_OG_FONT_FAMILY = "Noto Sans";
+export const EVENT_OG_FONT_WEIGHTS = [500, 600, 700, 800] as const;
+
+const FONT_STACK = `'${EVENT_OG_FONT_FAMILY}', 'Geist', 'Inter', sans-serif`;
+
 const CANVAS = { width: 1024, height: 512, padding: 64 } as const;
 
 export function createEventOgCard(payload: EventOgCardPayload): Node {
@@ -62,7 +67,7 @@ export function createEventOgCard(payload: EventOgCardPayload): Node {
             flexDirection: "column",
             gap: 0,
             color: palette.text,
-            fontFamily: "'Plus Jakarta Sans', 'Geist', 'Inter', sans-serif"
+            fontFamily: FONT_STACK
         },
         children: [
             container({

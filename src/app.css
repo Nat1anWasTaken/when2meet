@@ -37,7 +37,7 @@
     --sidebar-accent-foreground: oklch(0.3729 0.0306 259.7328);
     --sidebar-border: oklch(0.8687 0.0043 56.366);
     --sidebar-ring: oklch(0.5854 0.2041 277.1173);
-    --font-sans: Plus Jakarta Sans, sans-serif;
+    --font-sans: Noto Sans, sans-serif;
     --font-serif: Lora, serif;
     --font-mono: Roboto Mono, monospace;
     --radius: 1.25rem;
@@ -86,7 +86,7 @@
     --sidebar-accent-foreground: oklch(0.8717 0.0093 258.3382);
     --sidebar-border: oklch(0.3359 0.0077 59.4197);
     --sidebar-ring: oklch(0.6801 0.1583 276.9349);
-    --font-sans: Plus Jakarta Sans, sans-serif;
+    --font-sans: Noto Sans, sans-serif;
     --font-serif: Lora, serif;
     --font-mono: Roboto Mono, monospace;
     --radius: 1.25rem;

@@ -27,7 +27,7 @@ const config = {
     },
 
     ssr: {
-        noExternal: ["@takumi-rs/core"]
+        noExternal: ["@takumi-rs/wasm"]
     }
 };
 

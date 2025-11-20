@@ -14,15 +14,11 @@ export default defineConfig({
             outdir: "./src/lib/paraglide"
         })
     ],
+    assetsInclude: ["**/*.wasm"],
     optimizeDeps: {
-        exclude: ["@takumi-rs/core", "@takumi-rs/image-response"]
+        exclude: ["@takumi-rs/wasm"]
     },
     ssr: {
-        external: ["@takumi-rs/image-response", "@takumi-rs/core"]
-    },
-    build: {
-        rollupOptions: {
-            external: ["@takumi-rs/core", "@takumi-rs/image-response"]
-        }
+        noExternal: ["@takumi-rs/wasm"]
     }
 });

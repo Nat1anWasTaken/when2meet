@@ -1,9 +1,13 @@
 import { Buffer } from "node:buffer";
-import { Renderer } from "@takumi-rs/core";
+import { readFile } from "node:fs/promises";
+import { createRequire } from "node:module";
+import init, { Renderer } from "@takumi-rs/wasm";
 import { error } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import {
     createEventOgCard,
+    EVENT_OG_FONT_FAMILY,
+    EVENT_OG_FONT_WEIGHTS,
     type EventOgAvailabilityBlock,
     type EventOgParticipant
 } from "$lib/og/event-og-card";
@@ -21,7 +25,75 @@ type ParticipantRecord = {
     } | null;
 };
 
-const renderer = new Renderer({ loadDefaultFonts: true });
+const require = createRequire(import.meta.url);
+const wasmBinaryPromise = readFile(require.resolve("@takumi-rs/wasm/takumi_wasm_bg.wasm"));
+
+type EventOgFontWeight = (typeof EVENT_OG_FONT_WEIGHTS)[number];
+
+const FONT_SOURCE_BY_WEIGHT: Record<EventOgFontWeight, string> = {
+    500: "https://fonts.gstatic.com/s/notosans/v42/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyDPA99d.ttf",
+    600: "https://fonts.gstatic.com/s/notosans/v42/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyAjBN9d.ttf",
+    700: "https://fonts.gstatic.com/s/notosans/v42/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyAaBN9d.ttf",
+    800: "https://fonts.gstatic.com/s/notosans/v42/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyB9BN9d.ttf"
+};
+
+let rendererPromise: Promise<Renderer> | null = null;
+const fontBinaryCache = new Map<EventOgFontWeight, Uint8Array>();
+
+function getRenderer(): Promise<Renderer> {
+    if (!rendererPromise) {
+        rendererPromise = initializeRenderer().catch((error) => {
+            rendererPromise = null;
+            throw error;
+        });
+    }
+
+    return rendererPromise;
+}
+
+async function initializeRenderer(): Promise<Renderer> {
+    const wasmBinary = await wasmBinaryPromise;
+    await init(wasmBinary);
+    const renderer = new Renderer();
+    await registerFonts(renderer);
+    return renderer;
+}
+
+async function registerFonts(renderer: Renderer): Promise<void> {
+    await Promise.all(
+        EVENT_OG_FONT_WEIGHTS.map(async (weight) => {
+            const data = await loadFontBinary(weight);
+            renderer.loadFont({
+                name: EVENT_OG_FONT_FAMILY,
+                data,
+                weight
+            });
+        })
+    );
+}
+
+async function loadFontBinary(weight: EventOgFontWeight): Promise<Uint8Array> {
+    const cached = fontBinaryCache.get(weight);
+    if (cached) {
+        return cached;
+    }
+
+    const fetchFn = globalThis.fetch;
+    if (!fetchFn) {
+        throw new Error("Global fetch is not available to load OG fonts.");
+    }
+
+    const fontUrl = FONT_SOURCE_BY_WEIGHT[weight];
+    const response = await fetchFn(fontUrl);
+    if (!response.ok) {
+        throw new Error(`Failed to load OG font ${weight} from ${fontUrl}`);
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+    const bytes = new Uint8Array(arrayBuffer);
+    fontBinaryCache.set(weight, bytes);
+    return bytes;
+}
 
 export const GET: RequestHandler = async ({ params, fetch }) => {
     const { eventId } = params;
@@ -69,11 +141,12 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
         availabilityBlocks
     });
 
-    const png = await renderer.render(tree, {
+    const renderer = await getRenderer();
+
+    const png = renderer.render(tree, {
         width: 1024,
         height: 512,
-        format: "png",
-        fetch
+        format: "png"
     });
 
     const pngBytes = new Uint8Array(png);

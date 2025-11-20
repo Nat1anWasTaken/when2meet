@@ -14,13 +14,13 @@ importers:
       '@prisma/client':
         specifier: ^6.13.0
         version: 6.19.0(typescript@5.9.3)
-      '@takumi-rs/core':
-        specifier: ^0.52.0
-        version: 0.52.2
       '@takumi-rs/helpers':
         specifier: ^0.52.0
         version: 0.52.2
       '@takumi-rs/image-response':
+        specifier: ^0.52.0
+        version: 0.52.2
+      '@takumi-rs/wasm':
         specifier: ^0.52.0
         version: 0.52.2
       '@vercel/og':
@@ -156,10 +156,6 @@ importers:
       vite:
         specifier: ^7.0.4
         version: 7.2.2(@types/node@22.19.1)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6)
-    optionalDependencies:
-      '@takumi-rs/core-linux-x64-gnu':
-        specifier: ^0.52.0
-        version: 0.52.2
 
 packages:
 
