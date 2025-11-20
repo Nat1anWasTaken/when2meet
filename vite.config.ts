@@ -14,6 +14,13 @@ export default defineConfig({
             outdir: "./src/lib/paraglide"
         })
     ],
+    optimizeDeps: {
+        exclude: [
+            "@takumi-rs/core",
+            "@takumi-rs/helpers",
+            "@takumi-rs/image-response"
+        ]
+    },
     ssr: {
         external: ["@takumi-rs/image-response", "@takumi-rs/core"]
     }
