@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
+    import { goto, invalidateAll } from "$app/navigation";
     import { page } from "$app/state";
     import { authClient } from "$lib/auth-client";
     import ColorMapDisplay from "$lib/components/color-map-display.svelte";
@@ -177,9 +177,10 @@
         timeSelectorRef?.resetSelection?.();
     }
 
-    function handleSuccess() {
+    async function handleSuccess() {
         participated = true;
         reset();
+        await invalidateAll();
     }
 </script>
 

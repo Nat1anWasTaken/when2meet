@@ -199,7 +199,15 @@
         if (!cell || !timeGrid.contains(cell)) return;
 
         if (mode === "add") {
-            selectedCells.push(...currentSelectedCells);
+            // Use Set to prevent duplicates
+            const cellSet = new Set(selectedCells.map(([x, y]) => cellKeyFromCoords(x, y)));
+            currentSelectedCells.forEach(([x, y]) => cellSet.add(cellKeyFromCoords(x, y)));
+
+            // Convert back to array of [x, y] tuples
+            selectedCells = Array.from(cellSet).map((key) => {
+                const [x, y] = key.split(',').map(Number);
+                return [x, y] as Cell;
+            });
         } else {
             selectedCells = selectedCells.filter(
                 ([cx, cy]) => !currentSelectedCells.some(([sx, sy]) => sx === cx && sy === cy)
