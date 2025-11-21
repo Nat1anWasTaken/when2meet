@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { SvelteSet } from "svelte/reactivity";
     import TimeCell from "$lib/components/time-cell.svelte";
     import {
         cn,
@@ -200,12 +201,12 @@
 
         if (mode === "add") {
             // Use Set to prevent duplicates
-            const cellSet = new Set(selectedCells.map(([x, y]) => cellKeyFromCoords(x, y)));
+            const cellSet = new SvelteSet(selectedCells.map(([x, y]) => cellKeyFromCoords(x, y)));
             currentSelectedCells.forEach(([x, y]) => cellSet.add(cellKeyFromCoords(x, y)));
 
             // Convert back to array of [x, y] tuples
             selectedCells = Array.from(cellSet).map((key) => {
-                const [x, y] = key.split(',').map(Number);
+                const [x, y] = key.split(",").map(Number);
                 return [x, y] as Cell;
             });
         } else {

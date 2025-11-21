@@ -24,8 +24,6 @@ type ParticipantRecord = {
     } | null;
 };
 
-type EventOgFontWeight = (typeof EVENT_OG_FONT_WEIGHTS)[number];
-
 const LOCAL_FONT_URL = "/fonts/NotoSansCJK-VF.otf";
 
 let rendererPromise: Promise<Renderer> | null = null;
@@ -50,7 +48,11 @@ async function initializeRenderer(fetchFn: typeof fetch, origin: string): Promis
     return renderer;
 }
 
-async function registerFonts(renderer: Renderer, fetchFn: typeof fetch, origin: string): Promise<void> {
+async function registerFonts(
+    renderer: Renderer,
+    fetchFn: typeof fetch,
+    origin: string
+): Promise<void> {
     const data = await loadFontBinary(fetchFn, origin);
     EVENT_OG_FONT_WEIGHTS.forEach((weight) => {
         renderer.loadFont({
