@@ -40,6 +40,8 @@
 
     let open = $state<boolean>(false);
     let validationErrorMessage = $state<string | undefined>(undefined);
+    let organizerInputRef = $state<HTMLInputElement | null>(null);
+    let dateRangeSelectRef = $state<DateRangeSelect | null>(null);
 
     // Convert initial dates to DateRange format
     let selectedDateRange = $state<DateRange | undefined>(
@@ -214,7 +216,17 @@
         <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
                 <Label>{m.edit_event_label_event_name()}</Label>
-                <Input placeholder={m.edit_event_placeholder_event_name()} bind:value={name} />
+                <Input
+                    placeholder={m.edit_event_placeholder_event_name()}
+                    bind:value={name}
+                    onkeydown={(e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            organizerInputRef?.focus();
+                        }
+                    }}
+                />
             </div>
 
             <div class="flex flex-col gap-2">
@@ -222,6 +234,14 @@
                 <Input
                     placeholder={m.edit_event_placeholder_organizer_name()}
                     bind:value={organizerName}
+                    bind:ref={organizerInputRef}
+                    onkeydown={(e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            dateRangeSelectRef?.focus();
+                        }
+                    }}
                 />
             </div>
 
@@ -231,7 +251,11 @@
                     <p class=" col-span-1 text-xs text-muted-foreground">
                         {m.edit_event_sublabel_date_range()}
                     </p>
-                    <DateRangeSelect class="col-span-3 w-full" bind:selectedDateRange />
+                    <DateRangeSelect
+                        class="col-span-3 w-full"
+                        bind:selectedDateRange
+                        bind:this={dateRangeSelectRef}
+                    />
                     <p class="col-span-1 text-xs text-muted-foreground">
                         {m.edit_event_sublabel_timezone()}
                     </p>

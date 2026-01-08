@@ -24,6 +24,10 @@
 
     let open = $state(false);
     let triggerRef = $state<HTMLButtonElement>(null!);
+
+    export function focus() {
+        triggerRef?.focus();
+    }
 </script>
 
 <Popover.Root bind:open>
@@ -32,6 +36,12 @@
             <Button
                 variant="outline"
                 {...props}
+                onkeydown={(e) => {
+                    if (e.key === "Enter") {
+                        e.stopPropagation();
+                    }
+                    (props as any).onkeydown?.(e);
+                }}
                 class={cn(
                     "justify-between",
                     className,
