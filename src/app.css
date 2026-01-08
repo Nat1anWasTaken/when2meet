@@ -152,3 +152,8 @@
     --shadow-xl: var(--shadow-xl);
     --shadow-2xl: var(--shadow-2xl);
 }
+
+html,
+body {
+    touch-action: manipulation;
+}
