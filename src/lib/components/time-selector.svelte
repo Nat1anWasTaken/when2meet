@@ -1,6 +1,8 @@
 <script lang="ts">
+    import { onDestroy } from "svelte";
     import { SvelteSet } from "svelte/reactivity";
     import TimeCell from "$lib/components/time-cell.svelte";
+    import TimeCellTooltip from "$lib/components/time-cell-tooltip.svelte";
     import {
         cn,
         generateDaysArray,
@@ -22,8 +24,12 @@
         hoveredCell?: Cell | null;
         selectedCells?: Cell[];
         participants?: Array<{
+            id: number;
             username: string;
             timeSelection: { startTime: Date; endTime: Date }[];
+            user?: {
+                image?: string | null;
+            } | null;
         }>;
         availabilityColorMap?: AvailabilityColorMap;
     }
@@ -47,6 +53,8 @@
     let cellsPerDay = $derived((60 * 24) / intervalInMinutes);
 
     let timeGrid: HTMLElement;
+    const componentId = $props.id();
+    const tooltipId = `${componentId}-availability-tooltip`;
 
     // Select related states
     let mode = $state<"add" | "remove" | null>(null);
@@ -54,6 +62,9 @@
     let lastHovered = $state<Cell | null>(null);
     let startCell = $state<Cell | null>(null);
     let endCell = $state<Cell | null>(null);
+    let tooltipAnchor = $state<HTMLElement | null>(null);
+    let tooltipOpen = $state(false);
+    let tooltipCloseTimer: ReturnType<typeof setTimeout> | null = null;
     let currentSelectedCells = $derived(
         startCell && endCell ? rectCellsArray(startCell, endCell) : []
     );
@@ -64,18 +75,14 @@
 
     // Calculate participant availability for each cell
     let participantAvailability = $derived.by(() => {
-        const totalParticipants = participants?.length || 0;
-        if (totalParticipants === 0)
-            return new Map<string, { count: number; participants: typeof participants }>();
+        if (!participants?.length) return new Map<string, typeof participants>();
 
         // eslint-disable-next-line svelte/prefer-svelte-reactivity
-        const availability = new Map<
-            string,
-            { count: number; participants: typeof participants }
-        >();
+        const availability = new Map<string, typeof participants>();
+        const orderedParticipants = [...participants].sort((a, b) => a.id - b.id);
 
-        // Count availability for each cell and track full participant objects
-        participants.forEach((participant) => {
+        // Store each participant at most once per cell and keep a canonical order.
+        orderedParticipants.forEach((participant) => {
             participant.timeSelection.forEach((selection) => {
                 const startTime = new Date(selection.startTime);
                 const endTime = new Date(selection.endTime);
@@ -104,11 +111,10 @@
                 // Mark all cells in this time range as available for this participant
                 for (let y = startY; y < endY && y < cellsPerDay; y++) {
                     const key = cellKeyFromCoords(dayIndex, y);
-                    const existing = availability.get(key) || { count: 0, participants: [] };
-                    availability.set(key, {
-                        count: existing.count + 1,
-                        participants: [...existing.participants, participant]
-                    });
+                    const existing = availability.get(key) || [];
+                    if (!existing.some(({ id }) => id === participant.id)) {
+                        availability.set(key, [...existing, participant]);
+                    }
                 }
             });
         });
@@ -117,15 +123,75 @@
     });
 
     function getAvailabilityCount(x: number, y: number): number {
-        return participantAvailability.get(cellKeyFromCoords(x, y))?.count || 0;
+        return getAvailableParticipants(x, y).length;
     }
 
     function getAvailableParticipants(x: number, y: number) {
-        return participantAvailability.get(cellKeyFromCoords(x, y))?.participants || [];
+        return participantAvailability.get(cellKeyFromCoords(x, y)) || [];
     }
 
     function getAvailabilityColor(participantCount: number): string {
         return availabilityColorMap?.get(participantCount) || "var(--primary)";
+    }
+
+    let hoveredParticipants = $derived(
+        hoveredCell ? getAvailableParticipants(hoveredCell[0], hoveredCell[1]) : []
+    );
+
+    function cancelTooltipClose() {
+        if (tooltipCloseTimer === null) return;
+        clearTimeout(tooltipCloseTimer);
+        tooltipCloseTimer = null;
+    }
+
+    function showTooltip(cell: HTMLElement, x: number, y: number) {
+        if (selectable) return;
+
+        cancelTooltipClose();
+        tooltipAnchor = cell;
+        hoveredCell = [x, y];
+        tooltipOpen = true;
+    }
+
+    function closeTooltip() {
+        cancelTooltipClose();
+        hoveredCell = null;
+        tooltipOpen = false;
+    }
+
+    function scheduleTooltipClose() {
+        if (tooltipCloseTimer !== null || !tooltipOpen) return;
+
+        tooltipCloseTimer = setTimeout(() => {
+            tooltipCloseTimer = null;
+            hoveredCell = null;
+            tooltipOpen = false;
+        }, 60);
+    }
+
+    function getEventCell(event: Event): HTMLElement | null {
+        const target = event.target;
+        if (!(target instanceof Element)) return null;
+
+        const cell = target.closest<HTMLElement>(".cell");
+        return cell && timeGrid.contains(cell) ? cell : null;
+    }
+
+    function showTooltipForElement(cell: HTMLElement) {
+        const x = Number(cell.dataset.x);
+        const y = Number(cell.dataset.y);
+        if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+
+        showTooltip(cell, x, y);
+    }
+
+    function handleFocusIn(event: FocusEvent) {
+        const cell = getEventCell(event);
+        if (cell) showTooltipForElement(cell);
+    }
+
+    function handleFocusOut() {
+        scheduleTooltipClose();
     }
 
     export function resetSelection() {
@@ -169,13 +235,18 @@
         const cell = el?.closest<HTMLElement>(".cell");
 
         if (!cell || !timeGrid.contains(cell)) {
-            hoveredCell = null;
+            if (!selectable) scheduleTooltipClose();
             if (!isSelecting) return;
             return;
         }
 
         const x = Number(cell.dataset.x);
         const y = Number(cell.dataset.y);
+
+        if (!selectable) {
+            showTooltip(cell, x, y);
+            return;
+        }
 
         if (lastHovered && lastHovered[0] === x && lastHovered[1] === y) {
             return;
@@ -222,6 +293,12 @@
         endCell = null;
         mode = null;
     }
+
+    $effect(() => {
+        if (selectable) closeTooltip();
+    });
+
+    onDestroy(cancelTooltipClose);
 </script>
 
 <svelte:window
@@ -232,6 +309,8 @@
 
 <div
     bind:this={timeGrid}
+    onfocusin={handleFocusIn}
+    onfocusout={handleFocusOut}
     class={cn(
         "grid grid-flow-col p-2 transition-all duration-200 ease-in-out",
         selectable ? "gap-3" : "gap-1",
@@ -266,12 +345,24 @@
                 cell={[x, y]}
                 selecting={currentSelectedCells.some(([sx, sy]) => sx === x && sy === y)}
                 selected={selectedCells.some(([sx, sy]) => sx === x && sy === y)}
-                {participantCount}
-                totalParticipants={participants?.length || 0}
-                availableParticipants={getAvailableParticipants(x, y)}
                 cellColor={getAvailabilityColor(participantCount)}
                 {selectable}
+                tooltipId={tooltipOpen &&
+                !selectable &&
+                hoveredCell?.[0] === x &&
+                hoveredCell?.[1] === y
+                    ? tooltipId
+                    : undefined}
             />
         {/each}
     {/each}
 </div>
+
+<TimeCellTooltip
+    id={tooltipId}
+    bind:open={tooltipOpen}
+    anchor={tooltipAnchor}
+    participantCount={hoveredParticipants.length}
+    totalParticipants={participants?.length || 0}
+    availableParticipants={hoveredParticipants}
+/>

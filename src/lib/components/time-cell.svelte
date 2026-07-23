@@ -1,25 +1,14 @@
 <script lang="ts">
-    import { m } from "$i18n";
-    import * as Tooltip from "$lib/components/ui/tooltip";
     import { cn, type Cell } from "$lib/utils";
     import LucideCheck from "~icons/lucide/check";
-    import ParticipantBadge from "./participant-badge.svelte";
 
     interface Props {
         cell: Cell;
         selecting: boolean;
         selected: boolean;
-        participantCount: number;
-        totalParticipants: number;
-        availableParticipants: {
-            username: string;
-            timeSelection: { startTime: Date; endTime: Date }[];
-            user?: {
-                image?: string;
-            };
-        }[];
         cellColor: string;
         selectable?: boolean;
+        tooltipId?: string;
         class?: string;
     }
 
@@ -27,11 +16,9 @@
         cell,
         selecting,
         selected,
-        participantCount,
-        totalParticipants,
-        availableParticipants,
         cellColor,
         selectable = false,
+        tooltipId,
         class: className
     }: Props = $props();
 
@@ -76,41 +63,18 @@
     }
 </script>
 
-<Tooltip.Provider>
-    <Tooltip.Root delayDuration={0} disabled={selectable}>
-        <Tooltip.Trigger
-            data-x={cell[0]}
-            data-y={cell[1]}
-            class={getCellClasses()}
-            style={getCellStyle()}
-        >
-            {#if selected}
-                <LucideCheck />
-            {/if}
-        </Tooltip.Trigger>
-
-        {#if availableParticipants.length > 0}
-            <Tooltip.Content class="max-w-xs">
-                <div class="flex flex-col gap-2">
-                    <p class="text-sm">
-                        {participantCount}/{totalParticipants}
-                        {m.time_cell_tooltip_available()}
-                    </p>
-                    <div class="flex flex-row flex-wrap gap-2">
-                        {#each availableParticipants as participant (participant.username)}
-                            <ParticipantBadge
-                                name={participant.username}
-                                image={participant.user?.image}
-                                size="sm"
-                                class="border-1 border-accent"
-                            />
-                        {/each}
-                    </div>
-                </div>
-            </Tooltip.Content>
-        {/if}
-    </Tooltip.Root>
-</Tooltip.Provider>
+<button
+    type="button"
+    data-x={cell[0]}
+    data-y={cell[1]}
+    aria-describedby={tooltipId}
+    class={getCellClasses()}
+    style={getCellStyle()}
+>
+    {#if selected}
+        <LucideCheck />
+    {/if}
+</button>
 
 <style>
     @keyframes float {
