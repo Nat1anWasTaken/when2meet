@@ -2,7 +2,6 @@
     import { m } from "$i18n";
     import ParticipantBadge from "$lib/components/participant-badge.svelte";
     import { Tooltip as TooltipPrimitive } from "bits-ui";
-    import { flip } from "svelte/animate";
     import { cubicOut } from "svelte/easing";
     import { fade, fly } from "svelte/transition";
 
@@ -142,10 +141,6 @@
                                                 {#each availableParticipants as participant (participant.id)}
                                                     <div
                                                         class="availability-participant"
-                                                        animate:flip={{
-                                                            duration: 220,
-                                                            easing: cubicOut
-                                                        }}
                                                         in:fly={{
                                                             x: 8,
                                                             duration: 220,
