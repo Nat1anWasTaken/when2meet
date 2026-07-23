@@ -148,6 +148,11 @@
         if (selectable) return;
 
         cancelTooltipClose();
+        if (tooltipAnchor === cell && hoveredCell?.[0] === x && hoveredCell?.[1] === y) {
+            tooltipOpen = true;
+            return;
+        }
+
         tooltipAnchor = cell;
         hoveredCell = [x, y];
         tooltipOpen = true;

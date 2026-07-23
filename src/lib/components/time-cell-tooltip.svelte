@@ -30,6 +30,27 @@
         totalParticipants,
         availableParticipants
     }: Props = $props();
+
+    let movementReady = $state(false);
+
+    $effect(() => {
+        if (!open) {
+            movementReady = false;
+            return;
+        }
+
+        let secondFrame: number | undefined;
+        const firstFrame = requestAnimationFrame(() => {
+            secondFrame = requestAnimationFrame(() => {
+                movementReady = true;
+            });
+        });
+
+        return () => {
+            cancelAnimationFrame(firstFrame);
+            if (secondFrame !== undefined) cancelAnimationFrame(secondFrame);
+        };
+    });
 </script>
 
 <TooltipPrimitive.Provider delayDuration={0} disableHoverableContent={true}>
@@ -46,6 +67,7 @@
                     <div
                         {...wrapperProps}
                         class="availability-tooltip-wrapper"
+                        class:availability-tooltip-wrapper--moving={movementReady}
                         data-availability-tooltip-wrapper
                     >
                         {#if contentOpen}
@@ -79,13 +101,13 @@
                                                     <div
                                                         class="availability-participant-transition"
                                                         in:fly={{
-                                                            x: 16,
-                                                            duration: 160,
+                                                            x: 6,
+                                                            duration: 130,
                                                             easing: cubicOut
                                                         }}
                                                         out:fly={{
-                                                            x: 16,
-                                                            duration: 140,
+                                                            x: 6,
+                                                            duration: 100,
                                                             easing: cubicOut
                                                         }}
                                                     >
@@ -121,12 +143,15 @@
 
 <style>
     :global(.availability-tooltip-wrapper) {
-        transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
         will-change: transform;
     }
 
+    :global(.availability-tooltip-wrapper--moving) {
+        transition: transform 120ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
     @media (prefers-reduced-motion: reduce) {
-        :global(.availability-tooltip-wrapper) {
+        :global(.availability-tooltip-wrapper--moving) {
             transition: none;
         }
 
