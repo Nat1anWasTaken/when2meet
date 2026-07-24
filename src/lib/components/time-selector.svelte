@@ -317,13 +317,13 @@
     onfocusin={handleFocusIn}
     onfocusout={handleFocusOut}
     class={cn(
-        "grid max-h-[70vh] grid-flow-col overflow-auto overscroll-contain p-2 transition-all duration-200 ease-in-out",
+        "grid max-h-[70vh] grid-flow-col overflow-auto overscroll-contain px-2 pb-2 transition-all duration-200 ease-in-out",
         selectable ? "gap-3" : "gap-1",
         className
     )}
     style={`grid-template-columns: repeat(${days.length + 1}, minmax(0, 1fr)); grid-template-rows: repeat(${cellsPerDay + 1}, ${cellHeight})`}
 >
-    <div class="mb-2 h-full w-full"></div>
+    <div class="sticky top-0 z-10 mb-2 h-full w-full bg-background"></div>
     {#each generateTimeStrings(intervalInMinutes, false) as time, index (index)}
         <div
             class={cn(
@@ -338,7 +338,7 @@
     {/each}
     {#each days as date, x (date.getTime())}
         <div
-            class="sticky top-0 z-10 flex h-full w-full flex-col items-center justify-center bg-card"
+            class="sticky top-0 z-10 flex h-full w-full flex-col items-center justify-center bg-background"
         >
             <h2 class="text-sm font-bold">{getDayString(date).slice(0, 3)}</h2>
             {#if showDates}
