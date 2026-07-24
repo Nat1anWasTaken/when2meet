@@ -317,7 +317,7 @@
     onfocusin={handleFocusIn}
     onfocusout={handleFocusOut}
     class={cn(
-        "grid grid-flow-col p-2 transition-all duration-200 ease-in-out",
+        "grid max-h-[70vh] grid-flow-col overflow-auto overscroll-contain p-2 transition-all duration-200 ease-in-out",
         selectable ? "gap-3" : "gap-1",
         className
     )}
@@ -337,7 +337,9 @@
         </div>
     {/each}
     {#each days as date, x (date.getTime())}
-        <div class="sticky top-0 flex h-full w-full flex-col items-center justify-center">
+        <div
+            class="sticky top-0 z-10 flex h-full w-full flex-col items-center justify-center bg-card"
+        >
             <h2 class="text-sm font-bold">{getDayString(date).slice(0, 3)}</h2>
             {#if showDates}
                 <p class="text-sm text-muted-foreground">{date.getMonth() + 1}/{date.getDate()}</p>
