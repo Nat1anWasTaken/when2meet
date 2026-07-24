@@ -11,6 +11,7 @@
         "prepare": "paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide && svelte-kit sync || echo ''",
         "check": "paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+        "test": "vitest run",
         "format": "prettier --write .",
         "lint": "prettier --check . && eslint .",
         "db:push": "drizzle-kit push",
@@ -53,7 +54,8 @@
         "typescript": "^5.0.0",
         "typescript-eslint": "^8.20.0",
         "unplugin-icons": "^22.2.0",
-        "vite": "^7.0.4"
+        "vite": "^7.0.4",
+        "vitest": "^3.2.7"
     },
     "pnpm": {
         "onlyBuiltDependencies": [
