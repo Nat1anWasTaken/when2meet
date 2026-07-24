@@ -7,17 +7,15 @@
     import { copyText } from "$lib/utils";
     import IconCopy from "~icons/lucide/copy";
     import IconShare2 from "~icons/lucide/share-2";
-    import type { Snippet } from "svelte";
     import { toast } from "svelte-sonner";
     import { m } from "$i18n";
 
     interface Props {
         eventId: string;
         eventName: string;
-        children: Snippet;
     }
 
-    let { eventId, eventName, children }: Props = $props();
+    let { eventId, eventName }: Props = $props();
 
     let open = $state(false);
 
@@ -42,7 +40,11 @@
 
 <Dialog.Root bind:open>
     <Dialog.Trigger>
-        {@render children()}
+        {#snippet child({ props })}
+            <Button {...props} variant="ghost" size="sm" aria-label="Share event">
+                <IconShare2 class="h-4 w-4" />
+            </Button>
+        {/snippet}
     </Dialog.Trigger>
     <Dialog.Content class="sm:max-w-md">
         <Dialog.Header>

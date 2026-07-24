@@ -1,10 +1,12 @@
 <script lang="ts">
+    import { browser } from "$app/environment";
     import { goto, invalidateAll } from "$app/navigation";
     import { page } from "$app/state";
     import { authClient } from "$lib/auth-client";
     import ColorMapDisplay from "$lib/components/color-map-display.svelte";
     import EventCard from "$lib/components/event-card.svelte";
     import InvitationDialog from "$lib/components/invitation-dialog.svelte";
+    import MobileTimeSelector from "$lib/components/mobile-time-selector.svelte";
     import ParticipantBadge from "$lib/components/participant-badge.svelte";
     import ParticipationControlBar from "$lib/components/participation-control-bar.svelte";
     import TimeSelector from "$lib/components/time-selector.svelte";
@@ -85,6 +87,7 @@
     );
 
     let timeSelectorRef = $state<TimeSelector | null>(null);
+    let mobileTimeSelectorRef = $state<MobileTimeSelector | null>(null);
     // State management
     let participationMode = $state<"view" | "participate">("view");
     let selectedCells = $state<Cell[]>([]);
@@ -94,6 +97,11 @@
 
     let participated = $state<boolean>(false);
     let canJoin = $derived((currentUserId || !participated) && participationMode == "view");
+
+    $effect(() => {
+        if (!browser || currentUserId) return;
+        participated = localStorage.getItem(`when2meet:participated:${data.id}`) === "true";
+    });
 
     // Invitation dialog state
     let isInvited = $derived(page.url.searchParams.get("invited") === "true");
@@ -143,6 +151,7 @@
         // Focus input after a short delay
         setTimeout(() => {
             controlBarRef?.focusInput?.();
+            mobileTimeSelectorRef?.focusEditor?.();
         }, 100);
     });
 
@@ -167,6 +176,7 @@
 
         setTimeout(() => {
             controlBarRef?.focusInput?.();
+            mobileTimeSelectorRef?.focusEditor?.();
         }, 100);
     }
 
@@ -179,6 +189,9 @@
 
     async function handleSuccess() {
         participated = true;
+        if (browser && !currentUserId) {
+            localStorage.setItem(`when2meet:participated:${data.id}`, "true");
+        }
         reset();
         await invalidateAll();
     }
@@ -310,8 +323,14 @@
                         {/if}
                     </Card.Description>
                 </Card.Header>
-                <Card.Content class="p-6">
-                    <div class="mb-4">
+                <Card.Content
+                    class={participationMode === "participate" ? "p-0 sm:p-6" : "p-3 sm:p-6"}
+                >
+                    <div
+                        class={participationMode === "participate"
+                            ? "mb-4 hidden md:block"
+                            : "mb-4"}
+                    >
                         <ColorMapDisplay {availabilityColorMap} {totalParticipants} />
                     </div>
                     <TimeSelector
@@ -321,12 +340,25 @@
                         showDates={!data.weeklyRecurrence}
                         intervalInMinutes={60}
                         cellHeight="40px"
-                        class="w-full overflow-auto"
+                        class={participationMode === "participate"
+                            ? "hidden w-full overflow-auto md:grid"
+                            : "w-full overflow-auto"}
                         bind:selectable={selectorSelectable}
                         bind:selectedCells
                         participants={data.participants}
                         {availabilityColorMap}
                     />
+                    {#if participationMode === "participate"}
+                        <MobileTimeSelector
+                            bind:this={mobileTimeSelectorRef}
+                            startDate={data.availableTime.startTime}
+                            endDate={data.availableTime.endTime}
+                            showDates={!data.weeklyRecurrence}
+                            intervalInMinutes={60}
+                            bind:selectedCells
+                            participants={data.participants}
+                        />
+                    {/if}
                 </Card.Content>
             </Card.Root>
         {/if}

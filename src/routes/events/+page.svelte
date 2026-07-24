@@ -73,9 +73,7 @@
                 {m.events_unauthorized_description()}
             </p>
         </div>
-        <AuthDialog>
-            <Button>{m.events_unauthorized_continue()}</Button>
-        </AuthDialog>
+        <AuthDialog triggerLabel={m.events_unauthorized_continue()} />
     </div>
 {/snippet}
 

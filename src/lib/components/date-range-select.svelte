@@ -40,7 +40,9 @@
                     if (e.key === "Enter") {
                         e.stopPropagation();
                     }
-                    (props as any).onkeydown?.(e);
+                    if (typeof props.onkeydown === "function") {
+                        props.onkeydown(e);
+                    }
                 }}
                 class={cn(
                     "justify-between",

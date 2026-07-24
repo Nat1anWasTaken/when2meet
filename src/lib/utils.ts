@@ -84,6 +84,96 @@ export type Cell = [number, number];
 
 export type AvailabilityColorMap = Map<number, string>;
 
+export type CellRange = {
+    startRow: number;
+    endRow: number;
+};
+
+export function normalizeCells(cells: Cell[]): Cell[] {
+    const uniqueCells = new Map<string, Cell>();
+
+    for (const [day, row] of cells) {
+        uniqueCells.set(`${day},${row}`, [day, row]);
+    }
+
+    return Array.from(uniqueCells.values()).sort(
+        ([dayA, rowA], [dayB, rowB]) => dayA - dayB || rowA - rowB
+    );
+}
+
+export function getDayCellRanges(cells: Cell[], day: number): CellRange[] {
+    const rows = Array.from(
+        new Set(cells.filter(([cellDay]) => cellDay === day).map(([, row]) => row))
+    ).sort((a, b) => a - b);
+
+    if (rows.length === 0) return [];
+
+    const ranges: CellRange[] = [];
+    let startRow = rows[0];
+    let previousRow = rows[0];
+
+    for (const row of rows.slice(1)) {
+        if (row !== previousRow + 1) {
+            ranges.push({ startRow, endRow: previousRow + 1 });
+            startRow = row;
+        }
+        previousRow = row;
+    }
+
+    ranges.push({ startRow, endRow: previousRow + 1 });
+    return ranges;
+}
+
+export function addDayCellRange(
+    cells: Cell[],
+    day: number,
+    startRow: number,
+    endRow: number
+): Cell[] {
+    const normalizedStart = Math.max(0, Math.min(startRow, endRow));
+    const normalizedEnd = Math.min(24, Math.max(startRow, endRow));
+    const additions: Cell[] = [];
+
+    for (let row = normalizedStart; row < normalizedEnd; row++) {
+        additions.push([day, row]);
+    }
+
+    return normalizeCells([...cells, ...additions]);
+}
+
+export function removeDayCellRange(
+    cells: Cell[],
+    day: number,
+    startRow: number,
+    endRow: number
+): Cell[] {
+    return cells.filter(
+        ([cellDay, row]) =>
+            cellDay !== day || row < Math.min(startRow, endRow) || row >= Math.max(startRow, endRow)
+    );
+}
+
+export function replaceDayCellRange(
+    cells: Cell[],
+    day: number,
+    previousRange: CellRange,
+    nextRange: CellRange
+): Cell[] {
+    return addDayCellRange(
+        removeDayCellRange(cells, day, previousRange.startRow, previousRange.endRow),
+        day,
+        nextRange.startRow,
+        nextRange.endRow
+    );
+}
+
+export function copyDayCells(cells: Cell[], sourceDay: number, targetDays: number[]): Cell[] {
+    const sourceRows = cells.filter(([day]) => day === sourceDay).map(([, row]) => row);
+    const additions = targetDays.flatMap((day) => sourceRows.map((row) => [day, row] as Cell));
+
+    return normalizeCells([...cells, ...additions]);
+}
+
 /**
  * Get the cells in a rectangular area.
  * @param from The starting cell.

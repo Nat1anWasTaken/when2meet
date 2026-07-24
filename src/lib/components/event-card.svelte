@@ -5,7 +5,6 @@
     import IconCalendar from "~icons/lucide/calendar";
     import IconEarth from "~icons/lucide/earth";
     import IconRepeat from "~icons/lucide/repeat";
-    import IconShare2 from "~icons/lucide/share-2";
     import IconUser from "~icons/lucide/user";
 
     import { m } from "$i18n";
@@ -69,11 +68,7 @@
                     </div>
                 </div>
                 <div class="flex items-start justify-end">
-                    <ShareEventDialog {eventId} eventName={name}>
-                        <Button variant="ghost" size="sm" aria-label="Share event">
-                            <IconShare2 class="h-4 w-4" />
-                        </Button>
-                    </ShareEventDialog>
+                    <ShareEventDialog {eventId} eventName={name} />
                 </div>
             </div>
 
