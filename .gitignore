@@ -33,3 +33,5 @@ src/lib/paraglide
 # AI Tools
 .mcp.json
 .gemini-clipboard/
+.playwright-cli/
+output/playwright/
