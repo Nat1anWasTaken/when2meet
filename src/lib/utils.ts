@@ -325,7 +325,7 @@ export function generateAvailabilityColorMap(
     const colorMap = new Map<number, string>();
 
     // Base color (no participants)
-    colorMap.set(0, "var(--accent)");
+    colorMap.set(0, "oklch(var(--accent))");
 
     if (totalParticipants > 0) {
         // Generate colors for each participant count using OKLCH
