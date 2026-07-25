@@ -187,6 +187,13 @@
         will-change: transform;
     }
 
+    /* Bits UI sets pointer-events: auto on tooltip content inline. Keep the
+       availability popup transparent to hit-testing so pointer movement still
+       resolves to the time cells beneath it. */
+    :global(.availability-tooltip) {
+        pointer-events: none !important;
+    }
+
     :global(.availability-tooltip-wrapper--moving) {
         transition: transform 190ms cubic-bezier(0.32, 0.72, 0, 1);
     }
