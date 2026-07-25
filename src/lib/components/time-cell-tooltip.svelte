@@ -132,8 +132,7 @@
                                                     </span>
                                                 {/key}
                                             </span>
-                                            /{totalParticipants}
-                                            {m.time_cell_tooltip_available()}
+                                            /{totalParticipants}{m.time_cell_tooltip_available()}
                                         </p>
 
                                         {#if availableParticipants.length > 0}
