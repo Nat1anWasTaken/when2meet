@@ -91,7 +91,7 @@
 
 <ModeWatcher />
 <Toaster />
-<div class="relative flex h-screen min-h-screen flex-col">
+<div class="relative flex h-screen min-h-screen flex-col bg-background">
     <Navbar mobileHidden={mobileNavbarHidden} />
     <main
         bind:this={mainElement}
