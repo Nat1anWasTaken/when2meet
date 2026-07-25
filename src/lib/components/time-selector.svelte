@@ -323,7 +323,7 @@
     )}
     style={`grid-template-columns: repeat(${days.length + 1}, minmax(0, 1fr)); grid-template-rows: repeat(${cellsPerDay + 1}, ${cellHeight})`}
 >
-    <div class="sticky top-0 z-10 mb-2 h-full w-full bg-[Canvas]"></div>
+    <div class="sticky top-0 z-10 mb-2 h-full w-full bg-background"></div>
     {#each generateTimeStrings(intervalInMinutes, false) as time, index (index)}
         <div
             class={cn(
@@ -338,7 +338,7 @@
     {/each}
     {#each days as date, x (date.getTime())}
         <div
-            class="sticky top-0 z-10 flex h-full w-full flex-col items-center justify-center bg-[Canvas]"
+            class="sticky top-0 z-10 flex h-full w-full flex-col items-center justify-center bg-background"
         >
             <h2 class="text-sm font-bold">{getDayString(date).slice(0, 3)}</h2>
             {#if showDates}

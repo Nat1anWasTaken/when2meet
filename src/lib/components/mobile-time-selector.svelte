@@ -311,7 +311,7 @@
 >
     <div>
         <div
-            class="sticky top-[var(--mobile-navbar-offset,0px)] z-20 border-b border-accent bg-[Canvas] transition-[top] duration-200 ease-out motion-reduce:transition-none"
+            class="sticky top-[var(--mobile-navbar-offset,0px)] z-20 border-b border-accent bg-background transition-[top] duration-200 ease-out motion-reduce:transition-none"
         >
             <div class="flex items-center gap-1 p-2">
                 <Button
@@ -501,7 +501,7 @@
             {/each}
         </div>
 
-        <div class="grid grid-cols-2 gap-2 border-t border-accent bg-[Canvas] p-3">
+        <div class="grid grid-cols-2 gap-2 border-t border-accent bg-background p-3">
             <Button
                 bind:ref={copyTriggerElement}
                 variant="outline"
