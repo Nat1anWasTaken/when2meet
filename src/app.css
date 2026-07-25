@@ -156,4 +156,6 @@
 html,
 body {
     touch-action: manipulation;
+    background-color: var(--background);
+    color: var(--foreground);
 }

@@ -27,13 +27,17 @@
             "cell flex h-full w-full items-center justify-center transition-all duration-150 select-none truncate touch-none";
 
         if (selecting) {
-            return cn(baseClasses, "scale-105 border-2 border-primary shadow-md", className);
+            return cn(
+                baseClasses,
+                "scale-105 border-2 border-primary bg-primary/80 shadow-md",
+                className
+            );
         }
 
         if (selected) {
             return cn(
                 baseClasses,
-                "border-2 border-primary/70",
+                "border-2 border-primary/70 bg-primary/40",
                 selectable && "animate-float",
                 className
             );
@@ -51,15 +55,7 @@
     }
 
     function getCellStyle() {
-        if (selecting) {
-            return "background-color: hsl(var(--primary) / 0.8)";
-        }
-
-        if (selected) {
-            return "background-color: hsl(var(--primary) / 0.4)";
-        }
-
-        return `background-color: ${cellColor}`;
+        return selecting || selected ? undefined : `background-color: ${cellColor}`;
     }
 </script>
 

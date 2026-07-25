@@ -12,7 +12,7 @@
         const segments: { color: string; count: number }[] = [];
 
         for (let i = 0; i <= totalParticipants; i++) {
-            const color = availabilityColorMap.get(i) || "oklch(var(--accent))";
+            const color = availabilityColorMap.get(i) || "var(--accent)";
             segments.push({ color, count: i });
         }
 

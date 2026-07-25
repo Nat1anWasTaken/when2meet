@@ -2,11 +2,23 @@ import { describe, expect, it } from "vitest";
 import {
     addDayCellRange,
     copyDayCells,
+    generateAvailabilityColorMap,
     getDayCellRanges,
     removeDayCellRange,
     replaceDayCellRange,
     type Cell
 } from "./utils";
+
+describe("availability color map", () => {
+    it.each(["light", "dark"] as const)("uses valid theme colors in %s mode", (mode) => {
+        const colorMap = generateAvailabilityColorMap(3, 277, mode);
+
+        expect(colorMap.get(0)).toBe("var(--accent)");
+        for (const color of [...colorMap.values()].slice(1)) {
+            expect(color).toMatch(/^oklch\([\d.]+ [\d.]+ 277\)$/);
+        }
+    });
+});
 
 describe("mobile availability range helpers", () => {
     it("creates and merges single-hour, adjacent, and overlapping ranges", () => {
