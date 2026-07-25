@@ -187,7 +187,7 @@
     "participation_mobile_confirm_title": "確認你的空閒時間",
     "participation_mobile_confirm_description": "你在 {days}中共有 {hours}有空。",
     "_comment_time_components": "Time-related component strings",
-    "time_cell_tooltip_available": "有空的成員",
+    "time_cell_tooltip_available": " available",
     "mobile_time_editor": "手機空閒時間編輯器",
     "mobile_time_previous_day": "前一天",
     "mobile_time_next_day": "下一天",
