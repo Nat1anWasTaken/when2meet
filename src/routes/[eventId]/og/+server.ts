@@ -6,7 +6,6 @@ import { eq } from "drizzle-orm";
 import {
     createEventOgCard,
     EVENT_OG_FONT_FAMILY,
-    EVENT_OG_FONT_WEIGHTS,
     type EventOgAvailabilityBlock,
     type EventOgParticipant
 } from "$lib/og/event-og-card";
@@ -54,12 +53,12 @@ async function registerFonts(
     origin: string
 ): Promise<void> {
     const data = await loadFontBinary(fetchFn, origin);
-    EVENT_OG_FONT_WEIGHTS.forEach((weight) => {
-        renderer.loadFont({
-            name: EVENT_OG_FONT_FAMILY,
-            data,
-            weight
-        });
+    // Keep the variable font unpinned so each node's fontWeight can drive its
+    // `wght` axis. Registering the same bytes once per weight leaves the font at
+    // its default (thin) instance in Takumi.
+    renderer.loadFont({
+        name: EVENT_OG_FONT_FAMILY,
+        data
     });
 }
 

@@ -37,7 +37,6 @@ const brand = {
 };
 
 export const EVENT_OG_FONT_FAMILY = "Noto Sans CJK JP";
-export const EVENT_OG_FONT_WEIGHTS = [500, 600, 700, 800] as const;
 
 const FONT_STACK = `'${EVENT_OG_FONT_FAMILY}', 'Noto Sans', 'Geist', 'Inter', sans-serif`;
 
@@ -144,7 +143,7 @@ function buildHeader({ name, organizerName }: { name: string; organizerName: str
                         children: [
                             text(name, {
                                 fontSize: 68,
-                                fontWeight: 800,
+                                fontWeight: 700,
                                 lineHeight: 1.05,
                                 whiteSpace: "normal",
                                 wordBreak: "break-word"
@@ -162,12 +161,12 @@ function buildHeader({ name, organizerName }: { name: string; organizerName: str
                         children: [
                             text(brand.name, {
                                 fontSize: 32,
-                                fontWeight: 800,
+                                fontWeight: 600,
                                 letterSpacing: -0.8
                             }),
                             text(brand.extension, {
                                 fontSize: 32,
-                                fontWeight: 800,
+                                fontWeight: 600,
                                 color: palette.primary,
                                 letterSpacing: -0.8
                             })
@@ -178,7 +177,7 @@ function buildHeader({ name, organizerName }: { name: string; organizerName: str
             text(`by ${organizerName}`, {
                 fontSize: 24,
                 color: palette.muted,
-                fontWeight: 800
+                fontWeight: 500
             })
         ]
     });
@@ -232,31 +231,51 @@ function buildInfoBlock(label: string, value: string): Node {
         children: [
             text(label, {
                 fontSize: 14,
+                fontWeight: 600,
                 letterSpacing: 1,
                 color: palette.muted,
                 textTransform: "uppercase"
             }),
             text(value, {
                 fontSize: 28,
-                fontWeight: 800
+                fontWeight: 600
             })
         ]
     });
 }
 
 function buildParticipantsBlock(participants: EventOgParticipant[], summary: string): Node {
+    const label = text("Participants", {
+        fontSize: 14,
+        fontWeight: 600,
+        letterSpacing: 1,
+        color: palette.muted,
+        textTransform: "uppercase"
+    });
+
     if (participants.length === 0) {
         return container({
             style: {
                 flex: 1.3,
-                alignItems: "center",
-                justifyContent: "center"
+                display: "flex",
+                flexDirection: "column",
+                gap: 12
             },
             children: [
-                text("Waiting for RSVPs", {
-                    fontSize: 18,
-                    color: palette.muted,
-                    fontWeight: 800
+                label,
+                container({
+                    style: {
+                        display: "flex",
+                        alignItems: "center",
+                        height: 72
+                    },
+                    children: [
+                        text("No responses yet", {
+                            fontSize: 18,
+                            color: palette.muted,
+                            fontWeight: 500
+                        })
+                    ]
                 })
             ]
         });
@@ -274,12 +293,7 @@ function buildParticipantsBlock(participants: EventOgParticipant[], summary: str
             gap: 12
         },
         children: [
-            text("Participants", {
-                fontSize: 14,
-                letterSpacing: 1,
-                color: palette.muted,
-                textTransform: "uppercase"
-            }),
+            label,
             container({
                 style: {
                     display: "flex",
@@ -291,7 +305,7 @@ function buildParticipantsBlock(participants: EventOgParticipant[], summary: str
             }),
             text(summary, {
                 fontSize: 18,
-                fontWeight: 800,
+                fontWeight: 600,
                 color: palette.text
             })
         ]
@@ -336,7 +350,7 @@ function buildAvatarNode(participant: EventOgParticipant, index: number): Node {
         children: [
             text(getInitials(participant.name), {
                 fontSize: 24,
-                fontWeight: 800,
+                fontWeight: 700,
                 color: "#ffffff"
             })
         ]
@@ -448,12 +462,12 @@ function buildAvailabilityLabels({
             text(startLabel, {
                 fontSize: 14,
                 color: palette.muted,
-                fontWeight: 800
+                fontWeight: 600
             }),
             text(endLabel, {
                 fontSize: 14,
                 color: palette.muted,
-                fontWeight: 800
+                fontWeight: 600
             })
         ]
     });
