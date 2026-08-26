@@ -5,6 +5,7 @@ import {
     GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET
 } from "$env/static/private";
+import { building } from "$app/environment";
 import { cimd } from "@better-auth/cimd";
 import { fetchClientMetadataResource } from "@better-auth/cimd/node";
 import { mcp } from "@better-auth/mcp";
@@ -40,23 +41,27 @@ export const auth = betterAuth({
     },
     plugins: [
         jwt(),
-        mcp({
-            loginPage: "/oauth/login",
-            consentPage: "/oauth/consent",
-            resource: MCP_RESOURCE_URL,
-            scopes: ["openid", "profile", "offline_access", ...MCP_RESOURCE_SCOPES],
-            accessTokenExpiresIn: 15 * 60,
-            refreshTokenExpiresIn: 30 * 24 * 60 * 60,
-            refreshTokenReuseInterval: 30,
-            allowDynamicClientRegistration: true,
-            allowUnauthenticatedClientRegistration: true,
-            rateLimit: {
-                register: { window: 60, max: 5 }
-            }
-        }),
-        cimd({
-            fetchClientMetadataResource,
-            metadataProfile: "mcp-2026-07-28"
-        })
+        ...(building
+            ? []
+            : [
+                  mcp({
+                      loginPage: "/oauth/login",
+                      consentPage: "/oauth/consent",
+                      resource: MCP_RESOURCE_URL,
+                      scopes: ["openid", "profile", "offline_access", ...MCP_RESOURCE_SCOPES],
+                      accessTokenExpiresIn: 15 * 60,
+                      refreshTokenExpiresIn: 30 * 24 * 60 * 60,
+                      refreshTokenReuseInterval: 30,
+                      allowDynamicClientRegistration: true,
+                      allowUnauthenticatedClientRegistration: true,
+                      rateLimit: {
+                          register: { window: 60, max: 5 }
+                      }
+                  }),
+                  cimd({
+                      fetchClientMetadataResource,
+                      metadataProfile: "mcp-2026-07-28"
+                  })
+              ])
     ]
 });
