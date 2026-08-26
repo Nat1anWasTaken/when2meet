@@ -1,5 +1,16 @@
 import { sql } from "drizzle-orm";
-import { boolean, customType, date, pgTable, serial, text } from "drizzle-orm/pg-core";
+import {
+    boolean,
+    customType,
+    date,
+    jsonb,
+    pgTable,
+    serial,
+    text,
+    timestamp,
+    uniqueIndex,
+    uuid
+} from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 
 type TimeSelection = {
@@ -49,3 +60,25 @@ export const participant = pgTable("participant", {
     updatedAt: date("updated_at").defaultNow().notNull(),
     timeSelection: timeSelection("time_selection").array().notNull()
 });
+
+export const mcpOperation = pgTable(
+    "mcp_operation",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        userId: text("user_id")
+            .notNull()
+            .references(() => user.id, { onDelete: "cascade" }),
+        toolName: text("tool_name").notNull(),
+        operationKey: uuid("operation_key").notNull(),
+        requestHash: text("request_hash").notNull(),
+        result: jsonb("result").$type<Record<string, unknown>>(),
+        createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull()
+    },
+    (table) => [
+        uniqueIndex("mcp_operation_user_tool_key_uidx").on(
+            table.userId,
+            table.toolName,
+            table.operationKey
+        )
+    ]
+);

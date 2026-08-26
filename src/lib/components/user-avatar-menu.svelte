@@ -7,6 +7,7 @@
     import { toast } from "svelte-sonner";
     import IconCalendar from "~icons/lucide/calendar";
     import IconLogOut from "~icons/lucide/log-out";
+    import IconCable from "~icons/lucide/cable";
     import { m } from "$i18n";
     import { localizeHref } from "$lib/paraglide/runtime";
 
@@ -25,6 +26,10 @@
 
     const handleEvents = () => {
         goto(localizeHref("/events"));
+    };
+
+    const handleConnections = () => {
+        goto(localizeHref("/connections"));
     };
 
     const getUserInitials = (name: string | null | undefined) => {
@@ -64,6 +69,10 @@
             <DropdownMenu.Item onclick={handleEvents}>
                 <IconCalendar class="mr-2 h-4 w-4" />
                 <span>{m.user_menu_my_events()}</span>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item onclick={handleConnections}>
+                <IconCable class="mr-2 h-4 w-4" />
+                <span>{m.user_menu_connected_apps()}</span>
             </DropdownMenu.Item>
             <DropdownMenu.Separator />
             <DropdownMenu.Item onclick={handleLogout} variant="destructive">

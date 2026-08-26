@@ -6,6 +6,14 @@ import { svelteKitHandler } from "better-auth/svelte-kit";
 import { building } from "$app/environment";
 
 const originalHandle: Handle = async ({ event, resolve }) => {
+    if (
+        event.url.pathname.startsWith("/.well-known/oauth-") ||
+        event.url.pathname.startsWith("/.well-known/openid-configuration") ||
+        event.url.pathname.startsWith("/api/auth/.well-known/")
+    ) {
+        return auth.handler(event.request);
+    }
+
     return svelteKitHandler({ event, resolve, auth, building });
 };
 

@@ -13,6 +13,7 @@ declare global {
 }
 
 declare module "$env/static/private" {
+    export const BETTER_AUTH_URL: string;
     export const DATABASE_URL: string;
     export const GITHUB_CLIENT_ID: string;
     export const GITHUB_CLIENT_SECRET: string;
